@@ -2,53 +2,35 @@ const UsersRepo = require('../../../models/repositories/user.repository');
 module.exports.userFacebook = async (req, res) => {
     try {
         console.log("This is my sent",req.body);
-        let userinfo=JSON.parse(req.body.token);
-        console.log("this is the user info",userinfo.user.id);
-        let UsersDetailinfo= {
-            kyubi_user_token: userinfo.user.id,
-            facebook_id: req.body.fb_id,
-            facebook_name: req.body.fb_name,
-            facebook_profile_name:req.body.fb_username,
-            facebook_image:req.body.fb_image,
-            status: 0
-          };
-        let getUserInfo = await UsersRepo.GetUserById(userinfo.user.id).then(async res=>{
-            if(res){
-                console.log(res);
-                res.send({
-                    code: 1,
-                    message: "Data Stored Successfully",
-                    payload: res
-                });
-            }else{
-                await UsersRepo.saveUserDetails(UsersDetailinfo).then(result=>{
-                    console.log(result);
-                    res.send({
-                        code: 1,
-                        message: "Data Stored Successfully",
-                        payload: result
-                    });
-                }).catch(error =>{
-                    console.log(error);
-                });
-                //console.log("No result");
-            }
+        
+        
+        let getUserInfo = await UsersRepo.GetUserById(req.body.user_rec);
+        console.log("This is my Respo",getUserInfo);
+        if(getUserInfo){
             
-        }).catch(async error=>{
-            console.log(UsersDetailinfo);
-            await UsersRepo.saveUserDetails(UsersDetailinfo).then(result=>{
-                console.log(result);
-                res.send({
-                    code: 1,
-                    message: "Data Stored Successfully",
-                    payload: result
-                });
-            }).catch(error =>{
-                console.log(error);
+            let UpdateUserInfo=await UsersRepo.UpdateUser(req.body.user_rec,req.body.fb_id,req.body.fb_name,req.body.fb_username,req.body.fb_image);
+            let getUserInfoNew = await UsersRepo.GetUserById(req.body.user_rec);
+            res.send({
+                code: 1,
+                message: "Successfully User Added",
+                payload: getUserInfoNew
             });
-            
-            //console.log("No result Error",error);
-        });
+        }else{
+            let UsersDetailinfo= {
+                kyubi_user_token: req.body.user_rec,
+                facebook_id: req.body.fb_id,
+                facebook_name: req.body.fb_name,
+                facebook_profile_name:req.body.fb_username,
+                facebook_image:req.body.fb_image,
+                status: 0
+            };
+            let saveUesr=await UsersRepo.saveUserDetails(UsersDetailinfo);
+            res.send({
+                code: 1,
+                message: "Successfully User Added",
+                payload: saveUesr
+            });
+        }
         //UsersRepo.GetUserById(userinfo.user.id)
             
         
