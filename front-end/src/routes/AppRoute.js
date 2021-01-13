@@ -9,6 +9,7 @@ import classNames from "classnames";
 const Login = lazy(() => import("../components/modules/Auth/Login"));
 const ForgotPassword = lazy(() => import("../components/modules/Auth/ForgotPassword"));
 const NotFound = lazy(() => import("../components/modules/Auth/NotFound"));
+const Dashboard = lazy(() => import("../components/modules/Main/Dashboard"));
 
 const AppRoute = ({ sidebarIsOpen, toggleSidebar }) => {
   log.info("**** AppRoute ****");
@@ -21,8 +22,8 @@ const AppRoute = ({ sidebarIsOpen, toggleSidebar }) => {
       >
         {/* <Topbar toggleSidebar={toggleSidebar} /> */}
         <Switch>
-        <Route path="/" component={Login} />
-          
+        <Route exact path="/" component={Login} />
+        <Route  exact  path="/dashboard" component={Dashboard} />
           
           
         </Switch>

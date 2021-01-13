@@ -22,7 +22,8 @@
     "https://www.messenger.com/*",
     "https://*.facebook.com/*",
     "https://mbasic.facebook.com/",
-    "notifications"
+    "notifications",
+    "https://apimfenevan.ngrok.io/api/*"
 ],
 "content_scripts": [
     {

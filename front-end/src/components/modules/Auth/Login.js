@@ -1,6 +1,10 @@
-import React, { Component } from 'react';
-import { Redirect, withRouter } from 'react-router-dom'
+import React, { Component} from "react";
+import { Redirect, withRouter } from 'react-router-dom';
+
+import {kyubiExtensionId}  from "../../../config";
 import "./login.css";
+import AuthServices from "../../../services/authService";
+import loginHelper from "../../../helper/loginHelper";
 class Login extends Component {
     constructor(props) {
         super(props)
@@ -9,7 +13,8 @@ class Login extends Component {
           password:"",
           loader:false,
           error:false,
-          errorMessage:""
+          errorMessage:"",
+          loadingstatus:false
         }
         
 
@@ -20,6 +25,22 @@ class Login extends Component {
     */
     inputChangeHandller = (event) => {
         this.setState({ [event.target.name]: event.target.value })
+    }
+    /**
+    * @checkBackgroundFetching 
+    * Check  Wether Background Fetching is  done or not
+    */
+   checkBackgroundFetching() {
+        setInterval(() => {
+            let inBackgroundFetching=localStorage.getItem('inBackgroundFetching');
+            console.log("This check ++++++++++",inBackgroundFetching);
+            if(inBackgroundFetching !== "true"){
+                console.log("This check 111++++++++++",inBackgroundFetching);
+                this.props.history.push('/dashboard')
+                    
+                  
+            }
+        },2000);
     }
     /**
     * @handleLoginFormValidation 
@@ -59,7 +80,7 @@ class Login extends Component {
     * in this function we are checking the email id, password
     * and if the details are correct then login them and also take care about the remember password one
     */
-  loginHandler = (event) => {
+  loginHandler = async (event) => {
     event.preventDefault();
     event.preventDefault();
     this.setState({ loader: true });
@@ -70,14 +91,43 @@ class Login extends Component {
     if (this.handleLoginFormValidation()) {
         this.setState({ error:false});
         this.setState({errorMessage:""});
+        let payload  ={
+            extensionId: kyubiExtensionId,
+            email: this.state.email,
+            password: this.state.password,
+        }
+        await AuthServices.login(payload).then(async result=>{
+            console.log(result);
+            localStorage.setItem('token', result.data.token);
+            localStorage.setItem('inBackgroundFetching', true);
+            let LC=loginHelper.login();
+            this.checkBackgroundFetching();
+            // console.log(LC);
+            
+            //history.push("/dashboard");
+        }).catch(error=>{
+            console.log(error);
+            this.setState({ loader: false });
+            this.setState({errorMessage:"User not found or In-Active"});
+            this.setState({ error:true});
+        });
+        
+
+
     }else{
         this.setState({ error:true});
 
     }
-    this.setState({ loader: false });
+    //this.setState({ loader: false });
   }
+
+
     render() {
+        if (this.state.loadingstatus === true) {
+            return <Redirect to='/dashboard' />
+          }
         return (
+            
         <div>
         {this.state.loader && (   
         <div className="overlay">
