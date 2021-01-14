@@ -1,6 +1,7 @@
 const UsersRepo = require('../../../models/repositories/user.repository');
 const UserSettingRepository =   require('../../../models/repositories/settings.repository');
 const AutoResponderRepo =   require('../../../models/repositories/autoresponder.repository');
+const cast = require('TypeCast');
 module.exports.autoresponder = async (req, res) => {
     try {
         console.log("This is my sent",req.body.user_id);
@@ -185,6 +186,92 @@ module.exports.getautoresponderkeywords =   async   (req, res)  =>  {
             code: 3,
             message: error.message,
             payload: error
+        })
+    }
+}
+module.exports.setsetting   =   async   (req,   res)    =>  {
+    try{
+        console.log("This is my sent",req.body);
+        let getUserInfo = await UsersRepo.GetUserById(req.body.kyubi_user_token);
+        if(getUserInfo._id){
+            let getUserSettings= await UserSettingRepository.GetUserSettingById(getUserInfo._id);
+            if(getUserSettings){
+                console.log("This are",getUserSettings);
+                let UsersSettingsDetailinfo= {
+                    default_message: req.body.defaultmessage,
+                    default_message_text: req.body.default_message_text,
+                    autoresponder: req.body.autoresponder,
+                    default_time_delay: cast.number(req.body.default_time_delay)
+                  };
+                  let UpdateUserSettingsNew=await UserSettingRepository.UpdateUserSettingsDetails(
+                        getUserInfo._id,
+                        req.body.defaultmessage,
+                        req.body.default_message_text,
+                        req.body.autoresponder,
+                        cast.number(req.body.default_time_delay)
+                    );
+                    let getUserSettingsUpdate= await UserSettingRepository.GetUserSettingById(getUserInfo._id); 
+                    res.send({
+                        code: 1,
+                        message: "success",
+                        payload: getUserSettingsUpdate
+                    })
+
+            }else{
+                let UsersSettingsDetailinfo= {
+                    user_id: getUserInfo._id,
+                    default_message: req.body.defaultmessage,
+                    default_message_text: req.body.default_message_text,
+                    autoresponder: req.body.autoresponder,
+                    default_time_delay: cast.number(req.body.default_time_delay)
+                  };
+                  let getUserSettingsNew=await UserSettingRepository.saveUserSettingsDetails(UsersSettingsDetailinfo);
+                  res.send({
+                    code: 1,
+                    message: "success",
+                    payload: getUserSettingsNew
+                })
+            }
+        }
+        
+    }catch(error){
+        res.send({
+            code: 3,
+            message: "Error",
+            payload: error.message
+        })
+    }
+}
+module.exports.getSetting   =   async   (req,   res)    =>  {
+    try{
+        let getUserInfo = await UsersRepo.GetUserById(req.body.kyubi_user_token);
+        if(getUserInfo._id){
+            let getUserSettings= await UserSettingRepository.GetUserSettingById(getUserInfo._id);
+            if(getUserSettings){
+                res.send({
+                    code: 1,
+                    message: "success",
+                    payload: getUserSettings
+                })
+            }else{
+                res.send({
+                    code: 2,
+                    message: "success",
+                    payload: {}
+                })
+            }
+        }else{
+            res.send({
+                code: 2,
+                message: "success",
+                payload: {}
+            })
+        }
+    }catch(error){
+        res.send({
+            code: 3,
+            message: "Error",
+            payload: error.message
         })
     }
 }

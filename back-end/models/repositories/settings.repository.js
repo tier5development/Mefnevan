@@ -33,10 +33,13 @@ const UserSettingRepository   =   {
     * @UpdateUserSettingsDetails
     * update User  Setting details For Auto-responder
   */
- UpdateUserSettingsDetails: async (userId, autoresponder) => {
+ UpdateUserSettingsDetails: async (userId, default_message,default_message_text,autoresponder,default_time_delay) => {
     try {
       let UserSettingInfo = await UserSetting.updateOne({ user_id:mongoose.Types.ObjectId(userId)  }, {
-        autoresponder: autoresponder
+          default_message: default_message,
+          default_message_text: default_message_text,
+          autoresponder: autoresponder,
+          default_time_delay: default_time_delay
       }).exec();
       return UserSettingInfo;
     } catch (error) {

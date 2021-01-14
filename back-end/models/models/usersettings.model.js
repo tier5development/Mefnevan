@@ -12,13 +12,17 @@ const UserSettingsSchema = new Schema({
         default: 0,
         enum: [0, 1]
     },
+    default_message_text: {
+        type: String,
+        default: ''
+    },
     autoresponder: {
         type: Number,
         default: 0,
         enum: [0, 1]
     },
-    timezone: {
-        type: String,
+    default_time_delay: {
+        type: Number,
         default: ''
     },
     createdAt: {
