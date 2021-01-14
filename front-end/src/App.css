@@ -44,7 +44,16 @@ body{
 .App-link {
   color: #61dafb;
 }
-
+.crossbox{
+  margin-bottom: -44px;
+  
+  margin-left: 180px;
+  
+  margin-top: 10px;
+}
+.crossbox i{
+  color: white;
+}
 @keyframes App-logo-spin {
   from {
     transform: rotate(0deg);

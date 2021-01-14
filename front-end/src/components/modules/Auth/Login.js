@@ -19,7 +19,7 @@ class Login extends Component {
         
 
       }
-      /**
+    /**
     * @inputChangeHandller 
     * getting input field values
     */
@@ -30,18 +30,16 @@ class Login extends Component {
     * @checkBackgroundFetching 
     * Check  Wether Background Fetching is  done or not
     */
-   checkBackgroundFetching() {
-        setInterval(() => {
-            let inBackgroundFetching=localStorage.getItem('inBackgroundFetching');
-            console.log("This check ++++++++++",inBackgroundFetching);
-            if(inBackgroundFetching !== "true"){
-                console.log("This check 111++++++++++",inBackgroundFetching);
-                this.props.history.push('/dashboard')
-                    
-                  
-            }
-        },2000);
-    }
+    checkBackgroundFetching() {
+            setInterval(() => {
+                let inBackgroundFetching=localStorage.getItem('inBackgroundFetching');
+                console.log("This check ++++++++++",inBackgroundFetching);
+                if(inBackgroundFetching !== "true"){
+                    console.log("This check 111++++++++++",inBackgroundFetching);
+                    this.props.history.push('/dashboard');                  
+                }
+            },2000);
+        }
     /**
     * @handleLoginFormValidation 
     * email and password field blank validation
@@ -80,47 +78,62 @@ class Login extends Component {
     * in this function we are checking the email id, password
     * and if the details are correct then login them and also take care about the remember password one
     */
-  loginHandler = async (event) => {
-    event.preventDefault();
-    event.preventDefault();
-    this.setState({ loader: true });
-    let payload = {
-      email: this.state.email,
-      password: this.state.password,
-    }
-    if (this.handleLoginFormValidation()) {
-        this.setState({ error:false});
-        this.setState({errorMessage:""});
-        let payload  ={
-            extensionId: kyubiExtensionId,
-            email: this.state.email,
-            password: this.state.password,
+    loginHandler = async (event) => {
+        event.preventDefault();
+        event.preventDefault();
+        this.setState({ loader: true });
+        let payload = {
+        email: this.state.email,
+        password: this.state.password,
         }
-        await AuthServices.login(payload).then(async result=>{
-            console.log(result);
-            localStorage.setItem('token', result.data.token);
-            localStorage.setItem('inBackgroundFetching', true);
-            let LC=loginHelper.login();
-            this.checkBackgroundFetching();
-            // console.log(LC);
+        if (this.handleLoginFormValidation()) {
+            this.setState({ error:false});
+            this.setState({errorMessage:""});
+            let payload  ={
+                extensionId: kyubiExtensionId,
+                email: this.state.email,
+                password: this.state.password,
+            }
+            await AuthServices.login(payload).then(async result=>{
+                console.log(result);
+                localStorage.setItem('token', result.data.token);
+                localStorage.setItem('inBackgroundFetching', true);
+                let LC=loginHelper.login();
+                this.checkBackgroundFetching();
+                // console.log(LC);
+                
+                //history.push("/dashboard");
+            }).catch(error=>{
+                console.log(error);
+                this.setState({ loader: false });
+                this.setState({errorMessage:"User not found or In-Active"});
+                this.setState({ error:true});
+            });
             
-            //history.push("/dashboard");
-        }).catch(error=>{
-            console.log(error);
-            this.setState({ loader: false });
-            this.setState({errorMessage:"User not found or In-Active"});
+
+
+        }else{
             this.setState({ error:true});
-        });
-        
 
-
-    }else{
-        this.setState({ error:true});
-
+        }
+        //this.setState({ loader: false });
     }
-    //this.setState({ loader: false });
-  }
 
+    componentDidMount(){
+        this.setState({ loader: true });
+        let token=localStorage.getItem('token');
+        let inBackgroundFetching=localStorage.getItem('inBackgroundFetching');
+        if(token){
+            if(inBackgroundFetching !== "true"){
+                this.props.history.push('/dashboard');    
+            }else{
+                this.setState({ loader: false });
+            }
+        }else{
+            this.setState({ loader: false });
+        }
+        
+    }
 
     render() {
         if (this.state.loadingstatus === true) {

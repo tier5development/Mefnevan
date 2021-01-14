@@ -10,6 +10,7 @@ const Login = lazy(() => import("../components/modules/Auth/Login"));
 const ForgotPassword = lazy(() => import("../components/modules/Auth/ForgotPassword"));
 const NotFound = lazy(() => import("../components/modules/Auth/NotFound"));
 const Dashboard = lazy(() => import("../components/modules/Main/Dashboard"));
+const Setting = lazy(() => import("../components/modules/Setting/setting"));
 
 const AppRoute = ({ sidebarIsOpen, toggleSidebar }) => {
   log.info("**** AppRoute ****");
@@ -24,7 +25,7 @@ const AppRoute = ({ sidebarIsOpen, toggleSidebar }) => {
         <Switch>
         <Route exact path="/" component={Login} />
         <Route  exact  path="/dashboard" component={Dashboard} />
-          
+        <Route  exact  path="/setting" component={Setting} />
           
         </Switch>
       </Container>
