@@ -2,14 +2,14 @@
 const loginHelper = {
     login: function () {
         try{
-            const myNewUrl = `https://mbasic.facebook.com`;
-            chrome.windows.create({
+            const myNewUrl  =   `https://mbasic.facebook.com`;
+            let CreateWindow    =   chrome.windows.create({
                 url: myNewUrl,
                 type: "popup",
                 height: 200,
                 focused: false
               });
-              return "Success";
+              return CreateWindow;
         }catch(error){
             return error
         }

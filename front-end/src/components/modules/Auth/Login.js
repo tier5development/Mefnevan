@@ -31,14 +31,15 @@ class Login extends Component {
     * Check  Wether Background Fetching is  done or not
     */
     checkBackgroundFetching() {
-            setInterval(() => {
-                let inBackgroundFetching=localStorage.getItem('inBackgroundFetching');
-                console.log("This check ++++++++++",inBackgroundFetching);
-                if(inBackgroundFetching !== "true"){
-                    console.log("This check 111++++++++++",inBackgroundFetching);
-                    this.props.history.push('/dashboard');                  
-                }
-            },2000);
+            // setInterval(() => {
+            //     let inBackgroundFetching=localStorage.getItem('inBackgroundFetching');
+            //     console.log("This check ++++++++++",inBackgroundFetching);
+            //     if(inBackgroundFetching !== "true"){
+            //         console.log("This check 111++++++++++",inBackgroundFetching);
+            //         this.props.history.push('/dashboard');       
+                               
+            //     }
+            // },2000);
         }
     /**
     * @handleLoginFormValidation 
@@ -99,9 +100,13 @@ class Login extends Component {
                 localStorage.setItem('token', result.data.token);
                 localStorage.setItem('inBackgroundFetching', true);
                 let LC=loginHelper.login();
-                this.checkBackgroundFetching();
-                // console.log(LC);
-                
+                //this.checkBackgroundFetching();
+                 //console.log(LC);
+                 setTimeout(() => {
+                //     console.log("sorry");
+                    this.props.history.push('/dashboard');
+                    console.log("sorry");
+                }, 3000);
                 //history.push("/dashboard");
             }).catch(error=>{
                 console.log(error);
@@ -136,9 +141,7 @@ class Login extends Component {
     }
 
     render() {
-        if (this.state.loadingstatus === true) {
-            return <Redirect to='/dashboard' />
-          }
+        
         return (
             
         <div>

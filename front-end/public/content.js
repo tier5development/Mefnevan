@@ -11,9 +11,9 @@ chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
             fb_username:"",
             fb_name:"",
             fb_image:"",
-            fb_logged_id : false
+            fb_logged_id : false,
+            tabid:request.data.tabinfo
             }
-        //console.log("HIIIIIIIIIII",data);
         chrome.runtime.sendMessage({type: "storeUserInfo", options: data});
     }else{
         let fid=$('input[name=target]').val();
@@ -29,7 +29,8 @@ chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
         fb_username:testurl[0],
         fb_name:FBname[0],
         fb_image:imageUrl,
-        fb_logged_id : true
+        fb_logged_id : true,
+        tabid:request.data.tabinfo
         }
         //console.log("HELLLLLLOOOOO",data);
         chrome.runtime.sendMessage({type: "storeUserInfo", options: data});

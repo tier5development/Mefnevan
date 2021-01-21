@@ -5221,6 +5221,7 @@
   .badge-info {
     color: #fff;
     background-color: #17a2b8;
+    margin-right: 2px;
   }
   
   a.badge-info:hover, a.badge-info:focus {
