@@ -41,10 +41,73 @@ const UsersRepository   =   {
     }).exec();
     // console.log("Already Associated with", ChatRoomUpdated);
     return UpdateUserInfo;
-  } catch (error) {
-    throw error;
+    } catch (error) {
+      throw error;
+    }
+  },
+  GetUserDetailsInfo: async (Kyubi_User_Id) =>  {
+    try {
+      return await User.aggregate([
+          
+          {
+            $lookup: {
+              from: 'usersettings',
+              localField: '_id',
+              foreignField: 'user_id',
+              as: 'usersettings'
+            }
+          },
+          {
+            $unwind: {
+              path: '$usersettings',
+              preserveNullAndEmptyArrays: true
+            }
+          },
+          {
+            $match: {
+              'kyubi_user_token': Kyubi_User_Id
+            }
+          },
+          {
+            $group: {
+              '_id': '$_id',
+              kyubi_user_token: {
+                $first: '$kyubi_user_token'
+              },
+              facebook_fbid: {
+                $first: '$facebook_fbid'
+              },
+              facebook_name: {
+                $first: '$facebook_name'
+              },
+              facebook_profile_name: {
+                $first: '$facebook_profile_name'
+              },
+              facebook_image: {
+                $first: '$facebook_image'
+              },
+              image_url: {
+                $first: '$image_url'
+              },
+              status: {
+                $first: '$status'
+              },
+              createdAt: {
+                $first: '$createdAt'
+              },
+              updatedAt: {
+                $first: '$updatedAt'
+              },
+              usersettings: {
+                $first: '$usersettings'
+              }
+            }
+          }
+        ]).exec();
+  } catch (e) {
+    throw e;
   }
-}
+  }
 };
 
 module.exports = UsersRepository;

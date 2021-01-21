@@ -13,4 +13,8 @@ const router = require('express').Router()
   require('./Setting/router')
   )
 
+  router.use('/autoresponder',
+  require('./AutoResponder/router')
+  )
+
 module.exports = router

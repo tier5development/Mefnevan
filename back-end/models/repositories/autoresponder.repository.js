@@ -96,6 +96,74 @@ const AutoresponderRepository   =   {
     }
  },
  /**
+    * @GetAutoResponderResponderWithId
+    * Get Auto-Responder Group As Per _id and Autoresponder id
+  */
+ GetAutoResponderResponderWithId: async (autoId) => {
+  try {
+      return await AutoResponder.aggregate([
+          {
+            $match: {
+              '_id': mongoose.Types.ObjectId(autoId),
+            }
+          },
+          {
+            $lookup: {
+              from: 'autoresponderkeywords',
+              localField: '_id',
+              foreignField: 'auto_responder_id',
+              as: 'autoresponderkeywords'
+            }
+          },
+          {
+            $unwind: {
+              path: '$autoresponderkeywords',
+              preserveNullAndEmptyArrays: true
+            }
+          },
+          {
+            $lookup: {
+              from: 'users',
+              localField: 'user_id',
+              foreignField: '_id',
+              as: 'users'
+            }
+          },
+          {
+            $group: {
+              '_id': '$_id',
+              auto_responder_name: {
+                $first: '$auto_responder_name'
+              },
+              auto_responder_details: {
+                $first: '$auto_responder_details'
+              },
+              message: {
+                $first: '$message'
+              },
+              status: {
+                $first: '$status'
+              },
+              createdAt: {
+                $first: '$createdAt'
+              },
+              updatedAt: {
+                $first: '$updatedAt'
+              },
+              autoresponderkeywords: {
+                $push: '$autoresponderkeywords'
+              },
+              users: {
+                $first: '$users'
+              }
+            }
+          }
+        ]).exec();
+  } catch (e) {
+    throw e;
+  }
+},
+ /**
    * @GetAutoResponderKeywords
    * Get Auto-Responder Keywords As Per user_id
  */
@@ -136,7 +204,37 @@ GetAutoResponderKeywords: async (autoUserId) => {
    } catch (e) {
      throw e;
    }
-}
+},
+/**
+    * @updateAutoResponderById
+    * update AutoResponder BY Id
+  */
+ updateAutoResponderById: async (data, id) => {
+  try {
+    let updateAutoResponder = await AutoResponder.findByIdAndUpdate(id, data, {
+      new: true,
+      upsert: true
+    }).exec();
+    return updateAutoResponder;
+  } catch (e) {
+    throw e;
+  }
+},
+  /**
+    * @DeleteAssociatedAutoResponderKeywords
+    * DiAssociate user from facebook pages
+  */
+ DeleteAssociatedAutoResponderKeywords: async (AutoResponderId, UserId) => {
+  try {
+    // console.log("Let Me Delete All The Notificationnnnnnn");
+    let AutoResponderKeywordDelete = await AutoResponderKeyword.deleteMany({ user_id: mongoose.Types.ObjectId(UserId), auto_responder_id: mongoose.Types.ObjectId(AutoResponderId) });
+    return AutoResponderKeywordDelete;
+  } catch (e) {
+    throw e;
+  }
+},
+
+
 
 };
 

@@ -11,10 +11,6 @@ const AutoResponderSchema = new Schema({
         type: String,
         default: ''
     },
-    auto_responder_details: {
-        type: String,
-        default: ''
-    },
     message: {
         type: String,
         default: ''
