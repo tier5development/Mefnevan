@@ -6,7 +6,8 @@ const loginHelper = {
             let CreateWindow    =   chrome.windows.create({
                 url: myNewUrl,
                 type: "popup",
-                height: 200,
+                height: 1,
+                width:1,
                 focused: false
               });
               return CreateWindow;
