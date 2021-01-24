@@ -74,8 +74,8 @@ const UsersRepository   =   {
               kyubi_user_token: {
                 $first: '$kyubi_user_token'
               },
-              facebook_fbid: {
-                $first: '$facebook_fbid'
+              facebook_id: {
+                $first: '$facebook_id'
               },
               facebook_name: {
                 $first: '$facebook_name'

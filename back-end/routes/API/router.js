@@ -17,4 +17,8 @@ const router = require('express').Router()
   require('./AutoResponder/router')
   )
 
+  router.use('/friend',
+  require('./Friend/router')
+  )
+
 module.exports = router

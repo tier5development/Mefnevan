@@ -17,8 +17,9 @@ module.exports.userFacebook = async (req, res) => {
                 if(results.length>0){
                     console.log("This is my userInfoArray",results);
                     userInfoArray={
+                    user_id:results[0]._id,
                     kyubi_user_token: results[0].kyubi_user_token,
-                    facebook_fbid: results[0].facebook_id,
+                    facebook_id: results[0].facebook_id,
                     facebook_name: results[0].facebook_name,
                     facebook_profile_name: results[0].facebook_profile_name,
                     facebook_image: results[0].facebook_image,
@@ -50,8 +51,9 @@ module.exports.userFacebook = async (req, res) => {
             });
         }else{
             let UsersDetailinfo= {
+                user_id:req.body._id,
                 kyubi_user_token: req.body.user_rec,
-                facebook_id: req.body.fb_id,
+                facebook_id: req.body.facebook_id,
                 facebook_name: req.body.fb_name,
                 facebook_profile_name:req.body.fb_username,
                 facebook_image:req.body.fb_image,
