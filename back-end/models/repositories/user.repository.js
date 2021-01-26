@@ -1,5 +1,5 @@
 const User = require('../models/users.model');
-
+const mongoose = require('mongoose');
 const UsersRepository   =   {
   /**
     * @GetUserById
@@ -107,7 +107,71 @@ const UsersRepository   =   {
   } catch (e) {
     throw e;
   }
+  },
+  GetUserDetailsInfoById: async (User_Id) =>  {
+    try {
+      return await User.aggregate([
+        {
+          $match: {
+            '_id': mongoose.Types.ObjectId(User_Id)
+          }
+        },
+          {
+            $lookup: {
+              from: 'usersettings',
+              localField: '_id',
+              foreignField: 'user_id',
+              as: 'usersettings'
+            }
+          },
+          {
+            $unwind: {
+              path: '$usersettings',
+              preserveNullAndEmptyArrays: true
+            }
+          },
+         
+          {
+            $group: {
+              '_id': '$_id',
+              kyubi_user_token: {
+                $first: '$kyubi_user_token'
+              },
+              facebook_id: {
+                $first: '$facebook_id'
+              },
+              facebook_name: {
+                $first: '$facebook_name'
+              },
+              facebook_profile_name: {
+                $first: '$facebook_profile_name'
+              },
+              facebook_image: {
+                $first: '$facebook_image'
+              },
+              image_url: {
+                $first: '$image_url'
+              },
+              status: {
+                $first: '$status'
+              },
+              createdAt: {
+                $first: '$createdAt'
+              },
+              updatedAt: {
+                $first: '$updatedAt'
+              },
+              usersettings: {
+                $first: '$usersettings'
+              }
+            }
+          }
+        ]).exec();
+  } catch (e) {
+    throw e;
   }
+  }
+
 };
 
 module.exports = UsersRepository;

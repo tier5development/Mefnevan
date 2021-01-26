@@ -45,7 +45,21 @@ const UserSettingRepository   =   {
     } catch (error) {
       throw error;
     }
+  },
+  /**
+  * @UpdateUserSettingsById
+  * update User Settings BY Id
+*/
+UpdateUserSettingsById: async (userId,autoresponder) => {
+  try {
+    let UserSettingInfo = await UserSetting.updateOne({ user_id:mongoose.Types.ObjectId(userId)  }, {
+      autoresponder: autoresponder
+  }).exec();
+  return UserSettingInfo;
+  } catch (e) {
+    throw e;
   }
+  },
 };
 
 module.exports = UserSettingRepository;

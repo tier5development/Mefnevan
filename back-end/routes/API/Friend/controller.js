@@ -95,7 +95,7 @@ module.exports.friendsDefaultMessageCheck   =   async   (req,   res)    =>  {
                     codex=1;
                     mess="send message"; 
                 }else{
-                    codex=timediff;
+                    codex=2;
                     mess="Dont Send";
                 }
               }

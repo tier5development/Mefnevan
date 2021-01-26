@@ -1,6 +1,7 @@
 const UsersRepo = require('../../../models/repositories/user.repository');
 const UserSettingRepository =   require('../../../models/repositories/settings.repository');
 const AutoResponderRepo =   require('../../../models/repositories/autoresponder.repository');
+const UserHelper = require('../../../Helpers/usersHelper')
 const cast = require('TypeCast');
 module.exports.autoresponder = async (req, res) => {
     try {
@@ -47,42 +48,72 @@ module.exports.autoresponder = async (req, res) => {
 module.exports.updateautoresponder  =   async   (req,   res)    =>  {
     try{
         console.log("This is my sent",req.body);
-        let getUserInfo = await UsersRepo.GetUserById(req.body.user_id);
-        if(getUserInfo._id){
-            let getUserSettings= await UserSettingRepository.GetUserSettingById(getUserInfo._id);
-            if(getUserSettings){
-                let getUserSettingsNew=await UserSettingRepository.UpdateUserSettingsDetails(getUserInfo._id,req.body.autoresponder).then(async result=>{
-                    let getUserSettingsUpdated= await UserSettingRepository.GetUserSettingById(getUserInfo._id);
+        //let getUserInfo = await UsersRepo.GetUserById(req.body.user_id);
+        let getUserSettings= await UserSettingRepository.GetUserSettingById(req.body.user_id);
+        console.log(getUserSettings);
+        if(getUserSettings){
+            let UserSettingsInfoPayload= {
+                autoresponder:req.body.autoresponder
+              };
+              let updateUserSettingsInfo=await UserSettingRepository.UpdateUserSettingsById(req.body.user_id,req.body.autoresponder);
+             let  userInfo= UserHelper.UserdetailsInfo(req.body.user_id).then(result=>{
+                console.log("yo yo +++++++++++++++++",result);
                     res.send({
                         code: 1,
                         message: "Successfull",
-                        payload: getUserSettingsUpdated.autoresponder
+                        payload: result
                     });
-                  });
-                
+             }).catch(error => {
+                res.send({
+                    code: 2,
+                    message: error.message,
+                    payload: error
+                });
+             });
+             
+            
             }else{
-                let UsersSettingsDetailinfo= {
-                    user_id: getUserInfo._id,
-                    autoresponder: req.body.autoresponder
-                  };
-                  let getUserSettingsNew=await UserSettingRepository.saveUserSettingsDetails(UsersSettingsDetailinfo).then(async result=>{
-                    
-                    let getUserSettingsUpdated= await UserSettingRepository.GetUserSettingById(getUserInfo._id);
-                    res.send({
-                        code: 1,
-                        message: "Successfull",
-                        payload: getUserSettingsUpdated.autoresponder
-                    });
-                  });
-                
+                res.send({
+                    code: 2,
+                    message: "Error",
+                    payload: {}
+                });
             }
-        }else{
-            res.send({
-                code: 4,
-                message: "Sorry No Data Of Parent",
-                payload: ""
-            })
-        }
+        // if(getUserInfo._id){
+        //     let getUserSettings= await UserSettingRepository.GetUserSettingById(getUserInfo._id);
+        //     if(getUserSettings){
+         //        let getUserSettingsNew=await UserSettingRepository.UpdateUserSettingsDetails(getUserInfo._id,req.body.autoresponder).then(async result=>{
+        //             let getUserSettingsUpdated= await UserSettingRepository.GetUserSettingById(getUserInfo._id);
+        //             res.send({
+        //                 code: 1,
+        //                 message: "Successfull",
+        //                 payload: getUserSettingsUpdated.autoresponder
+        //             });
+        //           });
+                
+        //     }else{
+        //         let UsersSettingsDetailinfo= {
+        //             user_id: getUserInfo._id,
+        //             autoresponder: req.body.autoresponder
+        //           };
+        //           let getUserSettingsNew=await UserSettingRepository.saveUserSettingsDetails(UsersSettingsDetailinfo).then(async result=>{
+                    
+        //             let getUserSettingsUpdated= await UserSettingRepository.GetUserSettingById(getUserInfo._id);
+        //             res.send({
+        //                 code: 1,
+        //                 message: "Successfull",
+        //                 payload: getUserSettingsUpdated.autoresponder
+        //             });
+        //           });
+                
+        //     }
+        // }else{
+        //     res.send({
+        //         code: 4,
+        //         message: "Sorry No Data Of Parent",
+        //         payload: ""
+        //     })
+        // }
         
     }   catch  (error) {
         res.send({
