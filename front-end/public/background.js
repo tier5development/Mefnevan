@@ -71,6 +71,7 @@ chrome.runtime.onMessage.addListener(async function(request, sender) {
                     method.POST,
                     toJsonStr(params)
                     );
+                    console.log("This are thhe  response",response);
                 if (response.status !== 200 || !response.status) {
             
                 } else {
@@ -119,8 +120,7 @@ chrome.runtime.onMessage.addListener(async function(request, sender) {
             let isAutoresponderset=localStorage.getItem('autoresponder');
             let isUserLoggedInFacebook=localStorage.getItem('fb_logged_id');
             let inBackgroundFetching = localStorage.getItem('inBackgroundFetching');
-            console.log(isAutoresponderset);
-            console.log(isUserLoggedInFacebook);
+            
             if(isAutoresponderset==="1" && isUserLoggedInFacebook==="true" && inBackgroundFetching  ==="false"){
                 let myNewmessageUrl = `https://m.facebook.com/messages`;
                 chrome.windows.create({
@@ -223,6 +223,8 @@ chrome.runtime.onMessage.addListener(async function(request, sender) {
                         tabinfo:request.options.tabinfo           
                     }
                     chrome.tabs.sendMessage(request.options.tabinfo, { catch: "send-default-message",data });
+                }else{
+                    chrome.tabs.remove(request.options.tabinfo);
                 }
         }
     }else if(request.type   === "SaveDefaultMessageTrigger"){
@@ -249,14 +251,19 @@ chrome.runtime.onMessage.addListener(async function(request, sender) {
             console.log(isAutoresponderset);
             console.log(isUserLoggedInFacebook);
             if(isAutoresponderset==="1" && isUserLoggedInFacebook==="true" && inBackgroundFetching  ==="false"){
-                let myNewmessageUrl = `https://m.facebook.com/messages`;
-                chrome.windows.create({
-                    url: myNewmessageUrl,
-                    type: "popup",
-                    height: 1,
-                    width:1,
-                    focused: false
-                  });
+                setTimeout(() => {
+                    let myNewmessageUrl = `https://m.facebook.com/messages`;
+                    chrome.windows.create({
+                        url: myNewmessageUrl,
+                        type: "popup",
+                        height: 1,
+                        width:1,
+                        focused: false
+                      });
+                    
+                }, 3000);
+                
+                
             }
     }
 });

@@ -4,7 +4,7 @@ chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
     var jwt =request.data.userToken;
     var tokens = jwt.split(".");
     if( $('#m_login_email').length && $('#m_login_email').length)         // use this if you are using id to check
-    { 
+    { console.log("without Login");
         let data={
             token:atob(tokens[1]),
             fb_id:"",
@@ -16,6 +16,7 @@ chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
             }
         chrome.runtime.sendMessage({type: "storeUserInfo", options: data});
     }else{
+      console.log("with Login");
         let fid=$('input[name=target]').val();
         let testurl= $(".ca").find("a").attr("href");
         testurl = testurl.substring(1, testurl.length);

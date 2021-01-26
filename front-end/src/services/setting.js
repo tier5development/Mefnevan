@@ -40,6 +40,25 @@ const settingService = {
                 })
         })
     },
+    updateAutoresponderSetting: function (payload) {
+        return new Promise((resolve, reject) => {
+            let options = {
+                method: 'POST',
+                url: host + '/api/setting/updateautoresponder',
+                headers: {  'Accept': 'application/json', 'Content-Type': 'application/json' },
+                data: payload
+            }
+            axios(options)
+                .then(res => {
+                    console.log("In Success");
+                    resolve(res)
+                })
+                .catch(err => {
+                    console.log("In Error");
+                    reject(err)
+                })
+        })
+    },
     
 }
 

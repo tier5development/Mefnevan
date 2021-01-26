@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { Redirect, withRouter } from 'react-router-dom'
 import  {OpenFacebookInTab,CheckUserInfoFromFaccebook,OpenFacebookProfileInTab} from  '../../../helper/helper'
 import Sidebar from "../Common/sidebar"
+import settingService from "../../../services/setting"
 class Dashboard extends Component {
   constructor(props) {
     super(props)
@@ -11,6 +12,7 @@ class Dashboard extends Component {
       fb_username:"",
       fb_id:"",
       fb_logged_id:"",
+      autoresponder:"0",
       shownavbar:false,
       loader:true
     }
@@ -32,6 +34,54 @@ class Dashboard extends Component {
       OpenFacebookProfileInTab();
     }
   }
+  autoresponderHandler  = async (event) =>{
+    let user_id=localStorage.getItem('user_id');
+    let autoresponder = 0;
+    let payload ={
+      user_id:user_id,
+      autoresponder:autoresponder
+    }
+    await settingService.updateAutoresponderSetting(payload).then(async result=>{
+      this.setState({
+        loader:true
+      })
+      console.log(result);
+      if(result.data.code==1){
+        let responsenewvalue =result.data;
+        console.log( responsenewvalue.payload.UserInfo.user_id);
+        localStorage.setItem('kyubi_user_token', responsenewvalue.payload.UserInfo.kyubi_user_token);
+        localStorage.setItem('user_id', responsenewvalue.payload.UserInfo.user_id);
+        localStorage.setItem('fb_id', responsenewvalue.payload.UserInfo.facebook_id);
+        localStorage.setItem('fb_username', responsenewvalue.payload.UserInfo.facebook_name);
+        localStorage.setItem('fb_name', responsenewvalue.payload.UserInfo.facebook_profile_name);
+        localStorage.setItem('fb_image', responsenewvalue.payload.UserInfo.facebook_image);
+        localStorage.setItem('default_message', responsenewvalue.payload.UserSettings.default_message);
+        localStorage.setItem('default_message_text', responsenewvalue.payload.UserSettings.default_message_text);
+        localStorage.setItem('autoresponder', responsenewvalue.payload.UserSettings.autoresponder);
+        localStorage.setItem('default_time_delay', responsenewvalue.payload.UserSettings.default_time_delay);
+        localStorage.setItem('keywordsTally', JSON.stringify(responsenewvalue.payload.AutoResponderKeywords));
+        let fb_image=localStorage.getItem('fb_image');
+        let fb_username=localStorage.getItem('fb_username');
+        let fb_name=localStorage.getItem('fb_name');
+        let fb_id=localStorage.getItem('fb_id');
+        let fb_logged_id=localStorage.getItem('fb_logged_id');
+        let autoresponder=localStorage.getItem('autoresponder');
+        console.log("Yo Are Loged in",fb_logged_id);
+        this.setState({
+        fb_image:fb_image,
+        fb_username:fb_username,
+        fb_name:fb_name,
+        fb_id:fb_id,
+        fb_logged_id:fb_logged_id,
+        autoresponder:autoresponder,
+        loader:false
+        })
+
+      }
+    });
+
+    //CheckUserInfoFromFaccebook();
+  }
   refreshHandler  = async (event) =>  {
     event.preventDefault();
     this.setState({
@@ -44,12 +94,14 @@ class Dashboard extends Component {
       let fb_name=localStorage.getItem('fb_name');
       let fb_id=localStorage.getItem('fb_id');
       let fb_logged_id=localStorage.getItem('fb_logged_id');
+      let autoresponder=localStorage.getItem('autoresponder');
       this.setState({
         fb_image:fb_image,
         fb_username:fb_username,
         fb_name:fb_name,
         fb_id:fb_id,
         fb_logged_id:fb_logged_id,
+        autoresponder:autoresponder,
         loader:false
       })
 
@@ -62,6 +114,7 @@ class Dashboard extends Component {
       let fb_name=localStorage.getItem('fb_name');
       let fb_id=localStorage.getItem('fb_id');
       let fb_logged_id=localStorage.getItem('fb_logged_id');
+      let autoresponder=localStorage.getItem('autoresponder');
     console.log("Yo Are Loged in",fb_logged_id);
       this.setState({
         fb_image:fb_image,
@@ -69,6 +122,7 @@ class Dashboard extends Component {
         fb_name:fb_name,
         fb_id:fb_id,
         fb_logged_id:fb_logged_id,
+        autoresponder:autoresponder,
         loader:false
       })
 
@@ -130,9 +184,18 @@ class Dashboard extends Component {
                                 </li>
                                 
                               }
+                              {this.state.autoresponder=="1" ?
+                              <li className="list-group-item">
+                              <a onClick={this.autoresponderHandler} className="btn btn-warning btn-block"><i class="fas fa-sync"></i> Pause Autoresponder</a>
+                              </li>
+                              : 
+                              ""
+                              }
                                 <li className="list-group-item">
                                 <a onClick={this.refreshHandler} className="btn btn-warning btn-block"><i class="fas fa-sync"></i> Refresh</a>
                                 </li>
+
+                                
                                 
                               </ul>
                               <a onClick={this.fbHandler} className="btn btn-primary btn-block"><i class="fab fa-facebook-square"></i><b>
