@@ -227,7 +227,7 @@ module.exports.setsetting   =   async   (req,   res)    =>  {
         if(getUserInfo._id){
             let getUserSettings= await UserSettingRepository.GetUserSettingById(getUserInfo._id);
             if(getUserSettings){
-                console.log("This are",getUserSettings);
+                console.log("This arexxxxxxxxxxxxx",getUserSettings);
                 let UsersSettingsDetailinfo= {
                     default_message: req.body.defaultmessage,
                     default_message_text: req.body.default_message_text,
@@ -264,6 +264,8 @@ module.exports.setsetting   =   async   (req,   res)    =>  {
                     autoresponder: req.body.autoresponder,
                     default_time_delay: cast.number(req.body.default_time_delay)
                   };
+                  let getUserSettingsNew=await UserSettingRepository.saveUserSettingsDetails(UsersSettingsDetailinfo);
+                  
                   let  userInfo= UserHelper.UserdetailsInfo(getUserInfo._id).then(result=>{
                     console.log("yo yo +++++++++++++++++",result);
                         res.send({
