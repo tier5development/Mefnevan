@@ -1,7 +1,8 @@
 import React, { Component } from "react";
 import { NavLink } from "react-router-dom";
 import Sidebar from "../Common/sidebar";
-import AutoResponderService from  "../../../services/autoResponderServices"
+import AutoResponderService from  "../../../services/autoResponderServices";
+import settingService   from  "../../../services/setting";
 class autoResponnder extends Component {
     constructor(props) {
       super(props)
@@ -15,11 +16,38 @@ class autoResponnder extends Component {
         let payload ={
             user_id:Token
         }
-        AutoResponderService.listAutoResponder(payload).then(response =>{
+        AutoResponderService.listAutoResponder(payload).then(async response =>{
           
-            this.setState({loader:false});
+            
             this.setState({autoresponderList:response.data.payload.autokey})
             
+
+            let user_id=localStorage.getItem('user_id');
+            let payload   ={user_id:user_id }
+            await settingService.getUserDetails(payload).then(result  =>{
+
+            if(result.data.code==1){
+            let responsenewvalue =result.data;
+            console.log( responsenewvalue.payload.UserInfo.user_id);
+            localStorage.setItem('kyubi_user_token', responsenewvalue.payload.UserInfo.kyubi_user_token);
+            localStorage.setItem('user_id', responsenewvalue.payload.UserInfo.user_id);
+            localStorage.setItem('fb_id', responsenewvalue.payload.UserInfo.facebook_id);
+            localStorage.setItem('fb_username', responsenewvalue.payload.UserInfo.facebook_name);
+            localStorage.setItem('fb_name', responsenewvalue.payload.UserInfo.facebook_profile_name);
+            localStorage.setItem('fb_image', responsenewvalue.payload.UserInfo.facebook_image);
+            localStorage.setItem('default_message', responsenewvalue.payload.UserSettings.default_message);
+            localStorage.setItem('default_message_text', responsenewvalue.payload.UserSettings.default_message_text);
+            localStorage.setItem('autoresponder', responsenewvalue.payload.UserSettings.autoresponder);
+            localStorage.setItem('default_time_delay', responsenewvalue.payload.UserSettings.default_time_delay);
+            localStorage.setItem('keywordsTally', JSON.stringify(responsenewvalue.payload.AutoResponderKeywords));
+
+
+            }
+            }).catch(error=>{
+
+
+            })
+            this.setState({loader:false});
           }).catch(error=>{
             this.setState({loader:false});
           });

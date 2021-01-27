@@ -152,7 +152,7 @@ class autoResponderEdit extends Component {
                                     </div>
                                     <div className="form-group clearfix">
                                         <div className="icheck-success d-inline">
-                                        {this.state.auto_responder_status}
+                                        
                                         {this.state.auto_responder_status ?
                                         <input type="checkbox" id="checkboxPrimary3" name="auto_responder_status" onChange={this.autoSetting} checked/>
                                         :
