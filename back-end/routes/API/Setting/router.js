@@ -27,4 +27,8 @@ router.post('/getSetting',
 controller.getSetting
 )
 
+router.post('/getUserDetails',
+controller.getUserDetails
+)
+
 module.exports = router

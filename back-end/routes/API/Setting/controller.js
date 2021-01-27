@@ -241,12 +241,20 @@ module.exports.setsetting   =   async   (req,   res)    =>  {
                         req.body.autoresponder,
                         cast.number(req.body.default_time_delay)
                     );
-                    let getUserSettingsUpdate= await UserSettingRepository.GetUserSettingById(getUserInfo._id); 
-                    res.send({
-                        code: 1,
-                        message: "success",
-                        payload: getUserSettingsUpdate
-                    })
+                    let  userInfo= UserHelper.UserdetailsInfo(getUserInfo._id).then(result=>{
+                        console.log("yo yo +++++++++++++++++",result);
+                            res.send({
+                                code: 1,
+                                message: "Successfull",
+                                payload: result
+                            });
+                     }).catch(error => {
+                        res.send({
+                            code: 2,
+                            message: error.message,
+                            payload: error
+                        });
+                     });
 
             }else{
                 let UsersSettingsDetailinfo= {
@@ -256,12 +264,20 @@ module.exports.setsetting   =   async   (req,   res)    =>  {
                     autoresponder: req.body.autoresponder,
                     default_time_delay: cast.number(req.body.default_time_delay)
                   };
-                  let getUserSettingsNew=await UserSettingRepository.saveUserSettingsDetails(UsersSettingsDetailinfo);
-                  res.send({
-                    code: 1,
-                    message: "success",
-                    payload: getUserSettingsNew
-                })
+                  let  userInfo= UserHelper.UserdetailsInfo(getUserInfo._id).then(result=>{
+                    console.log("yo yo +++++++++++++++++",result);
+                        res.send({
+                            code: 1,
+                            message: "Successfull",
+                            payload: result
+                        });
+                 }).catch(error => {
+                    res.send({
+                        code: 2,
+                        message: error.message,
+                        payload: error
+                    });
+                 });
             }
         }
         
@@ -303,6 +319,31 @@ module.exports.getSetting   =   async   (req,   res)    =>  {
             code: 3,
             message: "Error",
             payload: error.message
+        })
+    }
+}
+module.exports.getUserDetails   =   async   (req,   res)    =>  {
+    try{
+        let  userInfo= UserHelper.UserdetailsInfo(req.body.user_id).then(result=>{
+            console.log("yo yo +++++++++++++++++",result);
+                res.send({
+                    code: 1,
+                    message: "Successfull",
+                    payload: result
+                });
+         }).catch(error => {
+            res.send({
+                code: 2,
+                message: error.message,
+                payload: error
+            });
+         });
+
+    }catch(error){
+        res.send({
+            code: 3,
+            message: error.message,
+            payload: error
         })
     }
 }
