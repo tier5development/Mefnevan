@@ -46,7 +46,7 @@ class sidebar extends Component {
               
                       <a href="" onClick={this.HideMenu} ><div className="crossbox"><i class="fas fa-times"></i></div></a>
                         
-                        <a href="../../index3.html" className="brand-link">
+                        <a href="" className="brand-link">
                           <img  src={logo}></img>
                         </a>
                         

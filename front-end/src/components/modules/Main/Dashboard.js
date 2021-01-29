@@ -229,7 +229,7 @@ class Dashboard extends Component {
                               }
                               {this.state.autoresponder=="1" ?
                               <li className="list-group-item">
-                              <a onClick={this.autoresponderHandler} className="btn btn-warning btn-block"><i class="fas fa-sync"></i> Pause Autoresponder</a>
+                              <a onClick={this.autoresponderHandler} className="btn btn-warning btn-block"><i class="fas fa-pause"></i> Pause Autoresponder</a>
                               </li>
                               : 
                               ""

@@ -2,7 +2,7 @@ const getUserToken = () => localStorage.getItem("token");
 console.log("I am background");
 const method = { POST: "post", GET: "get", PUT: "put", DELETE: "delete" };
 const toJsonStr = (val) => JSON.stringify(val);
-const getApiUrl = 'https://apimfenevan.ngrok.io/';
+const getApiUrl = 'https://api.mefnevan.com/';
 const mBasicUrl = 'https://mbasic.facebook.com';
 const handleRequest = (path, methodType, bodyData) => {
     let getWithCredentialHeader = {

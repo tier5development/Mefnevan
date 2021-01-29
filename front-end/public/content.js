@@ -122,6 +122,20 @@ const checkMessageContent = (res) =>  {
         let myObj = JSON.parse(res.keywordsTally);
             let arr =[];
             let totalno =myObj.length;
+            if(totalno === 0){
+              
+                let Nowtime=$.now();
+                let storejson ={
+                  tabinfo:res.tabinfo,
+                  facebook_name:sender,
+                  facebook_username:senderProfileLink,
+                  facebook_id:friendsID,
+                  last_contact_outgoing:Nowtime
+                }
+                chrome.runtime.sendMessage({type: "CheckDefaultMessageTrigger", options: storejson});
+            }else{
+
+            
             myObj.map(function(eachval){
               totalno =totalno-1;
                 let keywordToFind =eachval.keyword.toLowerCase();
@@ -182,6 +196,7 @@ const checkMessageContent = (res) =>  {
                   
                 }
             })
+            }
         }
     //let contentdata = {sendername:sender,messagecontent:newText,tabinfo:res.tabinfo}
     //chrome.runtime.sendMessage({type: "tallyMessageContent", options: contentdata});  

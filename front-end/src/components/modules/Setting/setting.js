@@ -128,11 +128,13 @@ class setting extends Component {
                     autoresponder: result.data.payload.autoresponder,
                     loader:false
                 })
+            }else{
+                this.setState({loader:false});
             }
             //console.log(result);
         }).catch(error=>{
             //console.log(error);
-            
+            this.setState({loader:false});
         }); 
 
     }
