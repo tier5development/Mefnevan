@@ -121,8 +121,9 @@ module.exports.GetUserDetails = async   (req,res)   =>{
             if(results.length>0){
                 console.log("This is my userInfoArray",results);
                 userInfoArray={
+                user_id:results[0]._id,
                 kyubi_user_token: results[0].kyubi_user_token,
-                facebook_fbid: results[0].facebook_fbid,
+                facebook_fbid: results[0].facebook_id,
                 facebook_name: results[0].facebook_name,
                 facebook_profile_name: results[0].facebook_profile_name,
                 facebook_image: results[0].facebook_image,

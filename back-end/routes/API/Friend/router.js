@@ -17,4 +17,10 @@ controller.friendsDefaultMessageCheck
 router.post('/friendsUpdateDefaut',
 controller.friendsUpdateDefaut
 )
+
+router.post('/friendsSaveLastMessageOut',
+controller.friendsSaveLastMessageOut
+)
+
+
 module.exports = router
