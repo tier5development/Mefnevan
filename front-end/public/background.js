@@ -266,7 +266,7 @@ chrome.runtime.onMessage.addListener(async function(request, sender) {
                                         }
                                         localStorage.setItem('fbmunread', fbmunread);
                                     });
-            }, 2000);
+            }, 4000);
         }
         
 
