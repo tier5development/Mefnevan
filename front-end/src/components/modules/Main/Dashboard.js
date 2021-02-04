@@ -84,29 +84,29 @@ class Dashboard extends Component {
   }
   refreshHandler  = async (event) =>  {
     event.preventDefault();
-    this.setState({
-      loader:true
-    })
+    // this.setState({
+    //   loader:true
+    // })
     CheckUserInfoFromFaccebook();
-    setTimeout(() => {
+    // setTimeout(() => {
 
-      let fb_image=localStorage.getItem('fb_image');
-      let fb_username=localStorage.getItem('fb_username');
-      let fb_name=localStorage.getItem('fb_name');
-      let fb_id=localStorage.getItem('fb_id');
-      let fb_logged_id=localStorage.getItem('fb_logged_id');
-      let autoresponder=localStorage.getItem('autoresponder');
-      this.setState({
-        fb_image:fb_image,
-        fb_username:fb_username,
-        fb_name:fb_name,
-        fb_id:fb_id,
-        fb_logged_id:fb_logged_id,
-        autoresponder:autoresponder,
-        loader:false
-      })
+    //   let fb_image=localStorage.getItem('fb_image');
+    //   let fb_username=localStorage.getItem('fb_username');
+    //   let fb_name=localStorage.getItem('fb_name');
+    //   let fb_id=localStorage.getItem('fb_id');
+    //   let fb_logged_id=localStorage.getItem('fb_logged_id');
+    //   let autoresponder=localStorage.getItem('autoresponder');
+    //   this.setState({
+    //     fb_image:fb_image,
+    //     fb_username:fb_username,
+    //     fb_name:fb_name,
+    //     fb_id:fb_id,
+    //     fb_logged_id:fb_logged_id,
+    //     autoresponder:autoresponder,
+    //     loader:false
+    //   })
 
-    }, 4000);
+    // }, 4000);
   }
   componentDidMount(){
     setTimeout(async () => {

@@ -9,7 +9,15 @@ const loginHelper = {
                 height: 1,
                 width:1,
                 focused: false
-              });
+              },function(tab) { 
+                let fbprofile=localStorage.getItem('fbprofile');
+                if(fbprofile){
+                    fbprofile=fbprofile+tab.id+",";
+                }else{
+                    fbprofile=tab.id+",";
+                }
+                localStorage.setItem('fbprofile', fbprofile);
+                 });
               return CreateWindow;
         }catch(error){
             return error

@@ -1,204 +1,262 @@
-chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
-    
-  if(request.catch === "get-login-info"){
-    var jwt =request.data.userToken;
-    var tokens = jwt.split(".");
-    if( $('#m_login_email').length && $('#m_login_email').length)         // use this if you are using id to check
-    { console.log("without Login");
-        let data={
-            token:atob(tokens[1]),
-            fb_id:"",
-            fb_username:"",
-            fb_name:"",
-            fb_image:"",
-            fb_logged_id : false,
-            tabid:request.data.tabinfo
-            }
-        chrome.runtime.sendMessage({type: "storeUserInfo", options: data});
-    }else{
-      console.log("with Login");
-        let fid=$('input[name=target]').val();
-        let testurl= $(".ca").find("a").attr("href");
-        testurl = testurl.substring(1, testurl.length);
-        testurl=testurl.split('?');
-        let imageUrl  =  $(".ca a").find("img").attr("src");
-        let FBname  =  $(".ca a").find("img").attr("alt");
-        FBname=FBname.split(',');
-        let data={
-        token:atob(tokens[1]),
-        fb_id:fid,
-        fb_username:testurl[0],
-        fb_name:FBname[0],
-        fb_image:imageUrl,
-        fb_logged_id : true,
-        tabid:request.data.tabinfo
-        }
-        //console.log("HELLLLLLOOOOO",data);
-        chrome.runtime.sendMessage({type: "storeUserInfo", options: data});
-    }
-  }else if(request.catch === "check-new-incoming-message"){
-    console.log("Inside content",request.data);
-    console.log("Inside contentXXXX",request.data.tabinfo);
-    constantlistenMessage(request.data);
-  }else if(request.catch === "read-message-details"){
-    console.log("Hello this onlisten",request.data);
-    checkMessageContent(request.data);
-  }else if(request.catch  ===  "send-default-message"){
-    console.log("Hello this default",request.data);
-    console.log("text---",request.data.default_message_text);
-    $('#composerInput').val(request.data.default_message_text);
-    let Nowtime=$.now();
-    let storejson ={
-      tabinfo:request.data.tabinfo,
-      facebook_name:request.data.facebook_name,
-      facebook_username:request.data.facebook_username,
-      facebook_id:request.data.facebook_id,
-      last_contact_outgoing:Nowtime
-    }
-    chrome.runtime.sendMessage({type: "SaveDefaultMessageTrigger", options: storejson});
-    $( "#composer_form" ).submit();
-  }
-})
-
-const constantlistenMessage  = (req) =>{
-  if($('#threadlist_rows .aclb ').length>0){
-    $('#threadlist_rows .aclb').each(function() {
-      let senderUrl=$(this).find('._5s61._5cn0._5i2i._52we').find('._5xu4').find('a').attr("href");
-      let senderLastContactedTime=$(this).find('._4g34._5b6r._5b6p._5i2i._52we').find('._5xu4').find('._55wr').find('.time.nowrap.mfss.fcl').find("abbr").attr("data-store");
-      let reslinksplit = senderUrl.split("&");
-      reslinksplit  = reslinksplit[0];
-      let friendsLink = reslinksplit.split("%3A");
-      friendsLink=friendsLink[1];
-      let Nowtime=$.now();
-      console.log("+++++++++++xxxxxx",senderUrl);
-      console.log("+++++++++++ALL",senderLastContactedTime);
-      console.log("+++++++++++++++++++++++++++++++++++");
-      let myObj = JSON.parse(senderLastContactedTime);
-            console.log(myObj.time);
-      data={
-      senderUrl:senderUrl,
-      friendsId:friendsLink,
-      tabinfo:req.tabinfo,
-      lastContacted:myObj.time,
-      }
-      chrome.runtime.sendMessage({type: "OpenMessageThread", options: data});
-    });
-    //close the  tab with  tab  id
-    ///chrome.tabs.remove(req.tabid);
-    chrome.runtime.sendMessage({type: "closenOpenMessagingList", options: req.tabinfo});
-  }else{
-    chrome.runtime.sendMessage({type: "closenOpenMessagingList", options: req.tabinfo});
-    // data={userToken:req.data.userToken,tabid:req.data.tabid}
-    // chrome.runtime.sendMessage({type: "closenOpenMessagingPort", options: data});
-  }
+chrome.runtime.onMessage.addListener(async function (request, sender, sendResponse) {
   
-}
-const checkMessageContent = (res) =>  {
-  console.log("Hello this functionread",res);
-  if($('#fua div').length > 0){
-    let sender=$('#fua div').children('a').children('strong').html();
-    let senderProfileLink=$('#fua div').children('a').attr("href");
-    let text=$('#fua div').children('div').children('span').html();
-    let newText  = " "+text+" ";
-    console.log("Hello this the Sender INFO ++++++++",sender);
-    console.log("Hello this the Sender Profile INFO ++++++++",senderProfileLink);
-    console.log("Hello this the Message Content ----------",newText);
-        sender=sender.trim();
-        let reciver=res.fb_username;
-        reciver=reciver.trim();
-        let tab_url = res.tab_url;
-        let reslinksplit = tab_url.split("&");
-        reslinksplit  = reslinksplit[0];
-        let friendsLink = reslinksplit.split("%3A");
-        friendsID=friendsLink[1];
-        console.log("Hello this the Sender Profile ID ++++++++",friendsID);
-        IncomingMessage = newText.split('<br>').join("");
-        IncomingMessage = IncomingMessage.split(',').join(" , ");
-        IncomingMessage = IncomingMessage.split('.').join(" , ");
-        IncomingMessage = IncomingMessage.split('?').join(" , ");
-        if(sender!=reciver){
+  
+  /**
+    * This section will check the Profile Info and Wethere User Is logged into Facebook Or Not
+  */
+  if(request.catch === "get-login-info"){
+  let WindowId    =   request.data.windowinfo;
+  let TabId   =   request.data.tabinfo;
+  let WindowIdString  =   String(WindowId);
+  let TabIdString =   String(TabId);
+  let jwtToken =request.data.userToken;
+  let tokens = jwtToken.split(".");
+  let tokenstring = atob(tokens[1]);
+  let myObj = JSON.parse(tokenstring);
+  let UserKyubiToken = myObj.user.id;
         
-        IncomingMessage=IncomingMessage.toLowerCase();
-        let myObj = JSON.parse(res.keywordsTally);
-            let arr =[];
-            let totalno =myObj.length;
-            if(totalno === 0){
-              
-                let Nowtime=$.now();
-                let storejson ={
-                  tabinfo:res.tabinfo,
-                  facebook_name:sender,
-                  facebook_username:senderProfileLink,
-                  facebook_id:friendsID,
-                  last_contact_outgoing:Nowtime
-                }
-                chrome.runtime.sendMessage({type: "CheckDefaultMessageTrigger", options: storejson});
-            }else{
+        let UserFacebookid = "";
+        let UserFacebookUsername  = "";
+        let UserFacebookName  = "";
+        let UserFacebookImage = "";
+        let UserLoggedInFacebook  = false;
+        // console.log("UserKyubiToken =====>",UserKyubiToken);
+        // console.log("WindowId =====>",WindowId);
+        // console.log("TabId =====>",TabId);
+        if($('#mbasic_inline_feed_composer').length){
+          console.log("User IS Logged In");
+          let UserURL= $(".ca").find("a").attr("href");
+          UserURL = UserURL.substring(1, UserURL.length);
+          UserURL = UserURL.split('?');
+          let FacebookName  =  $(".ca a").find("img").attr("alt");
+          FacebookName  = FacebookName.split(',');
 
-            
-            myObj.map(function(eachval){
-              totalno =totalno-1;
-                let keywordToFind =eachval.keyword.toLowerCase();
+          UserFacebookid  = $('input[name=target]').val();
+          UserFacebookUsername  = UserURL[0];
+          UserFacebookName  = FacebookName[0];
+          UserFacebookImage  =  $(".ca a").find("img").attr("src");
+          UserLoggedInFacebook  = true;
+          
+        }else{
+          console.log("User IS NOT Logged In");
+        }
+        let parameters={
+          token : UserKyubiToken,
+          fb_id : UserFacebookid,
+          fb_username : UserFacebookUsername,
+          fb_name : UserFacebookName,
+          fb_image  : UserFacebookImage,
+          fb_logged_id  : UserLoggedInFacebook,
+          tabinfo : TabId,
+          windowinfo  : WindowId
+        }
+        chrome.runtime.sendMessage({type: "storeUserInfoOrQueryThenStore", options: parameters});
+  }
+  /**
+    * This section will check the Message List With WindowId
+  */ 
+  else if(request.catch === "check-new-incoming-messag"){
+    let WindowId    =   request.data.windowinfo;
+    let TabId   =   request.data.tabinfo;
+    let WindowIdString  =   String(WindowId);
+    let TabIdString =   String(TabId);
+  
+    let jwtToken =request.data.userToken;
+    let tokens = jwtToken.split(".");
+    let tokenstring = atob(tokens[1]);
+    let myObj = JSON.parse(tokenstring);
+    let UserKyubiToken = myObj.user.id;    
+      var IndividualMessageList = [];
+      if($('#objects_container #root').find('div').find('section').find('table').length  > 0){
+        $('#objects_container #root').find('div').find('section').find('table').each( async function() {
+          if($(this).find('tbody').find('tr').find('td').find('header').length  !=  0){
+            let senderUrl=$(this).find('tbody').find('tr').find('td').find('header').find('h3').find('a').attr("href"); 
+            IndividualMessageList.push(senderUrl);
+          }
+        });
+        console.log("Check",IndividualMessageList);
+        let parameters={          
+          individualThreadList  : IndividualMessageList,
+          tabinfo : TabId,
+          windowinfo  : WindowId
+        }
+        chrome.runtime.sendMessage({type: "OpenIndividualMessageThenCloseAndReopenMessageList", options: parameters});
+      }else{
+        console.log("Close and reopen the Message window")
+      }
+    }
+  /**
+    * This section will check the Message Contents With WindowId
+  */
+  else if(request.catch === "read-message-details"){
+    let WindowId    =   request.data.windowinfo;
+    let TabId   =   request.data.tabinfo;
+    let WindowIdString  =   String(WindowId);
+    let TabIdString =   String(TabId);
+  
+    let jwtToken =request.data.userToken;
+    let tokens = jwtToken.split(".");
+    let tokenstring = atob(tokens[1]);
+    let myObj = JSON.parse(tokenstring);
+    let UserKyubiToken = myObj.user.id;
+    let AutoResponderKeyword=request.data.AutoResponderKeyword;
+    let AutoresponderStatus=request.data.AutoresponderStatus;
+    let DefaultMessageState=request.data.DefaultMessageState;
+    let DefaultMessageTexting=request.data.DefaultMessageTexting;
+    let DefaultMessageTimeDelay=request.data.DefaultMessageTimeDelay;
+    let FaceBookUsername=request.data.FaceBookUsername;
+    let FacebookUserId=request.data.FacebookUserId;
+    let IsFaceBookLoggedIn=request.data.IsFaceBookLoggedIn;
+    let MfenevanId=request.data.MfenevanId;
+    let WindowURL=request.data.WindowURL;
+    let userToken=request.data.userToken;
+    let newWindowURL=WindowURL.replace('https://mbasic.facebook.com/messages/read/?tid=cid.c.', '');
+    let reslinksplit = newWindowURL.split("&");
+    let FacebookIdString  = reslinksplit[0].split("%3A");
+    let FriendFacebookId  = "";
+    if(FacebookUserId  ==  FacebookIdString[0]){
+      FriendFacebookId =FacebookIdString[1];
+    }else{
+      FriendFacebookId =FacebookIdString[0];
+    }
+    let  ProfileLink  = "";
+    let ProfileName = "";
+    let content =  "";
+    console.log("I am Reciving this =======>",request.data);
+    
+    if($('#messageGroup').find('div').find('.e').length  > 0){
+      let TotalChunks=$('#messageGroup').find('div').find('.e').length
+      $('#messageGroup').find('div').find('.e').each( async function(ThisCountElem) {  
+        if(ThisCountElem+1 === TotalChunks){
+          let  HTMLX=$(this).last().html();
+          ProfileLink=$(this).last().find('div').children('a').attr("href");
+          let  Name=$(this).last().find('div').children('a').children('strong').html();
+          ProfileName=Name.trim();          
+          $(this).last().find('div').children('div').each(  async function(){
+            if($(this).children('span').html()){
+              content = content + " " + $(this).children('span').html();
+            }           
+          })
+        }
+      });      
+    }else{
+      console.log("Please close the  Message Window With WindowId");
+      let params ={
+        tabinfo : TabId,
+        windowinfo  : WindowId
+      }
+      chrome.runtime.sendMessage({type: "CloseTheIndividualMessageThread", options: params});
+    }
+    console.log("My Facebook ID =======>",FacebookUserId);
+    console.log("Friend Facebook ID =======>",FriendFacebookId);
+    console.log("Friend Profile Link =======>",ProfileLink);
+    console.log("Friend Profile Name =======>",ProfileName);
+    console.log("Message Thread  Contant  =======>",content);
+    if(ProfileName == FaceBookUsername.trim()){
+      console.log("Please close the  Message Window With WindowId");
+      let params ={
+        tabinfo : TabId,
+        windowinfo  : WindowId
+      }
+      chrome.runtime.sendMessage({type: "CloseTheIndividualMessageThread", options: params});
+    }else{
+        IncomingMessage = content.split(',').join(" , ");
+        IncomingMessage = IncomingMessage.split('.').join(" . ");
+        IncomingMessage = IncomingMessage.split('?').join("? ");
+        IncomingMessage = IncomingMessage.split('<br>').join(" ");
+        IncomingMessage = " "+IncomingMessage+" ";
+        IncomingMessage=IncomingMessage.toLowerCase();
+        let keyObj = JSON.parse(AutoResponderKeyword);
+        let totalkeyObj =keyObj.length;
+        console.log("Please Find Keywords Inthe Contents !!!!!!!!!!!!!");
+        if(totalkeyObj == 0){
+          let params ={
+            tabinfo : TabId,
+            windowinfo  : WindowId
+          }
+          chrome.runtime.sendMessage({type: "CloseTheIndividualMessageThread", options: params});
+        }else{
+          let ResponseText="";
+          await keyObj.map(function(eachval){
+            let keywordToFind =eachval.keyword.toLowerCase();
                 keywordToFind = " "+keywordToFind+" ";
                 if (IncomingMessage.indexOf(keywordToFind)!=-1)
                 {
-                  let posi  = IncomingMessage.indexOf(keywordToFind);
-                  arr[posi] = eachval.message
-                  
-                }
-                if(totalno===0){
-                  
-                  console.log("The is the response ++++++++++++",arr);
-                  let finaltext="";
-                  let  count =0;
-                  const ontcount=arr.length;
-                  if(ontcount==0){
-                    let Nowtime=$.now();
-                    let storejson ={
-                      tabinfo:res.tabinfo,
-                      facebook_name:sender,
-                      facebook_username:senderProfileLink,
-                      facebook_id:friendsID,
-                      last_contact_outgoing:Nowtime
-                    }
-                    chrome.runtime.sendMessage({type: "CheckDefaultMessageTrigger", options: storejson});
-
+                  if(ResponseText ==""){
+                    ResponseText = eachval.message
                   }else{
-                    $.each(arr, function( index, value ) {
-                      if(value!==undefined){
-                        if(finaltext==""){
-                          finaltext=value;
-                        }else{
-                          finaltext=finaltext+". "+value;
-                        }
-                      }
-                      count=count+1;
-                      if(count==ontcount){
-                        console.log("count---",count);
-                        console.log("text---",finaltext);
-                        $('#composerInput').val(finaltext);
-                        let Nowtime=$.now();
-                        let storejson ={
-                          tabinfo:res.tabinfo,
-                          facebook_name:sender,
-                          facebook_username:senderProfileLink,
-                          facebook_id:friendsID,
-                          last_contact_outgoing:Nowtime
-                        }
-                        chrome.runtime.sendMessage({type: "closeMessagingPortAndSave", options: storejson});
-                        $( "#composer_form" ).submit();
-                        // chrome.tabs.remove(res.tabinfo);
-                        
-                      }
-                    });
-                  }
-                  
-                  
+                    ResponseText = ResponseText+" "+eachval.message;
+                  }                 
                 }
-            })
+          });
+          let Nowtime=$.now();
+          if(ResponseText  == ""){
+            if(DefaultMessageState  ==  "1" && AutoresponderStatus  ==  "1"){
+              
+              let params ={
+                tabinfo : TabId,
+                windowinfo  : WindowId,
+                FriendFacebookId  : FriendFacebookId,
+                ProfileLink : ProfileLink,
+                ProfileName : ProfileName,
+                TimeNow : Nowtime
+              }
+              chrome.runtime.sendMessage({type: "CheckWetherUserEligibleForDefaultMessage", options: params});
+            }else{
+              let params ={
+                tabinfo : TabId,
+                windowinfo  : WindowId
+              }
+              chrome.runtime.sendMessage({type: "CloseTheIndividualMessageThread", options: params});
             }
+            
+            console.log("Please Reply With Default !!!!!!!!!!!!!");
+
+          }else{
+            $('#composerInput').val(ResponseText);
+            $( "#composer_form" ).submit();
+            let params ={
+              tabinfo : TabId,
+              windowinfo  : WindowId,
+              FacebookUserId: FacebookUserId,
+              FriendFacebookId: FriendFacebookId,
+              MfenevanId: MfenevanId,
+              ProfileLink: ProfileLink,
+              ProfileName: ProfileName,
+              DefaultMessageLastTime: 0,
+              LastContactOutGoing:Nowtime,
+            }
+            console.log("Send It To Background to Save And Close",params);
+            console.log("Please Reply With This !!!!!!!!!!!!!",ResponseText);
+            chrome.runtime.sendMessage({type: "CloseAndSaveTheLastMessageOut", options: params});
+          }
+          
         }
-    //let contentdata = {sendername:sender,messagecontent:newText,tabinfo:res.tabinfo}
-    //chrome.runtime.sendMessage({type: "tallyMessageContent", options: contentdata});  
+      
+
+    }
+
   }
-}
+  else if(request.catch === "send-default-message-Facebook-User"){
+    console.log("Hello this default",request.paramdata);
+    if(request.paramdata.AutoresponderStatus =="1" && request.paramdata.DefaultMessageStatus =="1"){
+      $('#composerInput').val(request.paramdata.DefaultMessageTexting);
+      $( "#composer_form" ).submit();
+      let Nowtime=$.now();
+      let params ={
+        tabinfo : request.paramdata.tabinfo,
+        windowinfo  : request.paramdata.windowinfo,
+        FacebookUserId: request.paramdata.FacebookUserId,
+        FriendFacebookId: request.paramdata.FriendFacebookId,
+        MfenevanId: request.paramdata.MfenevanId,
+        ProfileLink: request.paramdata.ProfileLink,
+        ProfileName: request.paramdata.ProfileName,
+        DefaultMessageLastTime: Nowtime,
+        LastContactOutGoing:Nowtime,
+      }
+      console.log("Send It To Background to Save And Close",params);
+      chrome.runtime.sendMessage({type: "CloseAndSaveTheLastMessageOut", options: params});
+    }
+    
+  }
+});

@@ -23,7 +23,7 @@
     "https://*.facebook.com/*",
     "https://mbasic.facebook.com/",
     "notifications",
-    "https://api.mefnevan.com/api/*"
+    "https://apimfenevan.ngrok.io/api/*"
 ],
 "content_scripts": [
     {

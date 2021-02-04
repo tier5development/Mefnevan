@@ -103,7 +103,6 @@ class Login extends Component {
                 //this.checkBackgroundFetching();
                  //console.log(LC);
                  setTimeout(() => {
-                //     console.log("sorry");
                     this.props.history.push('/dashboard');
                     console.log("sorry");
                 }, 3000);

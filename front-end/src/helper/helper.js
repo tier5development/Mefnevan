@@ -29,14 +29,24 @@ export function CheckUserInfoFromFaccebook() {
             let CreateWindow    =   chrome.windows.create({
                 url: myNewUrl,
                 type: "popup",
-                height: 200,
+                height: 1,
+                width:1,
                 focused: false
-              });
+              },function(tab) { 
+              let fbprofile=localStorage.getItem('fbprofile');
+              if(fbprofile){
+                  fbprofile=fbprofile+tab.id+",";
+              }else{
+                  fbprofile=tab.id+",";
+              }
+              localStorage.setItem('fbprofile', fbprofile);
+                 });
               return CreateWindow;
     }catch(error){
         console.log("This is a ",error);
     }
   }
+
 /** 
  * @OpenFacebookProfileInTab
  * this function will open Facebook Profile in a new Tab
