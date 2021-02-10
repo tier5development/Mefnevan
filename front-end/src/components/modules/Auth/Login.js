@@ -96,16 +96,24 @@ class Login extends Component {
                 password: this.state.password,
             }
             await AuthServices.login(payload).then(async result=>{
-                console.log(result);
+                console.log("This I gggggggg",result);
                 localStorage.setItem('token', result.data.token);
                 localStorage.setItem('inBackgroundFetching', true);
-                let LC=loginHelper.login();
+                if(result.data.code === 1){
+                    let LC=loginHelper.login();
+                    setTimeout(() => {
+                        this.props.history.push('/dashboard');
+                        console.log("sorry");
+                    }, 3000);
+                }else{
+                this.setState({ loader: false });
+                this.setState({errorMessage:"User not found or In-Active"});
+                this.setState({ error:true});
+                }
+                
                 //this.checkBackgroundFetching();
                  //console.log(LC);
-                 setTimeout(() => {
-                    this.props.history.push('/dashboard');
-                    console.log("sorry");
-                }, 3000);
+                 
                 //history.push("/dashboard");
             }).catch(error=>{
                 console.log(error);

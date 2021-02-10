@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import logo from "../../../image/logoone.png";
+import logo from "../../../image/Logo_Side.png";
 import { NavLink } from "react-router-dom";
 import {Animated} from "react-animated-css";
 class sidebar extends Component {
@@ -31,7 +31,7 @@ class sidebar extends Component {
     render() {
         return (
         <div>
-          <nav className="main-header navbar navbar-expand navbar-white navbar-dark">
+          <nav className="main-header navbar navbar-expand  navbar-dark">
               <ul className="navbar-nav">
                 <li className="nav-item">
                   <a className="nav-link" onClick={this.ShowMenu} data-widget="pushmenu" href="#" role="button">
@@ -42,14 +42,15 @@ class sidebar extends Component {
           </nav>
         {this.state.openSidebar ?
                       
-                      <div className="main-sidebar sidebar-dark-primary elevation-4 sidebar-no-expand" id="navbarMenu">
+                      <div className="main-sidebar sidebar-light-primary elevation-4 sidebar-no-expand" id="navbarMenu">
               
                       <a href="" onClick={this.HideMenu} ><div className="crossbox"><i class="fas fa-times"></i></div></a>
+                      
+                        <NavLink  to="/dashboard" className="brand-link">
                         
-                        <a href="" className="brand-link">
-                          <img  src={logo}></img>
-                        </a>
+                          <img  src={logo} className="Brandlogo"></img>
                         
+                        </NavLink>
                         <div className="sidebar">
                           <nav className="mt-2">
                             <ul className="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
@@ -77,14 +78,7 @@ class sidebar extends Component {
                                     </p>
                                   </NavLink>
                               </li>
-                              <li className="nav-item">
-                                  <NavLink  to="/friends" className="nav-link">
-                                    <i className="nav-icon fas fa-users"></i>
-                                    <p>
-                                      Friends
-                                    </p>
-                                  </NavLink>
-                              </li>
+                              
                               <li className="nav-item">
                                   <NavLink  to="/logout" className="nav-link">
                                     <i className="nav-icon fas fa-sign-out-alt"></i>

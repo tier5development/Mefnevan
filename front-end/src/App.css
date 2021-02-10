@@ -9,7 +9,7 @@ body{
   height: 680px;
     width: 450px;
     position: relative;
-    background:url(https://raw.githubusercontent.com/khadkamhn/day-01-login-form/master/img/bg.jpg) no-repeat center;
+    background:url("../src/image/cover.jpg") no-repeat center;
 	box-shadow:0 12px 15px 0 rgba(0,0,0,.24),0 17px 50px 0 rgba(0,0,0,.19);
 }
 *,:after,:before{box-sizing:border-box}
@@ -52,7 +52,13 @@ body{
   margin-top: 10px;
 }
 .crossbox i{
-  color: white;
+  color: rgb(0, 0, 0);
+  margin-bottom: 34px;
+  margin-right: 15px;
+}
+.Brandlogo {
+  width: 164px;
+  margin-top: 30px;
 }
 @keyframes App-logo-spin {
   from {

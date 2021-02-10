@@ -38,7 +38,15 @@ chrome.runtime.onMessage.addListener(async function (request, sender, sendRespon
           UserLoggedInFacebook  = true;
           
         }else{
+          UserLoggedInFacebook  = false;
           console.log("User IS NOT Logged In");
+          UserKyubiToken=atob(tokens[1]);
+          UserFacebookid="";
+          UserFacebookUsername="";
+          UserFacebookName="";
+          UserFacebookImage="";
+          UserLoggedInFacebook=false;
+          
         }
         let parameters={
           token : UserKyubiToken,

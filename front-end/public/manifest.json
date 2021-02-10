@@ -1,14 +1,14 @@
 {
-  "name": "Mefnevan",
-  "version": "1.0.0",
+  "name": "MeFn Evan",
+  "version": "1.0.1",
   "manifest_version": 2,
-  "description": "Mefnevan",
+  "description": "MeFn Evan",
   "icons": {
-      "192": "192X192.png",
-      "512": "512X512.png"
+      "48": "48X48.png",
+      "128": "128X128.png"
   },
   "browser_action": {
-      "default_icon": "512X512.png",
+      "default_icon": "128X128.png",
       "default_popup": "popup.html"
   },
   "background": {
@@ -23,7 +23,7 @@
     "https://*.facebook.com/*",
     "https://mbasic.facebook.com/",
     "notifications",
-    "https://apimfenevan.ngrok.io/api/*"
+    "https://api.mefnevan.com/api/*"
 ],
 "content_scripts": [
     {

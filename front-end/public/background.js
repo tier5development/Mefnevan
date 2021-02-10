@@ -4,7 +4,7 @@ console.log("I am background");
 const method = { POST: "post", GET: "get", PUT: "put", DELETE: "delete" };
 const toJsonStr = (val) => JSON.stringify(val);
 
-const getApiUrl = 'https://apimfenevan.ngrok.io/';
+const getApiUrl = 'https://api.mefnevan.com/';
 const mBasicUrl = 'https://mbasic.facebook.com';
 /** 
  * @handleRequest
@@ -82,8 +82,7 @@ chrome.tabs.onUpdated.addListener(async function(tabId, changeInfo, tab) {
             
             
             chrome.tabs.sendMessage(TabId, { catch: "get-login-info",data });
-        }
-        else if(tab.url === 'https://mbasic.facebook.com/messages' && CheckMListIDPresent==true){
+        }else if(tab.url === 'https://mbasic.facebook.com/messages' && CheckMListIDPresent==true){
             console.log("Yes the Message List is there");
             data={userToken:UserToken,tabinfo:TabId,windowinfo:WindowId}
             console.log(data);
@@ -230,6 +229,10 @@ chrome.runtime.onMessage.addListener(async function(request, sender) {
         chrome.windows.remove(WindowId);
         
         localStorage.removeItem("fbmunread");
+        let UserLoggedInFacebook=localStorage.getItem('fb_logged_id');
+        let BackGroundFetchingStatus=localStorage.getItem('inBackgroundFetching');
+        let AutoResponderStatus=localStorage.getItem('autoresponder');
+        if(AutoResponderStatus=="1" && UserLoggedInFacebook=="true" && BackGroundFetchingStatus  =="false"){
         request.options.individualThreadList.map(function(eachval){
             //console.log("EachUrl ====>",eachval);
             let NewUrl  =   mBasicUrl+eachval;
@@ -249,9 +252,9 @@ chrome.runtime.onMessage.addListener(async function(request, sender) {
                 localStorage.setItem('fbthread', fbthread);
             });
         })
-        let AutoResponderStatus =   localStorage.getItem('autoresponder');
-        let BackGroundFetchingStatus    = localStorage.getItem('inBackgroundFetching');
-        let UserLoggedInFacebook    =   localStorage.getItem('fb_logged_id');
+        }
+        
+        
         console.log("AutoResponderStatus",AutoResponderStatus);
         console.log("UserLoggedInFacebook",UserLoggedInFacebook);
         console.log("BackGroundFetchingStatus",BackGroundFetchingStatus);
@@ -363,21 +366,26 @@ chrome.runtime.onMessage.addListener(async function(request, sender) {
                     console.log("Store This In DB",NewIndividualThreadLinks);
                     let json_string = JSON.stringify(NewIndividualThreadLinks);
                     localStorage.setItem('individualThreadList', json_string);
-                    chrome.windows.create({
-                        url: myNewmessageUrl,
-                        type: "popup",
-                        height: 1,
-                        width:1,
-                        focused: false
-                    },function(tab) { 
-                        let fbthread=localStorage.getItem('fbthread');
-                        if(fbthread){
-                            fbthread=fbthread+tab.id+",";
-                        }else{
-                            fbthread=tab.id+",";
-                        }
-                        localStorage.setItem('fbthread', fbthread);
-                    });
+                    let UserLoggedInFacebook=localStorage.getItem('fb_logged_id');
+                    let BackGroundFetchingStatus=localStorage.getItem('inBackgroundFetching');
+                    let AutoResponderStatus=localStorage.getItem('autoresponder');
+                    if(AutoResponderStatus=="1" && UserLoggedInFacebook=="true" && BackGroundFetchingStatus  =="false"){
+                        chrome.windows.create({
+                            url: myNewmessageUrl,
+                            type: "popup",
+                            height: 1,
+                            width:1,
+                            focused: false
+                        },function(tab) { 
+                            let fbthread=localStorage.getItem('fbthread');
+                            if(fbthread){
+                                fbthread=fbthread+tab.id+",";
+                            }else{
+                                fbthread=tab.id+",";
+                            }
+                            localStorage.setItem('fbthread', fbthread);
+                        });
+                    }
                 }else{
                     let UserLoggedInFacebook=localStorage.getItem('fb_logged_id');
                     let BackGroundFetchingStatus=localStorage.getItem('inBackgroundFetching');
@@ -431,21 +439,26 @@ chrome.runtime.onMessage.addListener(async function(request, sender) {
                 console.log("Store This In DB",NewIndividualThreadLinks);
                 let json_string = JSON.stringify(NewIndividualThreadLinks);
                 localStorage.setItem('individualThreadList', json_string);
-                chrome.windows.create({
-                    url: myNewmessageUrl,
-                    type: "popup",
-                    height: 1,
-                    width:1,
-                    focused: false
-                },function(tab) { 
-                    let fbthread=localStorage.getItem('fbthread');
-                    if(fbthread){
-                        fbthread=fbthread+tab.id+",";
-                    }else{
-                        fbthread=tab.id+",";
-                    }
-                    localStorage.setItem('fbthread', fbthread);
-                });
+                let UserLoggedInFacebook=localStorage.getItem('fb_logged_id');
+                let BackGroundFetchingStatus=localStorage.getItem('inBackgroundFetching');
+                let AutoResponderStatus=localStorage.getItem('autoresponder');
+                if(AutoResponderStatus=="1" && UserLoggedInFacebook=="true" && BackGroundFetchingStatus  =="false"){
+                    chrome.windows.create({
+                        url: myNewmessageUrl,
+                        type: "popup",
+                        height: 1,
+                        width:1,
+                        focused: false
+                    },function(tab) { 
+                        let fbthread=localStorage.getItem('fbthread');
+                        if(fbthread){
+                            fbthread=fbthread+tab.id+",";
+                        }else{
+                            fbthread=tab.id+",";
+                        }
+                        localStorage.setItem('fbthread', fbthread);
+                    });
+                }
             }else{
                 let UserLoggedInFacebook=localStorage.getItem('fb_logged_id');
                 let BackGroundFetchingStatus=localStorage.getItem('inBackgroundFetching');
@@ -566,23 +579,28 @@ chrome.runtime.onMessage.addListener(async function(request, sender) {
                         FirstCount=FirstCount+1;
                     });
                     console.log("Store This In DB",NewIndividualThreadLinks);
-                    let json_string = JSON.stringify(NewIndividualThreadLinks);
-                    localStorage.setItem('individualThreadList', json_string);
-                    chrome.windows.create({
-                        url: myNewmessageUrl,
-                        type: "popup",
-                        height: 1,
-                        width:1,
-                        focused: false
-                    },function(tab) { 
-                        let fbthread=localStorage.getItem('fbthread');
-                        if(fbthread){
-                            fbthread=fbthread+tab.id+",";
-                        }else{
-                            fbthread=tab.id+",";
-                        }
-                        localStorage.setItem('fbthread', fbthread);
-                    });
+                    let UserLoggedInFacebook=localStorage.getItem('fb_logged_id');
+                    let BackGroundFetchingStatus=localStorage.getItem('inBackgroundFetching');
+                    let AutoResponderStatus=localStorage.getItem('autoresponder');
+                    if(AutoResponderStatus=="1" && UserLoggedInFacebook=="true" && BackGroundFetchingStatus  =="false"){
+                        let json_string = JSON.stringify(NewIndividualThreadLinks);
+                        localStorage.setItem('individualThreadList', json_string);
+                        chrome.windows.create({
+                            url: myNewmessageUrl,
+                            type: "popup",
+                            height: 1,
+                            width:1,
+                            focused: false
+                        },function(tab) { 
+                            let fbthread=localStorage.getItem('fbthread');
+                            if(fbthread){
+                                fbthread=fbthread+tab.id+",";
+                            }else{
+                                fbthread=tab.id+",";
+                            }
+                            localStorage.setItem('fbthread', fbthread);
+                        });
+                    }
                 }else{
                     let UserLoggedInFacebook=localStorage.getItem('fb_logged_id');
                     let BackGroundFetchingStatus=localStorage.getItem('inBackgroundFetching');
@@ -607,8 +625,7 @@ chrome.runtime.onMessage.addListener(async function(request, sender) {
                                             });
                     }
                 }
-    }
-    else if(request.type   ==  "StoreMessageLinkInStorage"){
+    }else if(request.type   ==  "StoreMessageLinkInStorage"){
         console.log("From Message List I Got",request.options);
         chrome.tabs.remove(TabId);
         chrome.windows.remove(WindowId);       
@@ -633,23 +650,28 @@ chrome.runtime.onMessage.addListener(async function(request, sender) {
                 FirstCount=FirstCount+1;
             });
             console.log("Store This In DB",NewIndividualThreadLinks);
-            let json_string = JSON.stringify(NewIndividualThreadLinks);
-            localStorage.setItem('individualThreadList', json_string);
-            chrome.windows.create({
-                url: myNewmessageUrl,
-                type: "popup",
-                height: 1,
-                width:1,
-                focused: false
-            },function(tab) { 
-                let fbthread=localStorage.getItem('fbthread');
-                if(fbthread){
-                    fbthread=fbthread+tab.id+",";
-                }else{
-                    fbthread=tab.id+",";
-                }
-                localStorage.setItem('fbthread', fbthread);
-            });
+            let UserLoggedInFacebook=localStorage.getItem('fb_logged_id');
+            let BackGroundFetchingStatus=localStorage.getItem('inBackgroundFetching');
+            let AutoResponderStatus=localStorage.getItem('autoresponder');
+            if(AutoResponderStatus=="1" && UserLoggedInFacebook=="true" && BackGroundFetchingStatus  =="false"){
+                let json_string = JSON.stringify(NewIndividualThreadLinks);
+                localStorage.setItem('individualThreadList', json_string);
+                chrome.windows.create({
+                    url: myNewmessageUrl,
+                    type: "popup",
+                    height: 1,
+                    width:1,
+                    focused: false
+                },function(tab) { 
+                    let fbthread=localStorage.getItem('fbthread');
+                    if(fbthread){
+                        fbthread=fbthread+tab.id+",";
+                    }else{
+                        fbthread=tab.id+",";
+                    }
+                    localStorage.setItem('fbthread', fbthread);
+                });
+            }
         }else{
             let UserLoggedInFacebook=localStorage.getItem('fb_logged_id');
             let BackGroundFetchingStatus=localStorage.getItem('inBackgroundFetching');
@@ -700,23 +722,28 @@ chrome.runtime.onMessage.addListener(async function(request, sender) {
                 FirstCount=FirstCount+1;
             });
             console.log("Store This In DB",NewIndividualThreadLinks);
-            let json_string = JSON.stringify(NewIndividualThreadLinks);
-            localStorage.setItem('individualThreadList', json_string);
-            chrome.windows.create({
-                url: myNewmessageUrl,
-                type: "popup",
-                height: 1,
-                width:1,
-                focused: false
-            },function(tab) { 
-                let fbthread=localStorage.getItem('fbthread');
-                if(fbthread){
-                    fbthread=fbthread+tab.id+",";
-                }else{
-                    fbthread=tab.id+",";
-                }
-                localStorage.setItem('fbthread', fbthread);
-            });
+            let UserLoggedInFacebook=localStorage.getItem('fb_logged_id');
+            let BackGroundFetchingStatus=localStorage.getItem('inBackgroundFetching');
+            let AutoResponderStatus=localStorage.getItem('autoresponder');
+            if(AutoResponderStatus=="1" && UserLoggedInFacebook=="true" && BackGroundFetchingStatus  =="false"){
+                let json_string = JSON.stringify(NewIndividualThreadLinks);
+                localStorage.setItem('individualThreadList', json_string);
+                chrome.windows.create({
+                    url: myNewmessageUrl,
+                    type: "popup",
+                    height: 1,
+                    width:1,
+                    focused: false
+                },function(tab) { 
+                    let fbthread=localStorage.getItem('fbthread');
+                    if(fbthread){
+                        fbthread=fbthread+tab.id+",";
+                    }else{
+                        fbthread=tab.id+",";
+                    }
+                    localStorage.setItem('fbthread', fbthread);
+                });
+            }
         }else{
             console.log("YYYYYYYYYYYYYYYYYYYYYYYYY");
             let UserLoggedInFacebook=localStorage.getItem('fb_logged_id');

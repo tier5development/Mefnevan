@@ -14,14 +14,26 @@ class logout extends Component {
 
       }
       componentDidMount(){
+        
+        localStorage.removeItem("fb_id")
+        localStorage.removeItem("token")
+        localStorage.removeItem("keywordsTally")
         localStorage.removeItem('inBackgroundFetching');
         localStorage.removeItem('fb_image');
         localStorage.removeItem('fb_logged_id');
         localStorage.removeItem('fb_name');
         localStorage.removeItem('fb_username');
-        localStorage.removeItem("fb_id")
+        localStorage.removeItem("autoresponder")
         localStorage.removeItem("kyubi_user_token")
-        localStorage.removeItem("token")
+        localStorage.removeItem("user_id")
+        localStorage.removeItem("default_message_text")
+        localStorage.removeItem("fb_username")
+        localStorage.removeItem("default_time_delay")
+        localStorage.removeItem("default_message")
+        localStorage.removeItem("individualThreadList")
+        localStorage.removeItem('fbthread');
+        localStorage.removeItem('fbmunread');
+        localStorage.removeItem('fbprofile');
         setTimeout(() => {
             this.props.history.push('/');
           }, 3000);
