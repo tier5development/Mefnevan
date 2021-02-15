@@ -76,7 +76,8 @@ chrome.tabs.onUpdated.addListener(async function(tabId, changeInfo, tab) {
             
 
         if(tab.url === 'https://mbasic.facebook.com/' && CheckProfileIDPresent==true){
-            console.log("Yes the Profile is there");
+            console.log("Yes the Profile is there Suvadeep");
+            console.log("This is info from background",tab);
             data={userToken:UserToken,tabinfo:TabId,windowinfo:WindowId}
             console.log(data);
             

@@ -8,6 +8,8 @@ import classNames from "classnames";
 
 const Login = lazy(() => import("../components/modules/Auth/Login"));
 const ForgotPassword = lazy(() => import("../components/modules/Auth/ForgotPassword"));
+const MessageGroup = lazy(() => import("../components/modules/MessageGroup/messageGroup"));
+const MessageGroupCreate = lazy(() => import("../components/modules/MessageGroup/messageGroupCreate"));
 const NotFound = lazy(() => import("../components/modules/Auth/NotFound"));
 const Dashboard = lazy(() => import("../components/modules/Main/Dashboard"));
 const Setting = lazy(() => import("../components/modules/Setting/setting"));
@@ -27,11 +29,14 @@ const AppRoute = ({ sidebarIsOpen, toggleSidebar }) => {
         {/* <Topbar toggleSidebar={toggleSidebar} /> */}
         <Switch>
         <Route exact path="/" component={Login} />
+        <Route exact path="/forgotPassword" component={ForgotPassword} />
         <Route  exact  path="/dashboard" component={Dashboard} />
         <Route  exact  path="/setting" component={Setting} />
         <Route  exact  path="/autoresponder" component={AutoResponder} />
         <Route  exact  path="/autorespondercreate" component={AutoResponderCreate} />
         <Route  exact  path="/autoresponderedit/:idfy"  component={AutoResponderEdit} />
+        <Route  exact  path="/messageGroup" component={MessageGroup} />
+        <Route  exact  path="/messagegroupcreate" component={MessageGroupCreate} />
         <Route  exact  path="/logout"  component={Logout} />
         </Switch>
       </Container>

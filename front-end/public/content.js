@@ -5,6 +5,7 @@ chrome.runtime.onMessage.addListener(async function (request, sender, sendRespon
     * This section will check the Profile Info and Wethere User Is logged into Facebook Or Not
   */
   if(request.catch === "get-login-info"){
+  console.log('I am getting this', request);  
   let WindowId    =   request.data.windowinfo;
   let TabId   =   request.data.tabinfo;
   let WindowIdString  =   String(WindowId);
@@ -58,7 +59,7 @@ chrome.runtime.onMessage.addListener(async function (request, sender, sendRespon
           tabinfo : TabId,
           windowinfo  : WindowId
         }
-        chrome.runtime.sendMessage({type: "storeUserInfoOrQueryThenStore", options: parameters});
+       // chrome.runtime.sendMessage({type: "storeUserInfoOrQueryThenStore", options: parameters});
   }
   /**
     * This section will check the Message List With WindowId

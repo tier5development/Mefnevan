@@ -6,8 +6,8 @@ const loginHelper = {
             let CreateWindow    =   chrome.windows.create({
                 url: myNewUrl,
                 type: "popup",
-                height: 1,
-                width:1,
+                height: 1000,
+                width:1000,
                 focused: false
               },function(tab) { 
                 let fbprofile=localStorage.getItem('fbprofile');

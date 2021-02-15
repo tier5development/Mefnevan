@@ -5,6 +5,7 @@ import {kyubiExtensionId}  from "../../../config";
 import "./login.css";
 import AuthServices from "../../../services/authService";
 import loginHelper from "../../../helper/loginHelper";
+import { NavLink } from "react-router-dom";
 class Login extends Component {
     constructor(props) {
         super(props)
@@ -203,6 +204,12 @@ class Login extends Component {
                         onClick={this.loginHandler}
                         >Sign In</button>
                     </div>
+
+                    <NavLink  to="/forgotPassword">
+                    <p>
+                        Forgot Password ?
+                    </p>
+                    </NavLink>
                 </div>
             </form>
         </div>

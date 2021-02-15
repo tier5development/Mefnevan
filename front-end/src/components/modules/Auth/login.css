@@ -10156,6 +10156,10 @@
   a.text-danger:hover, a.text-danger:focus {
     color: #a71d2a !important;
   }
+
+  .text-success {
+    color: #2AE12D !important;
+  }
   
   .text-light {
     color: #f8f9fa !important;
