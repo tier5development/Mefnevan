@@ -19,18 +19,33 @@ class messageGroupCreate extends Component {
     inputChangeHandller = (event) => {
         this.setState({ [event.target.name]: event.target.value })
     }
-    allTweets = [];
-    createMessageGroupHandler =  (event) =>{
+    componentDidMount(){
+        this.setState({loader:true});
+        let id = this.props.match.params.idfy ;
+        let messageGroupItem = JSON.parse(localStorage.getItem("groupitems"))[id];
+        console.log(messageGroupItem.message_group_name);
+        this.setState({
+            message_group_name:messageGroupItem.message_group_name,
+            message_group_description:messageGroupItem.message_group_description,
+            loader:false
+          })
+        
+    }
+
+    updateMessageGroupHandler =  (event) =>{
         this.setState({loader:true});
         event.preventDefault();
         let Token=localStorage.getItem("kyubi_user_token");
+        let id = this.props.match.params.idfy ;
+        console.log('Group Name '+this.state.message_group_name);
         let payload = {
             user_id:Token,
+            message_group_id: id,
             message_group_name:this.state.message_group_name,
             message_group_description:this.state.message_group_description,
         }
         
-        if(MessageGroupService.createMessageGroup(payload))
+        if(MessageGroupService.updateMessageGroup(payload))
         {
             this.setState({loader:false});
             this.props.history.push('/messageGroup');
@@ -58,7 +73,7 @@ class messageGroupCreate extends Component {
                                         
                                         <div className="card card-primary">
                                             <div className="card-header">
-                                                <h3 className="card-title"> Create Message-Group</h3>
+                                                <h3 className="card-title"> Edit Message-Group</h3>
                                             </div>
                                             <form>
                                             <div className="card-body">
@@ -88,7 +103,7 @@ class messageGroupCreate extends Component {
                                                 </div>
                                                 </div>           
                                             <div className="card-footer">
-                                            <button type="submit" className="btn btn-primary" onClick={this.createMessageGroupHandler} >Submit</button>
+                                            <button type="submit" className="btn btn-primary" onClick={this.updateMessageGroupHandler} >Submit</button>
                                             </div>
                                             </form>
                                         </div>

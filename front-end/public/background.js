@@ -4,7 +4,7 @@ console.log("I am background");
 const method = { POST: "post", GET: "get", PUT: "put", DELETE: "delete" };
 const toJsonStr = (val) => JSON.stringify(val);
 
-const getApiUrl = 'https://api.mefnevan.com/';
+const getApiUrl = 'http://localhost:8080';
 const mBasicUrl = 'https://mbasic.facebook.com';
 /** 
  * @handleRequest
