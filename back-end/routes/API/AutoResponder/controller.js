@@ -14,16 +14,19 @@ module.exports.AutoResponderCreate  =   async   (req,   res)    =>  {
                 message:req.body.auto_responder_message,
                 status:req.body.auto_responder_status
               };
-              let AutoResponderGroup=await AutoResponderRepo.CreateAutoResponderGroup(UsersAutoResponderinfo);
-              let strArr = req.body.auto_responder_keywords.split(',');
-              for(var i=0; i<strArr.length; i++){
+            let AutoResponderGroup=await AutoResponderRepo.CreateAutoResponderGroup(UsersAutoResponderinfo);
+
+            console.log("This is my AutoresponderGroup",UsersAutoResponderinfo);
+            req.body.auto_responder_keywords.map(async eachval =>{
+                console.log("each Keyword",eachval.text);
                 let UsersAutoResponderKeywordinfo= {
-                        user_id: getUserInfo._id,
-                        auto_responder_id: AutoResponderGroup._id,
-                        keywords:strArr[i]
-                    };
+                    user_id: getUserInfo._id,
+                    auto_responder_id: AutoResponderGroup._id,
+                    keywords:eachval.text
+                };
                 await AutoResponderRepo.CreateAutoResponderKeyword(UsersAutoResponderKeywordinfo);
-            }
+            })
+            
             res.send({
                 code: 1,
                 message: "TheKeyWords Is Saved SuccessFully",
@@ -52,21 +55,12 @@ module.exports.AutoResponderList    =   async   (req,   res)    =>  {
         if(getUserInfo._id){
             let getUserSettings= await UserSettingRepository.GetUserSettingById(getUserInfo._id);
             let AutoResponderDetails= await AutoResponderRepo.GetAutoResponderResponder(getUserInfo._id);
-            if(getUserSettings){
-                let AutoResponderDetails= await AutoResponderRepo.GetAutoResponderResponder(getUserInfo._id);
-                console.log(AutoResponderDetails);
-                res.send({
+            res.send({
                             code: 1,
                             message: "Successfull",
-                            payload:{setting:getUserSettings.autoresponder,autokey:AutoResponderDetails}
-                        });
-            }else{
-                res.send({
-                    code: 1,
-                    message: "Successfull",
-                    payload:0
-                });
-            }
+                            payload:{setting:getUserSettings,autokey:AutoResponderDetails}
+                    });
+            
             
         }else{
             res.send({
@@ -123,15 +117,16 @@ module.exports.AutoResponderUpdate  =   async   (req,   res)    =>  {
               };
               let updateAutoResponder=await AutoResponderRepo.updateAutoResponderById(UsersAutoResponderinfo,req.body.auto_responder_id);
               let DeleteAssociatedKeywords=await AutoResponderRepo.DeleteAssociatedAutoResponderKeywords(req.body.auto_responder_id,getUserInfo._id);
-              let strArr = req.body.auto_responder_keywords.split(',');
-              for(var i=0; i<strArr.length; i++){
-                let UsersAutoResponderKeywordinfo= {
+              
+                req.body.auto_responder_keywords.map(async eachval =>{
+                    console.log("each Keyword",eachval.text);
+                    let UsersAutoResponderKeywordinfo= {
                         user_id: getUserInfo._id,
                         auto_responder_id: req.body.auto_responder_id,
-                        keywords:strArr[i]
+                        keywords:eachval.text
                     };
-                await AutoResponderRepo.CreateAutoResponderKeyword(UsersAutoResponderKeywordinfo);
-                }
+                    await AutoResponderRepo.CreateAutoResponderKeyword(UsersAutoResponderKeywordinfo);
+                })
               res.send({
                 code: 1,
                 message: "Successfull",

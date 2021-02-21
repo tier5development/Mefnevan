@@ -1,6 +1,7 @@
 const   UsersRepo   =   require('../../../models/repositories/user.repository');
 const   FriendsRepo =   require('../../../models/repositories/friends.repository');
-
+const   UserSettingRepository   =   require('../../../models/repositories/settings.repository');
+var typecast = require('typecast');
 module.exports.FriendsCreateOrUpdate    =   async   (req,   res)    =>  {
     try{
         console.log("This is my sent",req.body);
@@ -64,6 +65,101 @@ module.exports.FriendsUpdate    =   async   (req,   res)    =>  {
             message: "Success",
             payload: req.body
         })
+    }catch(error){
+        res.send({
+            code: 3,
+            message: error.message,
+            payload: error
+        })
+    }
+}
+module.exports.CheckFriendReadyToReciveDefaultMessage   =   async   (req,   res)    =>  {
+    try{
+        console.log("This is my sent",req.body);
+        let ResponseDetails={
+            stateCode:2,
+            ResponseMessage: "Sorry Can`t Send Any Message"
+        }
+        let sendOption = 0;
+        let getUserSettings= await UserSettingRepository.GetUserSettingById(req.body.MfenevanId);
+        if(getUserSettings){
+            let FriendsInfo = await FriendsRepo.GetUserByUserFacebookID(req.body.MfenevanId,req.body.FriendFacebookId,req.body.FacebookUserId);
+            if(FriendsInfo){
+                console.log("Userr Settings",getUserSettings);
+                let FriendsInfoPayload= {
+                    facebook_username:req.body.ProfileLink,
+                    facebook_first_name:req.body.FacebookFirstName,
+                    facebook_last_name:req.body.FacebookLastName
+                  };
+                let updateFriendsInfo=await FriendsRepo.updateFriendsInfoById(FriendsInfoPayload,FriendsInfo._id);
+                if(FriendsInfo.last_default_message_time==0){
+                    sendOption = 1;
+                }else{
+                    console.log("This Is the timeeeeeeeeeeeeeeeeeee Now before  casting",req.body.TimeNow);
+                    let TimeNow=typecast(req.body.TimeNow, 'number')
+                    console.log("This Is the timeeeeeeeeeeeeeeeeeee Now after  casting",TimeNow);
+                    let timediff=(TimeNow - FriendsInfo.last_default_message_time)/ (60*60*1000);
+                    console.log("This Is the timeeeeeeeeeeeeeeeeeee Difference",timediff);
+                    console.log("This Is the timeeeeeeeeeeeeeeeeeee Delay",getUserSettings.default_time_delay);
+                    if(timediff>getUserSettings.default_time_delay){
+                        console.log("Increaessssssssssssssss")
+                        sendOption = 1; 
+                    }else{
+                        console.log("ZZZZZZZZZZZZZZZZZZZZZ")
+                        sendOption = 0;
+                    }
+                }
+            }else{
+                let FriendsInfoPayload= {
+                    user_id: req.body.MfenevanId,
+                    facebook_id: req.body.FriendFacebookId,
+                    facebook_user_id:req.body.FacebookUserId,
+                    facebook_username:req.body.ProfileLink,
+                    facebook_first_name:req.body.FacebookFirstName,
+                    facebook_last_name:req.body.FacebookLastName
+                };
+                let saveFriendsInfo=await FriendsRepo.CreateFriendsInfo(FriendsInfoPayload);
+                sendOption = 1;
+            }
+        }else{
+            sendOption  =   0;
+        }
+        if(sendOption==1 && getUserSettings.default_message==1){
+            if(getUserSettings.default_message_type==0){
+
+            let TimeNowTC=typecast(req.body.TimeNow, 'number')
+            let a = new Date(TimeNowTC);
+            let months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+            let year = a.getFullYear();
+            let month = months[a.getMonth()];
+            let date = a.getDate();
+            let hour = a.getHours();
+            let min = a.getMinutes();
+            let sec = a.getSeconds();
+            let OnlyDate = date + ' ' + month + ' ' + year ;
+            let DateTime = date + ' ' + month + ' ' + year + ' ' + hour + ':' + min + ':' + sec 
+
+               let newText=getUserSettings.default_message_text.replace('{first_name}', req.body.FacebookFirstName);
+                newText=newText.replace('{last_name}', req.body.FacebookLastName);
+                newText=newText.replace('{date}', OnlyDate);
+                newText=newText.replace('{date_time}', DateTime);
+                ResponseDetails={
+                    stateCode:1,
+                    ResponseMessage: newText
+                }
+            }
+        }else{
+            ResponseDetails={
+                stateCode:2,
+                ResponseMessage: ""
+            }
+        }
+        res.send({
+            code: 1,
+            message: "Successfull",
+            payload: ResponseDetails
+        })
+        
     }catch(error){
         res.send({
             code: 3,
@@ -157,6 +253,79 @@ module.exports.friendsUpdateDefaut    =   async   (req,   res)    =>  {
             message: "Success",
             payload: req.body
         })
+    }catch(error){
+        res.send({
+            code: 3,
+            message: error.message,
+            payload: error
+        })
+    }
+}
+module.exports.SaveLastMessageOutForFriend  =   async   (req,   res)    =>  {
+    try{
+        console.log("This is my sent",req.body);
+        let FriendsInfo = await FriendsRepo.GetUserByUserFacebookID(req.body.MfenevanId,req.body.FriendFacebookId,req.body.FacebookUserId);
+        let Checkuser_id= req.body.MfenevanId;
+        let Checkfacebook_id= req.body.FriendFacebookId;
+        let Checkfacebook_user_id=req.body.FacebookUserId;
+        let Checkfacebook_username=req.body.ProfileLink;
+        let Checkfacebook_first_name=req.body.FacebookFirstName;
+        let Checkfacebook_last_name=req.body.FacebookLastName;
+        let Checklast_contact_outgoing=0;
+        let Checklast_default_message=req.body.ResponseMessage;
+        let Checklast_default_message_time=0;
+        let Checkconnection_status=1;
+        let FriendsInfoPayloadUpdate  = {};
+        if(req.body.MessageSenderType =="last_default_message_time"){
+            Checklast_default_message_time=req.body.ResponseTime;
+            FriendsInfoPayloadUpdate  =   {
+                user_id: Checkuser_id,
+                facebook_id: Checkfacebook_id,
+                facebook_user_id:Checkfacebook_user_id,
+                facebook_username:Checkfacebook_username,
+                facebook_first_name:Checkfacebook_first_name,
+                facebook_last_name:Checkfacebook_last_name,
+                last_default_message: Checklast_default_message,
+                last_default_message_time:Checklast_default_message_time,
+                connection_status: Checkconnection_status
+            };
+        }else{
+            Checklast_contact_outgoing=req.body.ResponseTime;
+            FriendsInfoPayloadUpdate  =   {
+                user_id: Checkuser_id,
+                facebook_id: Checkfacebook_id,
+                facebook_user_id:Checkfacebook_user_id,
+                facebook_username:Checkfacebook_username,
+                facebook_first_name:Checkfacebook_first_name,
+                facebook_last_name:Checkfacebook_last_name,
+                last_contact_outgoing: Checklast_contact_outgoing,
+                last_default_message: Checklast_default_message,
+                connection_status: Checkconnection_status
+            };
+        }
+        if(FriendsInfo){
+            let updateFriendsInfo=await FriendsRepo.updateFriendsInfoById(FriendsInfoPayloadUpdate,FriendsInfo._id);
+        }else{
+            let FriendsInfoPayload= {
+                user_id: Checkuser_id,
+                facebook_id: Checkfacebook_id,
+                facebook_user_id:Checkfacebook_user_id,
+                facebook_username:Checkfacebook_username,
+                facebook_first_name:Checkfacebook_first_name,
+                facebook_last_name:Checkfacebook_last_name,
+                last_contact_outgoing: Checklast_contact_outgoing,
+                last_default_message: Checklast_default_message,
+                last_default_message_time:Checklast_default_message_time,
+                connection_status: Checkconnection_status
+            };
+            let saveFriendsInfo=await FriendsRepo.CreateFriendsInfo(FriendsInfoPayload);
+        }
+        res.send({
+            code: 1,
+            message: "Successfull",
+            payload: FriendsInfo
+        })
+        
     }catch(error){
         res.send({
             code: 3,

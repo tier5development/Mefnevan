@@ -117,6 +117,7 @@ module.exports.GetUserDetails = async   (req,res)   =>{
         console.log("This is my Respo",getUserInfo);
         let userInfoArray = {};
         let userSettingsArray = {};
+        let statusArray = [];
         await UsersRepo.GetUserDetailsInfo(req.body.user_rec).then(async results=>{
             if(results.length>0){
                 console.log("This is my userInfoArray",results);
@@ -136,20 +137,38 @@ module.exports.GetUserDetails = async   (req,res)   =>{
                         autoresponder: results[0].usersettings.autoresponder,
                         default_time_delay: results[0].usersettings.default_time_delay};
                 }
+                
+                await AutoResponderRepo.GetAutoResponderKeywords(getUserInfo._id).then(async result=>{
+                    if(result.length>0){
+                        
+                        await result.map(async individual => {
+                            if(individual.autoresponders[0].status===1){
+                                statusArray.push({keyword:individual.keywords, message:individual.autoresponders[0].message});
+                            }                                    
+                        })
+                        
+                    }
+                });
+            }else{
+                let UsersDetailinfo= {
+                    kyubi_user_token: req.body.user_rec,
+                    status: 0
+                };
+                console.log(UsersDetailinfo);
+                let saveUesr=await UsersRepo.saveUserDetails(UsersDetailinfo);
+                console.log(saveUesr);
+                userInfoArray={
+                    user_id:saveUesr._id,
+                    kyubi_user_token: saveUesr.kyubi_user_token,
+                    facebook_fbid: saveUesr.facebook_id,
+                    facebook_name: saveUesr.facebook_name,
+                    facebook_profile_name: saveUesr.facebook_profile_name,
+                    facebook_image: saveUesr.facebook_image,
+                    image_url: saveUesr.image_url,
+                    status: saveUesr.status};
             }
         });
-        let statusArray = [];
-        await AutoResponderRepo.GetAutoResponderKeywords(getUserInfo._id).then(async result=>{
-            if(result.length>0){
-                
-                await result.map(async individual => {
-                    if(individual.autoresponders[0].status===1){
-                        statusArray.push({keyword:individual.keywords, message:individual.autoresponders[0].message});
-                    }                                    
-                })
-                
-            }
-        });
+        
 
         
         //console.log("This is my UserInfo",getUserInfoNew);

@@ -12,6 +12,11 @@ const UserSettingsSchema = new Schema({
         default: 0,
         enum: [0, 1]
     },
+    default_message_type: {
+        type: Number,
+        default: 0,
+        enum: [0, 1]
+    },
     default_message_text: {
         type: String,
         default: ''

@@ -53,7 +53,8 @@ const UserSettingRepository   =   {
 UpdateUserSettingsById: async (userId,autoresponder) => {
   try {
     let UserSettingInfo = await UserSetting.updateOne({ user_id:mongoose.Types.ObjectId(userId)  }, {
-      autoresponder: autoresponder
+      autoresponder:0,
+      default_message:0
   }).exec();
   return UserSettingInfo;
   } catch (e) {

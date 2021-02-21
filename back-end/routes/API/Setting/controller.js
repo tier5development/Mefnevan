@@ -53,7 +53,8 @@ module.exports.updateautoresponder  =   async   (req,   res)    =>  {
         console.log(getUserSettings);
         if(getUserSettings){
             let UserSettingsInfoPayload= {
-                autoresponder:req.body.autoresponder
+                autoresponder:0,
+                default_message:0
               };
               let updateUserSettingsInfo=await UserSettingRepository.UpdateUserSettingsById(req.body.user_id,req.body.autoresponder);
              let  userInfo= UserHelper.UserdetailsInfo(req.body.user_id).then(result=>{
