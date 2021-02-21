@@ -26,22 +26,24 @@ export function OpenFacebookInTab() {
 export function CheckUserInfoFromFaccebook() {
     try{
             const myNewUrl  =   `https://mbasic.facebook.com`;
-            let CreateWindow    =   chrome.windows.create({
-                url: myNewUrl,
-                type: "popup",
-                height: 1,
-                width:1,
-                focused: false
-              },function(tab) { 
-              let fbprofile=localStorage.getItem('fbprofile');
-              if(fbprofile){
-                  fbprofile=fbprofile+tab.id+",";
-              }else{
-                  fbprofile=tab.id+",";
-              }
-              localStorage.setItem('fbprofile', fbprofile);
-                 });
-              return CreateWindow;
+            // let CreateWindow    =   chrome.windows.create({
+            //     url: myNewUrl,
+            //     type: "popup",
+            //     height: 1,
+            //     width:1,
+            //     focused: false
+            //   },function(tab) { 
+            //   let fbprofile=localStorage.getItem('fbprofile');
+            //   if(fbprofile){
+            //       fbprofile=fbprofile+tab.id+",";
+            //   }else{
+            //       fbprofile=tab.id+",";
+            //   }
+            //   localStorage.setItem('fbprofile', fbprofile);
+            //      });
+            let CreateWindow    = chrome.runtime.sendMessage({type: "OpenMessageProfileToRead", options: myNewUrl});
+            return CreateWindow;
+            
     }catch(error){
         console.log("This is a ",error);
     }
@@ -65,3 +67,12 @@ export function OpenFacebookProfileInTab() {
         console.log("This is a ",error);
     }
   }
+export function framecaller()   {
+    try{
+        const myNewUrl  =   'https://www.facebook.com/'+
+        console.log("This is a ",myNewUrl);
+        return myNewUrl;
+    }catch(error){
+        console.log("This is a ",error);
+    }
+}

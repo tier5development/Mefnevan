@@ -20,11 +20,11 @@ class setting extends Component {
     * @inputChangeHandller 
     * getting input field values
     */
-   inputChangeHandller = (event) => {
-    this.setState({ [event.target.name]: event.target.value })
+    inputChangeHandller = (event) => {
+        this.setState({ [event.target.name]: event.target.value })
     }
     
-   autoSetting = () => {
+    autoSetting = () => {
         console.log("hiyy",this.state.defaultmessage )
         if(this.state.defaultmessage === 0){
             this.setState({defaultmessage:1})
@@ -32,6 +32,7 @@ class setting extends Component {
             this.setState({defaultmessage:0})
         }
     }
+
     autoRespoSetting = () => {
         console.log("hiyy",this.state.autoresponder )
         if(this.state.autoresponder === 0){
@@ -44,6 +45,55 @@ class setting extends Component {
     * @handleLoginFormValidation 
     * email and password field blank validation
     */
+    /**
+     * @insertTagAtCursorForWelcomeMessage
+     * in this function we are managing the tag in welcome message area
+    */
+    insertTagAtCursorForWelcomeMessage(areaId, text) {
+        var txtarea = document.getElementById(areaId);
+        if (!txtarea) {
+        return;
+        }
+        // if (txtarea.value.length < 188) {
+        var scrollPos = txtarea.scrollTop;
+        var strPos = 0;
+        var br = ((txtarea.selectionStart || txtarea.selectionStart == '0') ?
+        "ff" : (document.selection ? "ie" : false));
+        if (br == "ie") {
+        txtarea.focus();
+        var range = document.selection.createRange();
+        range.moveStart('character', -txtarea.value.length);
+        strPos = range.text.length;
+        } else if (br == "ff") {
+        strPos = txtarea.selectionStart;
+        }
+        var front = (txtarea.value).substring(0, strPos);
+        var back = (txtarea.value).substring(strPos, txtarea.value.length);
+        txtarea.value = front + text + back;
+        strPos = strPos + text.length;
+        let WelcomeMessage = txtarea.value;
+        WelcomeMessage = WelcomeMessage.replace(/{first_name}/g, "");
+        WelcomeMessage = WelcomeMessage.replace(/{last_name}/g, "");
+        WelcomeMessage = WelcomeMessage.replace(/{date}/g, "");
+        WelcomeMessage = WelcomeMessage.replace(/{date_time}/g, "");
+        //console.log("This is the message ========",WelcomeMessage);
+        this.setState({ default_message_text: txtarea.value});
+        // this.setState({ welcomeContent: txtarea.value, welcomeTextLengthCount: txtarea.value });
+        if (br == "ie") {
+        txtarea.focus();
+        var ieRange = document.selection.createRange();
+        ieRange.moveStart('character', -txtarea.value.length);
+        ieRange.moveStart('character', strPos);
+        ieRange.moveEnd('character', 0);
+        ieRange.select();
+        } else if (br == "ff") {
+        txtarea.selectionStart = strPos;
+        txtarea.selectionEnd = strPos;
+        txtarea.focus();
+        }
+        txtarea.scrollTop = scrollPos;
+        // }
+    }
     handleFormValidation() {
         let payload = {
             defaultmessage: this.state.defaultmessage,
@@ -83,39 +133,29 @@ class setting extends Component {
             if(result.data.code==1){
                 let responsenewvalue =result.data;
                 console.log("Autoresponder  is ------------",responsenewvalue.payload.UserSettings.autoresponder);
-                localStorage.setItem('kyubi_user_token', responsenewvalue.payload.UserInfo.kyubi_user_token);
-                localStorage.setItem('user_id', responsenewvalue.payload.UserInfo.user_id);
-                localStorage.setItem('fb_id', responsenewvalue.payload.UserInfo.facebook_id);
-                localStorage.setItem('fb_username', responsenewvalue.payload.UserInfo.facebook_name);
-                localStorage.setItem('fb_name', responsenewvalue.payload.UserInfo.facebook_profile_name);
-                localStorage.setItem('fb_image', responsenewvalue.payload.UserInfo.facebook_image);
-                localStorage.setItem('default_message', responsenewvalue.payload.UserSettings.default_message);
-                localStorage.setItem('default_message_text', responsenewvalue.payload.UserSettings.default_message_text);
-                localStorage.setItem('autoresponder', responsenewvalue.payload.UserSettings.autoresponder);
-                localStorage.setItem('default_time_delay', responsenewvalue.payload.UserSettings.default_time_delay);
-                localStorage.setItem('keywordsTally', JSON.stringify(responsenewvalue.payload.AutoResponderKeywords));
-                this.setState({loader:false});
+                 this.setState({loader:false});
                 if(responsenewvalue.payload.UserSettings.autoresponder === 1){
+                    localStorage.setItem('autoresponder',responsenewvalue.payload.UserSettings.autoresponder);
+                    localStorage.setItem('default_message',responsenewvalue.payload.UserSettings.default_message);
                     CheckUserInfoFromFaccebook();
+                }else{
+                    localStorage.setItem('autoresponder',responsenewvalue.payload.UserSettings.autoresponder);
+                    localStorage.setItem('default_message',responsenewvalue.payload.UserSettings.default_message);
+                    localStorage.setItem('profileFetch',0);
+                    localStorage.setItem('messageListFetch',0);
+                    localStorage.setItem('individualMessageFetch',0);
                 }
-                
-                
               }else{
                 this.setState({loader:false});  
-              }
-            
-            
+              }            
         }).catch(error=>{
             console.log(error);
             this.setState({loader:false});
         });
-        
-
     }
     
     componentDidMount(){
         let payload = {
-
             kyubi_user_token:localStorage.getItem("kyubi_user_token")
         }
         SettingServices.getSetting(payload).then(async result=>{
@@ -136,7 +176,6 @@ class setting extends Component {
             //console.log(error);
             this.setState({loader:false});
         }); 
-
     }
     render() {
         return (
@@ -190,8 +229,15 @@ class setting extends Component {
                                             </div>
                                             <div className="form-group">
                                                 <label for="exampleInputEmail1">Default  Message</label>
-                                                <textarea name="default_message_text" value={this.state.default_message_text} onChange={this.inputChangeHandller} className="form-control" rows="3" name="default_message_text" placeholder="Enter ..."></textarea>
+                                                <textarea id="default_message_text" value={this.state.default_message_text} onChange={this.inputChangeHandller} className="form-control" rows="3" name="default_message_text" placeholder="Enter ..."></textarea>
+                                                    <div className="welcomeMessageTags">
+                                                    <button type="button" className="btn btn-outline-info btn-sm TagButton" onClick={() => this.insertTagAtCursorForWelcomeMessage('default_message_text', '{first_name}')}>First Name</button>
+                                                    <button type="button" className="btn btn-outline-info btn-sm TagButton" onClick={() => this.insertTagAtCursorForWelcomeMessage('default_message_text', '{last_name}')}>Last Name</button>
+                                                    <button type="button" className="btn btn-outline-info btn-sm TagButton" onClick={() => this.insertTagAtCursorForWelcomeMessage('default_message_text', '{date}')}>Todays Date</button>
+                                                    <button type="button" className="btn btn-outline-info btn-sm TagButton" onClick={() => this.insertTagAtCursorForWelcomeMessage('default_message_text', '{date_time}')}>Todays Date & Time</button>
+                                                    </div>
                                             </div>
+                                            
                                             <div className="bootstrap-timepicker">
                                                 <div className="form-group">
                                                     <label>Time Interval For Default Message:</label>

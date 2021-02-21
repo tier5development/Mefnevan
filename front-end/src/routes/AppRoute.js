@@ -14,6 +14,8 @@ const Setting = lazy(() => import("../components/modules/Setting/setting"));
 const AutoResponder = lazy(() => import("../components/modules/AutoResponder/autoResponder"));
 const AutoResponderCreate = lazy(() =>  import("../components/modules/AutoResponder/autoResponderCreate"))
 const AutoResponderEdit = lazy(() =>  import("../components/modules/AutoResponder/autoResponderEdit"));
+const MessageSegments = lazy(() =>  import("../components/modules/MessageSegments/messagesegment"));
+
 const Logout  = lazy(() =>  import("../components/modules/Auth/logout"));
 const AppRoute = ({ sidebarIsOpen, toggleSidebar }) => {
   log.info("**** AppRoute ****");
@@ -26,12 +28,13 @@ const AppRoute = ({ sidebarIsOpen, toggleSidebar }) => {
       >
         {/* <Topbar toggleSidebar={toggleSidebar} /> */}
         <Switch>
-        <Route exact path="/" component={Login} />
+        <Route exact path="/" test="abc" component={Login} />
         <Route  exact  path="/dashboard" component={Dashboard} />
         <Route  exact  path="/setting" component={Setting} />
         <Route  exact  path="/autoresponder" component={AutoResponder} />
         <Route  exact  path="/autorespondercreate" component={AutoResponderCreate} />
         <Route  exact  path="/autoresponderedit/:idfy"  component={AutoResponderEdit} />
+        <Route  exact  path="/messagesegments" component={MessageSegments} />
         <Route  exact  path="/logout"  component={Logout} />
         </Switch>
       </Container>

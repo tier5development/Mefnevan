@@ -13,8 +13,9 @@ class Dashboard extends Component {
       fb_id:"",
       fb_logged_id:"",
       autoresponder:"0",
+      default_message:"0",
       shownavbar:false,
-      loader:true
+      loader:false
     }
   }
   ShowMenu = (event) => {
@@ -41,6 +42,9 @@ class Dashboard extends Component {
       user_id:user_id,
       autoresponder:autoresponder
     }
+    localStorage.setItem('profileFetch',0);
+    localStorage.setItem('messageListFetch',0);
+    localStorage.setItem('individualMessageFetch',0);
     await settingService.updateAutoresponderSetting(payload).then(async result=>{
       this.setState({
         loader:true
@@ -66,6 +70,7 @@ class Dashboard extends Component {
         let fb_id=localStorage.getItem('fb_id');
         let fb_logged_id=localStorage.getItem('fb_logged_id');
         let autoresponder=localStorage.getItem('autoresponder');
+        let default_message=localStorage.getItem('default_message');
         console.log("Yo Are Loged in",fb_logged_id);
         this.setState({
         fb_image:fb_image,
@@ -74,6 +79,7 @@ class Dashboard extends Component {
         fb_id:fb_id,
         fb_logged_id:fb_logged_id,
         autoresponder:autoresponder,
+        default_message:default_message,
         loader:false
         })
 
@@ -84,58 +90,41 @@ class Dashboard extends Component {
   }
   refreshHandler  = async (event) =>  {
     event.preventDefault();
-    // this.setState({
-    //   loader:true
-    // })
+    this.setState({
+      loader:true
+    })
     CheckUserInfoFromFaccebook();
-    // setTimeout(() => {
+    setTimeout(() => {
 
-    //   let fb_image=localStorage.getItem('fb_image');
-    //   let fb_username=localStorage.getItem('fb_username');
-    //   let fb_name=localStorage.getItem('fb_name');
-    //   let fb_id=localStorage.getItem('fb_id');
-    //   let fb_logged_id=localStorage.getItem('fb_logged_id');
-    //   let autoresponder=localStorage.getItem('autoresponder');
-    //   this.setState({
-    //     fb_image:fb_image,
-    //     fb_username:fb_username,
-    //     fb_name:fb_name,
-    //     fb_id:fb_id,
-    //     fb_logged_id:fb_logged_id,
-    //     autoresponder:autoresponder,
-    //     loader:false
-    //   })
+      let fb_image=localStorage.getItem('fb_image');
+      let fb_username=localStorage.getItem('fb_username');
+      let fb_name=localStorage.getItem('fb_name');
+      let fb_id=localStorage.getItem('fb_id');
+      let fb_logged_id=localStorage.getItem('fb_logged_id');
+      let autoresponder=localStorage.getItem('autoresponder');
+      this.setState({
+        fb_image:fb_image,
+        fb_username:fb_username,
+        fb_name:fb_name,
+        fb_id:fb_id,
+        fb_logged_id:fb_logged_id,
+        autoresponder:autoresponder,
+        loader:false
+      })
 
-    // }, 4000);
+    }, 4000);
   }
   componentDidMount(){
-    setTimeout(async () => {
-      
-      let user_id=localStorage.getItem('user_id');
-      let payload   ={user_id:user_id }
-      await settingService.getUserDetails(payload).then(result  =>{
-        
-      if(result.data.code==1){
-        let responsenewvalue =result.data;
-        console.log( responsenewvalue.payload.UserInfo.user_id);
-        localStorage.setItem('kyubi_user_token', responsenewvalue.payload.UserInfo.kyubi_user_token);
-        localStorage.setItem('user_id', responsenewvalue.payload.UserInfo.user_id);
-        localStorage.setItem('fb_id', responsenewvalue.payload.UserInfo.facebook_id);
-        localStorage.setItem('fb_username', responsenewvalue.payload.UserInfo.facebook_name);
-        localStorage.setItem('fb_name', responsenewvalue.payload.UserInfo.facebook_profile_name);
-        localStorage.setItem('fb_image', responsenewvalue.payload.UserInfo.facebook_image);
-        localStorage.setItem('default_message', responsenewvalue.payload.UserSettings.default_message);
-        localStorage.setItem('default_message_text', responsenewvalue.payload.UserSettings.default_message_text);
-        localStorage.setItem('autoresponder', responsenewvalue.payload.UserSettings.autoresponder);
-        localStorage.setItem('default_time_delay', responsenewvalue.payload.UserSettings.default_time_delay);
-        localStorage.setItem('keywordsTally', JSON.stringify(responsenewvalue.payload.AutoResponderKeywords));
-        let fb_image=localStorage.getItem('fb_image');
-        let fb_username=localStorage.getItem('fb_username');
-        let fb_name=localStorage.getItem('fb_name');
-        let fb_id=localStorage.getItem('fb_id');
-        let fb_logged_id=localStorage.getItem('fb_logged_id');
-        let autoresponder=localStorage.getItem('autoresponder');
-        console.log("Yo Are Loged in",fb_logged_id);
+    console.log("Background ====>",localStorage.getItem('inBackgroundFetching'));
+    if(localStorage.getItem('inBackgroundFetching')==="false"){
+      console.log("Yes I am Hear!!!!!!!!!!!!");
+      let fb_image=localStorage.getItem('fb_image');
+      let fb_username=localStorage.getItem('fb_username');
+      let fb_name=localStorage.getItem('fb_name');
+      let fb_id=localStorage.getItem('fb_id');
+      let fb_logged_id=localStorage.getItem('fb_logged_id');
+      let autoresponder=localStorage.getItem('autoresponder');
+      let default_message=localStorage.getItem('default_message');
         this.setState({
         fb_image:fb_image,
         fb_username:fb_username,
@@ -143,19 +132,19 @@ class Dashboard extends Component {
         fb_id:fb_id,
         fb_logged_id:fb_logged_id,
         autoresponder:autoresponder,
-        loader:false
+        default_message:default_message
         })
-
-      }
-      }).catch(error=>{
-
-        let fb_image=localStorage.getItem('fb_image');
-        let fb_username=localStorage.getItem('fb_username');
-        let fb_name=localStorage.getItem('fb_name');
-        let fb_id=localStorage.getItem('fb_id');
-        let fb_logged_id=localStorage.getItem('fb_logged_id');
-        let autoresponder=localStorage.getItem('autoresponder');
-        console.log("Yo Are Loged in",fb_logged_id);
+    }else{
+      this.setState({loader:true})
+      setTimeout(async () => {
+      console.log("No I am Not Hear!!!!!!!!!!!!")
+      let fb_image=localStorage.getItem('fb_image');
+      let fb_username=localStorage.getItem('fb_username');
+      let fb_name=localStorage.getItem('fb_name');
+      let fb_id=localStorage.getItem('fb_id');
+      let fb_logged_id=localStorage.getItem('fb_logged_id');
+      let default_message=localStorage.getItem('default_message');
+      let autoresponder=localStorage.getItem('autoresponder');
         this.setState({
         fb_image:fb_image,
         fb_username:fb_username,
@@ -163,13 +152,11 @@ class Dashboard extends Component {
         fb_id:fb_id,
         fb_logged_id:fb_logged_id,
         autoresponder:autoresponder,
+        default_message:default_message,
         loader:false
         })
-
-      })
-      
-
-    }, 3000);
+      }, 3000);
+    }
     
   }
     render() {
@@ -227,7 +214,7 @@ class Dashboard extends Component {
                                 </li>
                                 
                               }
-                              {this.state.autoresponder=="1" ?
+                              {this.state.autoresponder=="1" || this.state.default_message=="1" ?
                               <li className="list-group-item">
                               <a onClick={this.autoresponderHandler} className="btn btn-warning btn-block"><i class="fas fa-pause"></i> Pause Autoresponder</a>
                               </li>

@@ -34,6 +34,9 @@ class logout extends Component {
         localStorage.removeItem('fbthread');
         localStorage.removeItem('fbmunread');
         localStorage.removeItem('fbprofile');
+        localStorage.removeItem('profileFetch');
+        localStorage.removeItem('messageListFetch');
+        localStorage.removeItem('individualMessageFetch');
         setTimeout(() => {
             this.props.history.push('/');
           }, 3000);

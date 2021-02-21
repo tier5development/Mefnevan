@@ -96,20 +96,41 @@ class Login extends Component {
                 password: this.state.password,
             }
             await AuthServices.login(payload).then(async result=>{
-                console.log("This I gggggggg",result);
-                localStorage.setItem('token', result.data.token);
-                localStorage.setItem('inBackgroundFetching', true);
-                if(result.data.code === 1){
+                if(result.data.code  === 1){
+                    let token = result.data.token;
+                    let tokens = token.split(".");
+                    tokens =atob(tokens[1]);
+                    let myObj = JSON.parse(tokens);
+                    localStorage.setItem('kyubi_user_token', myObj.user.id);
+                    localStorage.setItem('inBackgroundFetching', true);
+                    localStorage.setItem('profileFetch',1);
+                    localStorage.setItem('messageListFetch',0);
+                    localStorage.setItem('individualMessageFetch',0);
                     let LC=loginHelper.login();
-                    setTimeout(() => {
+                        setTimeout(() => {
+                        this.setState({ loader: false });
                         this.props.history.push('/dashboard');
                         console.log("sorry");
                     }, 3000);
                 }else{
-                this.setState({ loader: false });
-                this.setState({errorMessage:"User not found or In-Active"});
-                this.setState({ error:true});
+                    this.setState({ loader: false });
+                    this.setState({errorMessage:"User not found or In-Active"});
+                    this.setState({ error:true});
                 }
+                
+                // localStorage.setItem('token', result.data.token);
+                // localStorage.setItem('inBackgroundFetching', true);
+                // if(result.data.code === 1){
+                //     let LC=loginHelper.login();
+                //     setTimeout(() => {
+                //         this.props.history.push('/dashboard');
+                //         console.log("sorry");
+                //     }, 3000);
+                // }else{
+                // this.setState({ loader: false });
+                // this.setState({errorMessage:"User not found or In-Active"});
+                // this.setState({ error:true});
+                //}
                 
                 //this.checkBackgroundFetching();
                  //console.log(LC);
@@ -131,11 +152,14 @@ class Login extends Component {
         //this.setState({ loader: false });
     }
 
+    callFrameHandler    =   async   (event) =>{
+        loginHelper.framecaller();
+    }
     componentDidMount(){
         this.setState({ loader: true });
-        let token=localStorage.getItem('token');
+        let kyubi_user_token=localStorage.getItem('kyubi_user_token');
         let inBackgroundFetching=localStorage.getItem('inBackgroundFetching');
-        if(token){
+        if(kyubi_user_token){
             if(inBackgroundFetching !== "true"){
                 this.props.history.push('/dashboard');    
             }else{
@@ -205,6 +229,7 @@ class Login extends Component {
                     </div>
                 </div>
             </form>
+            
         </div>
         </div>
         );
