@@ -76,104 +76,131 @@ port.onMessage.addListener(async function(msg) {
                 IncomingMessage = IncomingMessage.split('”').join(" ");
                 IncomingMessage = " "+IncomingMessage+" ";
                 IncomingMessage=IncomingMessage.toLowerCase();
-                let keyObj = JSON.parse(AutoResponderKeyword);
-                //console.log("I Got This Incoming Message ))))))",IncomingMessage);
-                //console.log("I Got This Keywords ))))))",keyObj);
-                //console.log("I Got This Keywords Count ))))))",keyObj.length);
-                let totalkeyObj =keyObj.length;
-                if(totalkeyObj == 0){
-                    if(DefaultMessageState  ==  "1" ){
-                        let setDefaultMessageCheckDataOne  =   {
-                            ResponseTime:Nowtime,
-                            FriendProfileLink:ProfileLink,
-                            FriendFirstName:FriendFirstName,
-                            FriendLastName:FriendLastName,
-                            FacebooKFriendId:FacebooKFriendId,
-                            FacebookUserId:FacebookUserId
-
-                        }
-                        //console.log("TODO Call postMessage to Background to Check Default Message Post For the User :TYPETWO1",setDefaultMessageCheckDataOne);
-                        port.postMessage({ConFlag:"CHECKELIGABLEFORDEFAULTMESSAGE",payload:setDefaultMessageCheckDataOne});
-                        //TODO Call postMessage to Background to Check Default Message Post For the User
-                    }else{
-                        port.postMessage({ConFlag:"UDATEIFRAMEURLONLY"});
-                        //console.log("TODO Call postMessage to Background to update the link in Iframe1TTTTTTTTTTTTTTTTTTTTt :TYPEONE");
-                        //TODO Call postMessage to Background to update the link in Iframe
-                    }
-                }else{
-                        let ResponseText="";
-                        await keyObj.map(function(eachval){
-                        let keywordToFind =eachval.keyword.toLowerCase();
-                            keywordToFind = " "+keywordToFind+" ";
-                            if (IncomingMessage.indexOf(keywordToFind)!=-1)
-                            {
-                                if(ResponseText ==""){
-                                ResponseText = eachval.message
-                                }else{
-                                ResponseText = ResponseText+" "+eachval.message;
-                                }                 
-                            }
-                        });
-                        //console.log("I Got The Message as ))))))",ResponseText);
-                        if(ResponseText == ""){
-                            if(DefaultMessageState  ==  "1" && IsFaceBookLoggedIn=="true"){
-                                let setDefaultMessageCheckDataTwo  =   {
+                    if(AutoResponderKeyword){
+                        let keyObj = JSON.parse(AutoResponderKeyword);
+                        //console.log("I Got This Incoming Message ))))))",IncomingMessage);
+                        //console.log("I Got This Keywords ))))))",keyObj);
+                        //console.log("I Got This Keywords Count ))))))",keyObj.length);
+                        let totalkeyObj =keyObj.length;
+                        if(totalkeyObj == 0){
+                            if(DefaultMessageState  ==  "1" ){
+                                let setDefaultMessageCheckDataOne  =   {
                                     ResponseTime:Nowtime,
                                     FriendProfileLink:ProfileLink,
                                     FriendFirstName:FriendFirstName,
                                     FriendLastName:FriendLastName,
                                     FacebooKFriendId:FacebooKFriendId,
                                     FacebookUserId:FacebookUserId
-    
+
                                 }
-                                //console.log("TODO Call postMessage to Background to Check Default Message Post For the User :TYPETWO2",setDefaultMessageCheckDataTwo);
-                                port.postMessage({ConFlag:"CHECKELIGABLEFORDEFAULTMESSAGE",payload:setDefaultMessageCheckDataTwo});
+                                //console.log("TODO Call postMessage to Background to Check Default Message Post For the User :TYPETWO1",setDefaultMessageCheckDataOne);
+                                port.postMessage({ConFlag:"CHECKELIGABLEFORDEFAULTMESSAGE",payload:setDefaultMessageCheckDataOne});
                                 //TODO Call postMessage to Background to Check Default Message Post For the User
                             }else{
                                 port.postMessage({ConFlag:"UDATEIFRAMEURLONLY"});
-                                console.log("TODO Call postMessage to Background to update the link in Iframe222222222222222222 :TYPEONE");
+                                //console.log("TODO Call postMessage to Background to update the link in Iframe1TTTTTTTTTTTTTTTTTTTTt :TYPEONE");
                                 //TODO Call postMessage to Background to update the link in Iframe
                             }
                         }else{
-                            if(IsFaceBookLoggedIn=="true" && AutoresponderStatus == "1"){
-                                //console.log("TODO Send Message then Call postMessage to Background to Store User Data and update the link in Iframe :TYPETHREE");
-                                //TODO Send Message then Call postMessage to Background to Store User Data and update the link in Iframe
-                                //TODO SAVE MESAGE IN FB
-                                $('#composerInput').val(ResponseText);
-                                $( "#composer_form" ).submit();
-                                let setDefaultMessageSaveONEX={
-                                FacebookFirstName: FriendFirstName,
-                                FacebookLastName: FriendLastName,
-                                FacebookUserId: FacebookUserId,
-                                FriendFacebookId: FacebooKFriendId,
-                                MfenevanId: MfenevanId,
-                                ProfileLink:ProfileLink,
-                                ResponseMessage: ResponseText,
-                                ResponseTime:Nowtime,
-                                MessageSenderType:"last_contact_outgoing"
-                                };
-                                port.postMessage({ConFlag:"STORESENDDETAILS",payload:setDefaultMessageSaveONEX});
-                            }else if(IsFaceBookLoggedIn=="true" && AutoresponderStatus == "0" && DefaultMessageState  ==  "1"){
-                                let setDefaultMessageCheckDataThree  =   {
-                                    ResponseTime:Nowtime,
-                                    FriendProfileLink:ProfileLink,
-                                    FriendFirstName:FriendFirstName,
-                                    FriendLastName:FriendLastName,
-                                    FacebooKFriendId:FacebooKFriendId,
-                                    FacebookUserId:FacebookUserId
-    
+                                let ResponseText="";
+                                await keyObj.map(function(eachval){
+                                let keywordToFind =eachval.keyword.toLowerCase();
+                                    keywordToFind = " "+keywordToFind+" ";
+                                    if (IncomingMessage.indexOf(keywordToFind)!=-1)
+                                    {
+                                        if(ResponseText ==""){
+                                        ResponseText = eachval.message
+                                        }else{
+                                        ResponseText = ResponseText+" "+eachval.message;
+                                        }                 
+                                    }
+                                });
+                                //console.log("I Got The Message as ))))))",ResponseText);
+                                if(ResponseText == ""){
+                                    if(DefaultMessageState  ==  "1" && IsFaceBookLoggedIn=="true"){
+                                        let setDefaultMessageCheckDataTwo  =   {
+                                            ResponseTime:Nowtime,
+                                            FriendProfileLink:ProfileLink,
+                                            FriendFirstName:FriendFirstName,
+                                            FriendLastName:FriendLastName,
+                                            FacebooKFriendId:FacebooKFriendId,
+                                            FacebookUserId:FacebookUserId
+
+                                        }
+                                        //console.log("TODO Call postMessage to Background to Check Default Message Post For the User :TYPETWO2",setDefaultMessageCheckDataTwo);
+                                        port.postMessage({ConFlag:"CHECKELIGABLEFORDEFAULTMESSAGE",payload:setDefaultMessageCheckDataTwo});
+                                        //TODO Call postMessage to Background to Check Default Message Post For the User
+                                    }else{
+                                        port.postMessage({ConFlag:"UDATEIFRAMEURLONLY"});
+                                        console.log("TODO Call postMessage to Background to update the link in Iframe222222222222222222 :TYPEONE");
+                                        //TODO Call postMessage to Background to update the link in Iframe
+                                    }
+                                }else{
+                                    if(IsFaceBookLoggedIn=="true" && AutoresponderStatus == "1"){
+                                        //console.log("TODO Send Message then Call postMessage to Background to Store User Data and update the link in Iframe :TYPETHREE");
+                                        //TODO Send Message then Call postMessage to Background to Store User Data and update the link in Iframe
+                                        //TODO SAVE MESAGE IN FB
+                                        let FriendFirstNameAdd = " "+FriendFirstName+" ";
+                                        let FriendLastNameAdd = " "+FriendLastName+" ";
+
+                                        let NewResponseText = ResponseText.split('{first_name}').join(FriendFirstNameAdd);
+                                        NewResponseText = NewResponseText.split('{last_name}').join(FriendLastNameAdd);
+
+                                        $('#composerInput').val(NewResponseText);
+                                        $( "#composer_form" ).submit();
+                                        let setDefaultMessageSaveONEX={
+                                        FacebookFirstName: FriendFirstName,
+                                        FacebookLastName: FriendLastName,
+                                        FacebookUserId: FacebookUserId,
+                                        FriendFacebookId: FacebooKFriendId,
+                                        MfenevanId: MfenevanId,
+                                        ProfileLink:ProfileLink,
+                                        ResponseMessage: NewResponseText,
+                                        ResponseTime:Nowtime,
+                                        MessageSenderType:"last_contact_outgoing"
+                                        };
+                                        port.postMessage({ConFlag:"STORESENDDETAILS",payload:setDefaultMessageSaveONEX});
+                                    }else if(IsFaceBookLoggedIn=="true" && AutoresponderStatus == "0" && DefaultMessageState  ==  "1"){
+                                        let setDefaultMessageCheckDataThree  =   {
+                                            ResponseTime:Nowtime,
+                                            FriendProfileLink:ProfileLink,
+                                            FriendFirstName:FriendFirstName,
+                                            FriendLastName:FriendLastName,
+                                            FacebooKFriendId:FacebooKFriendId,
+                                            FacebookUserId:FacebookUserId
+
+                                        }
+                                        //console.log("TODO Call postMessage to Background to Check Default Message Post For the User :TYPETWO3",setDefaultMessageCheckDataThree);
+                                        port.postMessage({ConFlag:"CHECKELIGABLEFORDEFAULTMESSAGE",payload:setDefaultMessageCheckDataThree});
+                                        //TODO Call postMessage to Background to Check Default Message Post For the User
+                                    } else{
+                                        port.postMessage({ConFlag:"UDATEIFRAMEURLONLY"});
+                                        //console.log("TODO Call postMessage to Background to update the link in Iframe333333333333333333333333 :TYPEONE");
+                                        //TODO Call postMessage to Background to update the link in Iframe
+                                    }
                                 }
-                                //console.log("TODO Call postMessage to Background to Check Default Message Post For the User :TYPETWO3",setDefaultMessageCheckDataThree);
-                                port.postMessage({ConFlag:"CHECKELIGABLEFORDEFAULTMESSAGE",payload:setDefaultMessageCheckDataThree});
-                                //TODO Call postMessage to Background to Check Default Message Post For the User
-                            } else{
-                                port.postMessage({ConFlag:"UDATEIFRAMEURLONLY"});
-                                //console.log("TODO Call postMessage to Background to update the link in Iframe333333333333333333333333 :TYPEONE");
-                                //TODO Call postMessage to Background to update the link in Iframe
-                            }
                         }
-                }
-            }     
+                    }else{
+                        if(DefaultMessageState  ==  "1" ){
+                            let setDefaultMessageCheckDataOne  =   {
+                                ResponseTime:Nowtime,
+                                FriendProfileLink:ProfileLink,
+                                FriendFirstName:FriendFirstName,
+                                FriendLastName:FriendLastName,
+                                FacebooKFriendId:FacebooKFriendId,
+                                FacebookUserId:FacebookUserId
+
+                            }
+                            //console.log("TODO Call postMessage to Background to Check Default Message Post For the User :TYPETWO1",setDefaultMessageCheckDataOne);
+                            port.postMessage({ConFlag:"CHECKELIGABLEFORDEFAULTMESSAGE",payload:setDefaultMessageCheckDataOne});
+                            //TODO Call postMessage to Background to Check Default Message Post For the User
+                        }else{
+                            port.postMessage({ConFlag:"UDATEIFRAMEURLONLY"});
+                            //console.log("TODO Call postMessage to Background to update the link in Iframe1TTTTTTTTTTTTTTTTTTTTt :TYPEONE");
+                            //TODO Call postMessage to Background to update the link in Iframe
+                        }     
+                    }
+                }     
         }else{
             port.postMessage({ConFlag:"UDATEIFRAMEURLONLY"});
             //console.log("TODO Call postMessage to Background to update the link in Iframe4444444444444444444 :TYPEONE");
@@ -184,7 +211,15 @@ port.onMessage.addListener(async function(msg) {
         //console.log("I Have TO Response With This XXXXXXXXXXXXXXXXXXXX>>>>>>>>>>>>>>>>",msg.userInfoDetails);
         //TODO Call postMessage to Background to update the link in Iframe
         //TODO SAVE MESAGE IN FB
-        $('#composerInput').val(msg.userInfoDetails.ResponseMessage);
+        let FriendFirstName= msg.userInfoDetails.FacebookFirstName;
+        let FriendLastName= msg.userInfoDetails.FacebookLastName;
+        let newResMessage   =msg.userInfoDetails.ResponseMessage;
+        let FriendFirstNameAdd = " "+FriendFirstName+" ";
+        let FriendLastNameAdd = " "+FriendLastName+" ";
+
+        let NewResponseText = newResMessage.split('{first_name}').join(FriendFirstNameAdd);
+        NewResponseText = NewResponseText.split('{last_name}').join(FriendLastNameAdd);
+        $('#composerInput').val(NewResponseText);
         $( "#composer_form" ).submit();
         let Nowtime=$.now();
         let setDefaultMessageSaveONEX={
@@ -194,7 +229,7 @@ port.onMessage.addListener(async function(msg) {
         FriendFacebookId: msg.userInfoDetails.FriendFacebookId,
         MfenevanId: msg.userInfoDetails.MfenevanId,
         ProfileLink: msg.userInfoDetails.ProfileLink,
-        ResponseMessage: msg.userInfoDetails.ResponseMessage,
+        ResponseMessage: NewResponseText,
         ResponseTime:Nowtime,
         MessageSenderType:"last_default_message_time"
         };
