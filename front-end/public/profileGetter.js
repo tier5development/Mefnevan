@@ -1,41 +1,69 @@
 
-//console.log("I am in Profile JS ");
-let UserFacebookid = "";
-let UserFacebookUsername  = "";
-let UserFacebookName  = "";
-let UserFacebookImage = "";
-let UserLoggedInFacebook  = false;
-//console.log("UserKyubiToken =====>",$('#mbasic_inline_feed_composer').length);
-// console.log("WindowId =====>",WindowId);
-// console.log("TabId =====>",TabId);
-if($('#mbasic_inline_feed_composer').length){
-    //console.log("User IS Logged In");
-    let UserURL= $(".ca").find("a").attr("href");
-    //console.log("User IS Logged In",UserURL);
-    UserURL = UserURL.substring(1, UserURL.length);
-    UserURL = UserURL.split('?');
-    let FacebookName  =  $(".ca a").find("img").attr("alt");
-    FacebookName  = FacebookName.split(',');
-    UserFacebookid  = $('input[name=target]').val();
-    UserFacebookUsername  = UserURL[0];
-    UserFacebookName  = FacebookName[0];
-    UserFacebookImage  =  $(".ca a").find("img").attr("src");
-    UserLoggedInFacebook  = true;
+console.log("I am in Profile JS ");
+let UserFacebookUsername =  "";
+let UserFacebookName    =   "";
+let UserFacebookid  =   "";
+let UserFacebookImage   =   "";
+let UserLoggedInFacebook =  false;
+let NavItem =$("nav").find("a");
+let CheckCounter =0;
+if(NavItem){
+    console.log("I Got THIS Nav Items ",NavItem.length);
+    if(NavItem.length  === 0){
+        CheckCounter =0;
+        UserLoggedInFacebook =  false;
+    }else{
+        NavItem.each( async function() {
+            let  name = $(this).text();
+            if(name === "Profile"){
+                CheckCounter =CheckCounter+1;
+            }
+        })
+        if(CheckCounter > 0){
+            UserLoggedInFacebook =  true;
+            let UserURL= $(".ca").find("a").attr("href");
+            if(UserURL !== ""){
+                UserFacebookUsername = UserURL;
+            }else{
+                console.log("Warning I am Not Getting Facebook UserName Please Fix Me !!!!");
+            }
+            let Name  =  $(".ca a").find("img").attr("alt");
+            if(Name !== ""){
+                let finame = Name.split(',');
+                UserFacebookName  = finame[0];
+            }else{
+                console.log("Warning I am Not Getting Facebook Name Please Fix Me !!!!");
+            }
+            let fid =   $('input[name=target]').val();
+            if(fid !== ""){
+                UserFacebookid  = fid;
+
+            }else{
+                console.log("Warning I am Not Getting Facebook ID Please Fix Me !!!!");
+            }
+            let fimage =  $(".ca a").find("img").attr("src");
+            if(fimage !== ""){
+                UserFacebookImage  = fimage;
+            }else{
+                console.log("Warning I am Not Getting Facebook ID Please Fix Me !!!!");
+            }
+          
+        }else{
+            UserLoggedInFacebook =  false;
+        }
+    }   
 }else{
-    //console.log("User IS Not Logged In");
-    UserFacebookid="";
-    UserFacebookUsername="";
-    UserFacebookName="";
-    UserFacebookImage="";
-    UserLoggedInFacebook=false;
+    UserLoggedInFacebook =  false;
+    console.log("I Did Not Got THIS Nav Items ",NavItem);
 }
+
 let parameters={
-    
-    fb_id : UserFacebookid,
-    fb_username : UserFacebookUsername,
-    fb_name : UserFacebookName,
-    fb_image  : UserFacebookImage,
-    fb_logged_id  : UserLoggedInFacebook,
-    
+    FacebookId : UserFacebookid,
+    FacebookUsername : UserFacebookUsername,
+    FacebookName : UserFacebookName,
+    FacebookImage  : UserFacebookImage,
+    LoggedInFacebook  : UserLoggedInFacebook
   }
-  chrome.runtime.sendMessage({type: "storeUserInfoOrQueryThenStore", options: parameters});
+
+console.log("This I got After Scraping ",parameters);
+chrome.runtime.sendMessage({type: "storeUserInfoOrQueryThenStore", options: parameters});

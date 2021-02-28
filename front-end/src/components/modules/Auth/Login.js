@@ -5,6 +5,12 @@ import {kyubiExtensionId}  from "../../../config";
 import "./login.css";
 import AuthServices from "../../../services/authService";
 import loginHelper from "../../../helper/loginHelper";
+import logo from "../../../images/logo1.svg";
+import biglogo from "../../../images/biglogo.svg";
+import mail from "../../../images/mail.svg";
+import lock from "../../../images/lock.svg";
+import messanger from "../../../images/Messanger.svg";
+import path from "../../../images/Path3.svg";
 class Login extends Component {
     constructor(props) {
         super(props)
@@ -81,7 +87,7 @@ class Login extends Component {
     */
     loginHandler = async (event) => {
         event.preventDefault();
-        event.preventDefault();
+        
         this.setState({ loader: true });
         let payload = {
         email: this.state.email,
@@ -101,41 +107,25 @@ class Login extends Component {
                     let tokens = token.split(".");
                     tokens =atob(tokens[1]);
                     let myObj = JSON.parse(tokens);
+                    console.log("Tis Is my Obj",myObj)
                     localStorage.setItem('kyubi_user_token', myObj.user.id);
                     localStorage.setItem('inBackgroundFetching', true);
                     localStorage.setItem('profileFetch',1);
                     localStorage.setItem('messageListFetch',0);
                     localStorage.setItem('individualMessageFetch',0);
                     let LC=loginHelper.login();
-                        setTimeout(() => {
-                        this.setState({ loader: false });
-                        this.props.history.push('/dashboard');
-                        console.log("sorry");
-                    }, 3000);
+                    //     setTimeout(() => {
+                    //     this.setState({ loader: false });
+                    //     this.props.history.push('/dashboard');
+                    //     console.log("sorry");
+                    // }, 3000);
                 }else{
                     this.setState({ loader: false });
                     this.setState({errorMessage:"User not found or In-Active"});
                     this.setState({ error:true});
                 }
                 
-                // localStorage.setItem('token', result.data.token);
-                // localStorage.setItem('inBackgroundFetching', true);
-                // if(result.data.code === 1){
-                //     let LC=loginHelper.login();
-                //     setTimeout(() => {
-                //         this.props.history.push('/dashboard');
-                //         console.log("sorry");
-                //     }, 3000);
-                // }else{
-                // this.setState({ loader: false });
-                // this.setState({errorMessage:"User not found or In-Active"});
-                // this.setState({ error:true});
-                //}
-                
-                //this.checkBackgroundFetching();
-                 //console.log(LC);
-                 
-                //history.push("/dashboard");
+
             }).catch(error=>{
                 console.log(error);
                 this.setState({ loader: false });
@@ -174,64 +164,57 @@ class Login extends Component {
     render() {
         
         return (
-            
-        <div>
-        {this.state.loader && (   
-        <div className="overlay">
-            <i className="fas fa-2x fa-sync-alt fa-spin"></i>
-        </div>
-        )}
-        
-        
-        <div className="login-html">
-            <p className="login-box-msg">Sign In</p>
-            <form>
-                <div className="input-group mb-3">
-                    <input 
-                    className="form-control" 
-                    name="email"
-                    id="email"
-                    type="email"
-                    placeholder="Email Address"
-                    onChange={this.inputChangeHandller}
-                    />
-                    <div className="input-group-append">
-                        <div className="input-group-text">
-                            <span className="fas fa-envelope"></span>
-                        </div>
+            <div>
+                {this.state.loader && (   
+                <div class="after_login_refresh"><img src={biglogo} alt=""/></div>
+                )}
+                <div className="loginscreen">
+                <div className="graphics1"></div>
+                <div className="graphics2"></div>
+                <div className="logo"><img src={logo} /></div>
+                <div className="login_container">
+                    <div className="login_welcome_block">
+                        Welcome,
+                        <h3>Login to continue!</h3>
+                    </div>
+                    <div className="login_block">
+                            <form>
+                                <label>
+                                    <span><img src={mail}/></span>
+                                    <input 
+                                    name="email"
+                                    id="email"
+                                    type="email"
+                                    placeholder="Email Address"
+                                    onChange={this.inputChangeHandller}
+                                    />
+                                </label>
+                                <label>
+                                    <span><img src={lock} /></span>
+                                    <input 
+                                        type="password" 
+                                        placeholder="**********"
+                                        name="password"
+                                        id="password"
+                                        onChange={this.inputChangeHandller}
+                                    />
+                                </label>
+                                <div className="text-right gap1">
+                                    <a href="#" className="link">Forgot Password?</a>
+                                </div>
+                                <button type="button" className="blue_btn" onClick={this.loginHandler} >LOGIN</button>
+                                <div className="login_signup">
+                                    Don’t have an account? <a href="#">Sign up</a>
+                                </div>
+                            </form>
+                    </div>  
+                    <div className="footer">
+                        <p>Powered by <a href="#">Tier5</a> and the <a href="#">Tier5 Partnership</a></p>
+                        <a href="#"><img src={path}/></a> <a href="#"><img src={messanger}/></a>
                     </div>
                 </div>
-                <div class="input-group mb-3">
-                    <input 
-                    type="password" 
-                    class="form-control"
-                    placeholder="**********"
-                    name="password"
-                    id="password"
-                    onChange={this.inputChangeHandller}
-                    />
-                    <div className="input-group-append">
-                        <div className="input-group-text">
-                            <span className="fas fa-lock"></span>
-                        </div>
-                    </div>
-                </div>
-                <div className="row"> 
-                {this.state.error && ( 
-                <p class="text-danger">{this.state.errorMessage}</p> 
-                )}             
-                    <div class="col-12">
-                        <button 
-                        type="button" 
-                        className="btn btn-primary btn-block"
-                        onClick={this.loginHandler}
-                        >Sign In</button>
-                    </div>
-                </div>
-            </form>
-            
-        </div>
-        </div>
+            </div>
+            </div>
         );
     }
 }

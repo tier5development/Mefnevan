@@ -20,7 +20,7 @@
     "storage",
     "clipboardRead",
     "https://www.messenger.com/*",
-    "https://*.facebook.com/*",
+    "https://m.facebook.com/*",
     "https://mbasic.facebook.com/",
     "notifications",
     "https://api.mefnevan.com/api",
@@ -46,7 +46,7 @@
             "messageListGetter.js"
         ],
         "matches": [
-            "https://mbasic.facebook.com/messages"
+            "https://m.facebook.com/messages"
         ],
         "run_at": "document_end"
     },

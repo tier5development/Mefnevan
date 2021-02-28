@@ -3,7 +3,7 @@ const loginHelper = {
     
     login: function () {
         try{
-            const myNewUrl  =   `https://mbasic.facebook.com`;
+            const myNewUrl  =   `https://m.facebook.com/messages`;
             // let CreateWindow    =   chrome.windows.create({
             //     url: myNewUrl,
             //     type: "popup",
