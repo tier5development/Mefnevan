@@ -45,6 +45,19 @@ const UsersRepository   =   {
       throw error;
     }
   },
+    /**
+    * @UpdateUserInfo
+    * update User Info
+  */
+ UpdateUserInfo: async (userId, UserInfo) => {
+  try {
+    let UpdateUserInfo = await User.updateOne({ kyubi_user_token: userId }, UserInfo).exec();
+    // console.log("Already Associated with", ChatRoomUpdated);
+    return UpdateUserInfo;
+    } catch (error) {
+      throw error;
+    }
+  },
   GetUserDetailsInfo: async (Kyubi_User_Id) =>  {
     try {
       return await User.aggregate([

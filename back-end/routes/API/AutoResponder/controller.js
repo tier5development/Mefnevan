@@ -143,3 +143,60 @@ module.exports.AutoResponderUpdate  =   async   (req,   res)    =>  {
         })
     }
 }
+module.exports.AutoResponderUpdateStatus    =   async   (req,   res)    =>  {
+    try{
+        console.log("This is my sent",req.body);
+        let AutoResponderDetails= await AutoResponderRepo.GetAutoResponderResponderWithId(req.body.autoresponder_id);
+        if(AutoResponderDetails){
+            let UsersAutoResponderinfo= {
+                status:req.body.status
+              };
+            let updateAutoResponder=await AutoResponderRepo.updateAutoResponderById(UsersAutoResponderinfo,req.body.autoresponder_id);
+              if(updateAutoResponder){
+                res.send({
+                    code: 1,
+                    message: "Successfull",
+                    payload:updateAutoResponder
+                });
+              }else{
+                res.send({
+                    code: 2,
+                    message: "Error",
+                    payload:"Error"
+                });
+              }
+        }
+    }catch(error){
+        res.send({
+            code: 3,
+            message: "Error",
+            payload: error.message
+        })
+    }
+}
+module.exports.AutoResponderDelete    =   async   (req,   res)    =>  {
+    try{
+        console.log("This is my sent",req.body);
+        let DeleteAssociatedAutoResponderKeywords= await AutoResponderRepo.DeleteAssociatedAutoResponderKeywords(req.body.Id,req.body.user_id);
+        let DeleteAutoResponder= await AutoResponderRepo.DeleteAutoResponder(req.body.Id,req.body.user_id);
+        if(DeleteAutoResponder){
+            res.send({
+                code: 1,
+                message: "Successfull",
+                payload:DeleteAutoResponder
+            });
+          }else{
+            res.send({
+                code: 2,
+                message: "Error",
+                payload:"Error"
+            });
+          }
+    }catch(error){
+        res.send({
+            code: 3,
+            message: "Error",
+            payload: error.message
+        })
+    }
+}

@@ -21,7 +21,10 @@ module.exports.UserdetailsInfo =  async(user_id) =>{
                             default_message: results[0].usersettings.default_message,
                             default_message_text: results[0].usersettings.default_message_text,
                             autoresponder: results[0].usersettings.autoresponder,
-                            default_time_delay: results[0].usersettings.default_time_delay};
+                            default_time_delay: results[0].usersettings.default_time_delay,
+                            default_message_type: results[0].usersettings.default_message_type,
+                            default_message_group:results[0].usersettings.default_message_group
+                        };
                     }
                 }
             });

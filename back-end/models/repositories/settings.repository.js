@@ -46,6 +46,39 @@ const UserSettingRepository   =   {
       throw error;
     }
   },
+     /**
+    * @UpdateUserSettings
+    * update User  Setting details For Auto-responder
+  */
+ UpdateUserSettingsWithoutGroup: async (user_id,default_message_type,default_message_text,default_time_delay) => {
+  try {
+    let UserSettingInfo = await UserSetting.updateOne({ user_id:mongoose.Types.ObjectId(user_id)  }, {
+          default_message_type: default_message_type,
+          default_message_text: default_message_text,
+          default_time_delay: default_time_delay
+    }).exec();
+    return UserSettingInfo;
+  } catch (error) {
+    throw error;
+  }
+},
+     /**
+    * @UpdateUserSettings
+    * update User  Setting details For Auto-responder
+  */
+ UpdateUserSettingsWithGroup: async (user_id, default_message_group,default_message_type,default_message_text,default_time_delay) => {
+  try {
+    let UserSettingInfo = await UserSetting.updateOne({ user_id:mongoose.Types.ObjectId(user_id)  }, {
+          default_message_group:mongoose.Types.ObjectId(default_message_group),
+          default_message_type: default_message_type,
+          default_message_text: default_message_text,
+          default_time_delay: default_time_delay
+    }).exec();
+    return UserSettingInfo;
+  } catch (error) {
+    throw error;
+  }
+},
   /**
   * @UpdateUserSettingsById
   * update User Settings BY Id
@@ -61,6 +94,22 @@ UpdateUserSettingsById: async (userId,autoresponder) => {
     throw e;
   }
   },
+    /**
+  * @UpdateUserSettingsById
+  * update User Settings BY Id
+*/
+UpdateUserSettingsLoad: async (userId,LoadStatus) => {
+  try {
+    let UserSettingInfo = await UserSetting.updateOne({ _id:mongoose.Types.ObjectId(userId)  }, {
+      autoresponder:LoadStatus,
+      default_message:LoadStatus
+  }).exec();
+  return UserSettingInfo;
+  } catch (e) {
+    throw e;
+  }
+  },
 };
+
 
 module.exports = UserSettingRepository;

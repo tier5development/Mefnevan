@@ -7,6 +7,11 @@ const UserSettingsSchema = new Schema({
         ref: 'Users',
         default: null
     },
+    default_message_group: {
+        type: Schema.Types.ObjectId,
+        ref: 'MessageGroups',
+        default: ''
+    },
     default_message: {
         type: Number,
         default: 0,
