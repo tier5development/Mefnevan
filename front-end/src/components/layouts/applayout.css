@@ -1087,3 +1087,15 @@ input[type="checkbox"].switch_2{
     margin-left: 5px;
     color: #fff;
 }
+.inserone{
+	left: 153px !important;
+    top: 10px !important;
+}
+.insertwo{
+	left: 153px !important;
+    top: 20px !important;
+}
+.inserthree{
+	left: 153px !important;
+    top: 30px !important;
+}

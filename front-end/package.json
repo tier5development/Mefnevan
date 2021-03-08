@@ -23,6 +23,7 @@
     "react-native-modern-datepicker": "^1.0.0-beta.91",
     "react-router-dom": "^5.2.0",
     "react-scripts": "4.0.1",
+    "react-select": "^4.2.1",
     "react-switch": "^6.0.0",
     "react-tag-input": "^6.5.2",
     "reactstrap": "^8.8.1",

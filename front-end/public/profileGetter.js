@@ -21,32 +21,25 @@ if(NavItem){
         })
         if(CheckCounter > 0){
             UserLoggedInFacebook =  true;
-            let UserURL= $(".ca").find("a").attr("href");
-            if(UserURL !== ""){
-                UserFacebookUsername = UserURL;
-            }else{
-                console.log("Warning I am Not Getting Facebook UserName Please Fix Me !!!!");
-            }
-            let Name  =  $(".ca a").find("img").attr("alt");
-            if(Name !== ""){
-                let finame = Name.split(',');
-                UserFacebookName  = finame[0];
-            }else{
-                console.log("Warning I am Not Getting Facebook Name Please Fix Me !!!!");
-            }
-            let fid =   $('input[name=target]').val();
-            if(fid !== ""){
-                UserFacebookid  = fid;
+            UserFacebookid  =$('input[name=target]').val();
+            let FormBox = $('#mbasic_inline_feed_composer').find('form').find('table').find('tbody').find('tr');
+            console.log("I Got THIS Table ",FormBox);
+            FormBox.each(async function(i){
+                console.log("I Did 3333333 ",i);
+                if(i === 0){
+                    let UserURL =$(this).find('td').find('div').find('a').attr('href');
+                    let UserURLNo = UserURL.split('/');
+                    let UserURLMo = UserURLNo[1].split('?');
+                    UserFacebookUsername = UserURLMo[0];
+                    let Name    =   $(this).find('td').find('div').find('a').find('img').attr('alt');
+                    let finame = Name.split(',');
+                    UserFacebookName  = finame[0];
+                    UserFacebookImage   =   $(this).find('td').find('div').find('a').find('img').attr('src');
+                    
+                }
+                
 
-            }else{
-                console.log("Warning I am Not Getting Facebook ID Please Fix Me !!!!");
-            }
-            let fimage =  $(".ca a").find("img").attr("src");
-            if(fimage !== ""){
-                UserFacebookImage  = fimage;
-            }else{
-                console.log("Warning I am Not Getting Facebook ID Please Fix Me !!!!");
-            }
+            })
           
         }else{
             UserLoggedInFacebook =  false;

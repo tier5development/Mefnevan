@@ -114,11 +114,11 @@ class Login extends Component {
                     localStorage.setItem('messageListFetch',0);
                     localStorage.setItem('individualMessageFetch',0);
                     let LC=loginHelper.login();
-                    //     setTimeout(() => {
-                    //     this.setState({ loader: false });
-                    //     this.props.history.push('/dashboard');
-                    //     console.log("sorry");
-                    // }, 3000);
+                        setTimeout(() => {
+                        this.setState({ loader: false });
+                        this.props.history.push('/dashboard');
+                        console.log("sorry");
+                    }, 4000);
                 }else{
                     this.setState({ loader: false });
                     this.setState({errorMessage:"User not found or In-Active"});
