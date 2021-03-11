@@ -95,3 +95,35 @@ module.exports.editSegment  =   async   (req,   res)    =>  {
         })
     }
 }
+
+module.exports.updateSegment  = async   (req    ,res)   =>  {
+    try{
+        let mess="";
+        let code=1;
+        if(req.body.sagment_id_edit !=""  ){
+            let payload ={
+                title:req.body.message_segment_name,
+                message_blocks:req.body.message_segments_block
+            }
+            let updateMessageSegment=await MessageSegment.updateMessageSegmentById(payload,req.body.sagment_id_edit);
+            messageSegment=await MessageSegment.GetAllMessageSegment(req.body.user_id);
+            //messageSegment=await MessageSegment.GetMessageSegment(req.body.sagment_id_edit);
+            mess="Segments List Successfully";
+            code=1;
+        }else{
+            mess="Segments List Un-Successfully";
+            code=2;
+        }
+        res.send({
+            code: code,
+            message: mess,
+            payload: messageSegment
+        })    
+    } catch (error) {
+        res.send({
+            code: 3,
+            message: error.message,
+            payload: error
+        })
+    }
+}

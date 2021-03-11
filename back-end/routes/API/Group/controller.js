@@ -74,8 +74,8 @@ module.exports.editGroup  =   async   (req,   res)    =>  {
     try{
         let mess="";
         let code=1;
-        if(req.body.segment_id !=""  ){
-            messageSegment=await MessageSegment.GetMessageSegment(req.body.segment_id);
+        if(req.body.group_id !=""  ){
+            MessageGroups=await MessageGroup.GetMessageGroup(req.body.group_id);
             mess="Segments List Successfully";
             code=1;
         }else{
@@ -85,7 +85,38 @@ module.exports.editGroup  =   async   (req,   res)    =>  {
         res.send({
             code: code,
             message: mess,
-            payload: messageSegment
+            payload: MessageGroups
+        })    
+    } catch (error) {
+        res.send({
+            code: 3,
+            message: error.message,
+            payload: error
+        })
+    }
+}
+module.exports.updateGroup  =   async   (req,   res)    =>  {
+    try{
+        let mess="";
+        let code=1;
+        if(req.body.group_id_edit !=""  ){
+            let payload ={
+                title:req.body.group_name_edit,
+                associate_blocks:req.body.BlockStorage
+            }
+            let updateMessageGroup=await MessageGroup.updateMessageGroupById(payload,req.body.group_id_edit);
+            messageGroup=await MessageGroup.GetAllMessageGroup(req.body.user_id);
+            //messageSegment=await MessageSegment.GetMessageSegment(req.body.sagment_id_edit);
+            mess="Segments List Successfully";
+            code=1;
+        }else{
+            mess="Segments List Un-Successfully";
+            code=2;
+        }
+        res.send({
+            code: code,
+            message: mess,
+            payload: messageGroup
         })    
     } catch (error) {
         res.send({

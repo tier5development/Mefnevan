@@ -29,4 +29,8 @@ router.post('/saveLastMessageOutForFriend',
 controller.SaveLastMessageOutForFriend
 )
 
+router.post('/fetchMessageGroupAndContents',
+controller.fetchMessageGroupAndContents
+)
+
 module.exports = router

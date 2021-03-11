@@ -12,4 +12,7 @@ controller.listSegment
 router.post('/edit',
 controller.editSegment  
 )
+router.post('/update',
+controller.updateSegment  
+)
 module.exports = router

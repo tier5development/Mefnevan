@@ -29,10 +29,25 @@ const MessageSegmentRepository   =   {
   * @getMessageSegment
   * get the Segments info by a specified field from Mongo DB
   */
-   GetMessageSegment: async (id) => {
+    GetMessageSegment: async (id) => {
       try {
         let MessageSegmentInfo = await MessageSegment.findOne({ '_id': mongoose.Types.ObjectId(id) }).exec();
         return MessageSegmentInfo;
+      } catch (e) {
+        throw e;
+      }
+    },
+  /**
+  * @updateMessageSegmentById
+  * update AutoResponder BY Id
+  */
+    updateMessageSegmentById: async (data, id) => {
+      try {
+        let updateMessageSegment = await MessageSegment.findByIdAndUpdate(id, data, {
+          new: true,
+          upsert: true
+        }).exec();
+        return updateMessageSegment;
       } catch (e) {
         throw e;
       }
