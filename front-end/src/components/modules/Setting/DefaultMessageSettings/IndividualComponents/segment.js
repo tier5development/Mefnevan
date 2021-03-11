@@ -116,14 +116,19 @@ class segment extends Component {
                             loader:false,
                             segmentList:1,
                             segmentCreate:0,
-                            segmentEdit:0
+                            segmentEdit:0,
+                            message_block:[],
+                            sagment_name:""
+
                             })  
                         }else{
                             this.setState({
                                 loader:false,
                                 segmentList:1,
                                 segmentCreate:0,
-                                segmentEdit:0
+                                segmentEdit:0,
+                                message_block:[],
+                                sagment_name:""
                                 })
                         }
                     }).catch(error=>{
@@ -177,14 +182,20 @@ class segment extends Component {
                     loader:false,
                     segmentList:1,
                     segmentCreate:0,
-                    segmentEdit:0
+                    segmentEdit:0,
+                    message_block_edit:[],
+                    sagment_name_edit:"",
+                    sagment_id_edit:""
                     })  
                 }else{
                     this.setState({
                         loader:false,
                         segmentList:1,
                         segmentCreate:0,
-                        segmentEdit:0
+                        segmentEdit:0,
+                        message_block_edit:[],
+                        sagment_name_edit:"",
+                        sagment_id_edit:""
                         })
                 }
             }).catch(error=>{

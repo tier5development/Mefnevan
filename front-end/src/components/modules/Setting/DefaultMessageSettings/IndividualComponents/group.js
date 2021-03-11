@@ -321,6 +321,7 @@ class group extends Component {
 
     }
     submitAddGroup = async  (event) =>{
+        this.setState({loader:true});
         event.preventDefault();
         let payload =   {
             BlockStorage:this.state.BlockStorage,
@@ -338,7 +339,8 @@ class group extends Component {
                     openCreateOption:0,
                     openCreateOptionKeyWord:0,
                     openCreateOptionStaticText:0,
-                    openCreateOptionSegment:0
+                    openCreateOptionSegment:0,
+                    loader:false
                 })
                 //console.log("This I got From DDDDBBBBBB EROOOOOO GGGGG",this.state.message_Group_List);
             }
@@ -478,6 +480,9 @@ class group extends Component {
             }
             {this.state.groupCreate ?
             <div className="subtabcontent">
+                {this.state.loader && (   
+                                <div className="after_login_refresh"><img src={LoaderLogo} alt=""/></div>
+                )}
                 <div class="headding gap1">
                     <span class="big">Create a Message Group</span> 
                     <a  onClick={this.listGroupHandler} href="#" className="roundarrow"><img src={backArrowLogo}/></a>

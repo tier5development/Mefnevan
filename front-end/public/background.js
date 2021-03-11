@@ -1,7 +1,7 @@
 //console.log("I am background ");
 //console.log("I am background 1234",screen.width);
 //console.log("I am background 1234",screen.height);
-const getApiUrl = "https://apimfenevan.ngrok.io/"; //"https://api.mefnevan.com" ;
+const getApiUrl = "http://3.236.238.87:8008/"; //"https://api.mefnevan.com" ;
 const MessageListUrl = `https://mbasic.facebook.com/messages`;
 const mBasicUrl = 'https://mbasic.facebook.com';
 const mFacebook = 'https://m.facebook.com';
