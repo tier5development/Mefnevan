@@ -7,6 +7,7 @@ import AuthServices from "../../../services/authService";
 import loginHelper from "../../../helper/loginHelper";
 import logo from "../../../images/logo1.svg";
 import biglogo from "../../../images/biglogo.svg";
+import LoaderLogo from "../../../images/Loader.gif"
 import mail from "../../../images/mail.svg";
 import lock from "../../../images/lock.svg";
 import messanger from "../../../images/Messanger.svg";
@@ -136,7 +137,7 @@ class Login extends Component {
 
 
         }else{
-            this.setState({ error:true});
+            this.setState({ error:true,loader: false});
 
         }
         //this.setState({ loader: false });
@@ -166,7 +167,7 @@ class Login extends Component {
         return (
             <div>
                 {this.state.loader && (   
-                <div class="after_login_refresh"><img src={biglogo} alt=""/></div>
+                <div class="after_login_refresh"><img src={LoaderLogo} alt=""/></div>
                 )}
                 <div className="loginscreen">
                 <div className="graphics1"></div>
@@ -206,6 +207,9 @@ class Login extends Component {
                                 <div className="login_signup">
                                     Don’t have an account? <a href="#">Sign up</a>
                                 </div>
+                                {this.state.error && (   
+                                    <div className="error"> {this.state.errorMessage} *</div>
+                                )}
                             </form>
                     </div>  
                     <div className="footer">

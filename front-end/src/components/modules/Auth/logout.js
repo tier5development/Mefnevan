@@ -1,6 +1,6 @@
 import React, { Component} from "react";
 import { Redirect, withRouter } from 'react-router-dom';
-
+import loginHelper from "../../../helper/loginHelper";
 import {kyubiExtensionId}  from "../../../config";
 import "./login.css";
 
@@ -14,7 +14,7 @@ class logout extends Component {
 
       }
       componentDidMount(){
-        
+        let LO = loginHelper.logout();
         localStorage.removeItem("fb_id")
         localStorage.removeItem("token")
         localStorage.removeItem("keywordsTally")

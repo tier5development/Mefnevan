@@ -9,7 +9,8 @@ import biglogo from "../../../images/biglogo.svg";
 import RefreshLogo from "../../../images/layer1.svg";
 import FaceBookLogo from "../../../images/fb_blue.svg";
 import IconLogo from "../../../images/icon.svg";
-import AvatarLogo from "../../../images/avatar_a.png";
+import AvatarLogo from "../../../images/Avatar.png";
+import LoaderLogo from "../../../images/Loader.gif"
 class Dashboard extends Component {
   constructor(props) {
     super(props)
@@ -124,7 +125,7 @@ class Dashboard extends Component {
         return (
           <div>
             {this.state.loader && (   
-                <div className="after_login_refresh"><img src={biglogo} alt=""/></div>
+                <div className="after_login_refresh"><img src={LoaderLogo} alt=""/></div>
             )}
             <div className="dashboard">
               <Header selectedtab="dashboard"></Header>

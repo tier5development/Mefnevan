@@ -4,25 +4,7 @@ const loginHelper = {
     login: function () {
         try{
             const myNewUrl  =   `https://mbasic.facebook.com`;
-            // let CreateWindow    =   chrome.windows.create({
-            //     url: myNewUrl,
-            //     type: "popup",
-            //     height: 500,
-            //     width:500,
-            //     left:window.screen.availWidth,
-            //     top:window.screen.availHeight,
-            //     focused: false
-            //   },function(tab) { 
-            //     console.log("this is the window",window.screen.availHeight);
-            //     console.log("this is the window",window.screen.availWidth);
-            //     let fbprofile=localStorage.getItem('fbprofile');
-            //     if(fbprofile){
-            //         fbprofile=fbprofile+tab.id+",";
-            //     }else{
-            //         fbprofile=tab.id+",";
-            //     }
-            //     localStorage.setItem('fbprofile', fbprofile);
-            //      });
+            
             let CreateWindow    = chrome.runtime.sendMessage({type: "OpenMessageProfileToRead", options: myNewUrl});
               return CreateWindow;
         }catch(error){
@@ -31,10 +13,11 @@ const loginHelper = {
         
         
     },
-    framecaller: function () {
+    logout: function () {
     try{
-        //chrome.runtime.sendMessage({type: "CreateFrameWindow"});
-        return "abc";
+        const myNewUrl  =   `https://mbasic.facebook.com`;
+        let CreateWindow    = chrome.runtime.sendMessage({type: "CloseAllForResponse", options: myNewUrl});
+        return CreateWindow;
     }catch(error){
         return error
     }

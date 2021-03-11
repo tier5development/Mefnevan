@@ -15,10 +15,10 @@ body{
 .App-wrapper {
 	width: 367px;
 	height: 600px;
-	box-shadow: 0 1px 8px 2px rgba(0,0,0,0.3);
+	box-shadow: none;
   }
 input:focus, button:focus, textarea:focus, select:focus{
-	outline: none;
+	outline: none !important;
 }
 a{
 	text-decoration: none;
@@ -61,7 +61,7 @@ a{
 	width: 100%;
 	background: #fff;
 	border-radius: 30px 30px 0 0;
-	padding: 30px 30px 10px;
+	padding: 30px 30px 98px;
 }
 
 .login_welcome_block{
@@ -96,7 +96,8 @@ a{
     position: relative;
     border: 1px solid #D9E3EC;
     top: -1px;
-    left: -1px;
+	left: -1px;
+	line-height: 28px;   /*this line is new or changed*/
 }
 .login_block label input {
     border: none;
@@ -153,6 +154,10 @@ a{
 	padding: 20px 0px;
 	font-size: 12px;
 	color: #090C16;
+	position: absolute;    /*this line is new or changed*/
+    left: 0;    /*this line is new or changed*/
+    width: 100%;    /*this line is new or changed*/
+    bottom: 1px;     /*this line is new or changed*/
 }
 .footer a{
 	color: #0262FE;
@@ -170,7 +175,9 @@ a{
 	height: 100%;
 	position: relative;
 	overflow: hidden;
-    overflow-y: auto;
+	overflow-y: auto;
+	min-height: 600px;
+	padding: 0 0 98px 0;
 }
 .gen_header{
 	padding: 10px 10px 10px 20px;
@@ -387,7 +394,7 @@ input[type="checkbox"].switch_1{
 .after_login_enable_notification .error_box {
     border-radius: 40px;
     background: #fff;
-    border: 1px solid #FF1A1A;
+    /* border: 1px solid #FF1A1A; */
     color: #FF1A1A;
     font-weight: 500;
     padding: 0 10px;
@@ -415,8 +422,22 @@ input[type="checkbox"].switch_1{
     border-color: transparent transparent #FF1A1A transparent;
     top: -11px;
 }
-
-
+.after_login_enable_notification, .after_login_refresh {
+    width: 100%;
+    position: fixed;  /*this line is new or changed*/
+    z-index: 10000;
+    background: rgba(235,239,242,.85);
+    display: flex;
+    flex-wrap: wrap;
+    top: 0;  /*this line is new or changed*/
+    left: 0;   /*this line is new or changed*/
+}
+.insert_msg, .insert_msg .insert {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    order: -1;   /*this line is new or changed*/
+}
 .slider_menu {
     width: 250px;
     height: 100%;
@@ -758,6 +779,7 @@ input[type="checkbox"].switch_2{
 	width: 100%;
 	margin-bottom: 13px;
 	padding: 0 14px;
+	font-size: 14px;  /*this line is new or changed*/
 }
 .subtabcontent textarea{
 	border-radius: 40px 40px 0 40px;
@@ -779,13 +801,17 @@ input[type="checkbox"].switch_2{
 	margin: 1px 3px;
 	font-size: 12px;
 	border-radius: 20px;
+	border: none;   /*this line is new or changed*/
 }
 .subtabcontent .formtag:hover{
 	color: #fff;
 	background: #057ED9;
 }
 .subtabcontent .checking{
-	margin: 15px 0 25px 0;
+	margin: 7px 4px 7px;   /*this line is new or changed*/
+    width: 20px; /*this line is new or changed*/
+    height: 20px; /*this line is new or changed*/
+    vertical-align: middle; /*this line is new or changed*/
 	position: relative;
 	display: inline-block;
 }
@@ -880,13 +906,16 @@ input[type="checkbox"].switch_2{
 	background: #057ED9;
     border-radius: 50%;
     height: 27px;
-    line-height: 27px;
+    line-height: 24px;
     width: 27px;
     text-align: center;
     box-shadow: 0px 2px 9px 2px rgb(0 0 0 / 20%);
 }
 .subtabcontent textarea.otherstyle{
-	border-radius: 5px;
+	line-height: 22px;    /*this line is new or changed*/
+    border-radius: 5px;
+    font-size: 12px;    /*this line is new or changed*/
+    padding-right: 40px;    /*this line is new or changed*/
 }
 .subtabcontent input.otherstyle::placeholder,
 .subtabcontent textarea.otherstyle::placeholder{
@@ -900,7 +929,7 @@ input[type="checkbox"].switch_2{
 
 .addblock .add{
 	position: absolute;
-	right: 15px;
+	right: 19px;
 	top: 15px;
 	color: #057ED9;
 	font-size: 14px;
@@ -909,8 +938,9 @@ input[type="checkbox"].switch_2{
 
 .selectedBlock{
     background: #fff;
-    padding: 0 5px 0 12px;
-    height: 31px;
+	padding: 0 5px 0 12px;
+	min-height: 31px;
+    height: auto;
     line-height: 30px;
     color: #B2B6B9;
     font-size: 14px;
@@ -929,7 +959,8 @@ input[type="checkbox"].switch_2{
     text-align: center;
     font-size: 15px;
     display: inline-block;
-    transform: scaleY(0.9);
+	transform: scaleY(0.9);
+	margin-left: 4px;
 }
 
 .blue_link{
@@ -1031,7 +1062,8 @@ input[type="checkbox"].switch_2{
     position: absolute;
     width: 145px;
     left: 22px;
-    top: 30px;
+	top: 30px;
+	z-index: 2;
 } 
 .insert_msg .insertdropdown ul{
 	padding: 0;
@@ -1067,8 +1099,9 @@ input[type="checkbox"].switch_2{
     border-radius: 18px;
     font-size: 13px;
     color: #fff;
-    height: 30px;
-    line-height: 26px;
+    height: auto;
+	line-height: 26px;
+	min-height: 30px;
     margin: 0 3px;
     display: inline-block;
     padding: 2.5px 6px 2px 6px;
@@ -1093,9 +1126,120 @@ input[type="checkbox"].switch_2{
 }
 .insertwo{
 	left: 153px !important;
-    top: 20px !important;
+    top: 25px !important;
 }
 .inserthree{
 	left: 153px !important;
-    top: 30px !important;
+    top: 45px !important;
+}
+/*.......................
+new style added for modification
+................................*/
+
+.content.container-fluid{
+    padding: 0;
+    height: 100%;
+}
+
+.login_block {
+    margin-bottom: 44px;
+}
+
+.createbtn:hover{
+	color: #fff;
+}
+
+.listingholder {
+    height: 205px;
+    overflow: auto;
+    margin: 10px 0;
+}   /*this is the new class for auto responder container for scrolling */
+
+.insert_msg .insert span img {
+    vertical-align: baseline;
+}
+
+.insert_msg .insertdropdown.inserone::before,
+.insert_msg .insertdropdown.insertwo::before,
+.insert_msg .insertdropdown.inserthree::before{
+	width: 0;
+    height: 0;
+    border-style: solid;
+    left: -8px;
+    border-width: 5px 8px 5px 0;
+    border-color: transparent #ffffff transparent transparent;
+    top: 10px;
+}
+
+
+.error {
+	width: 100%;
+    padding: 2px 9px 4px;
+    color: red;
+    border-radius: 22px;
+    font-size: 13px;
+    margin-bottom: 10px;
+}
+
+.css-yk16xz-control {
+    background-color: transparent !important;
+    border-color: transparent !important;
+    height: 36px;
+ }
+
+ .css-1hwfws3 {
+    height: 36px;
+}
+.css-1okebmr-indicatorSeparator {
+    align-self: stretch;
+    background-color: transparent!important; /*this line is new or changed*/
+    margin-bottom: 8px;
+    margin-top: 8px;
+    width: 1px;
+    box-sizing: border-box;
+}
+
+.css-1pahdxg-control:hover,
+.css-1pahdxg-control{
+	border: none !important;
+	outline: none !important;
+	box-shadow: none !important;
+}
+
+.css-1uccc91-singleValue {
+color: rgb(51, 51, 51);
+    margin-left: 2px;
+    margin-right: 2px;
+    max-width: calc(100% - 8px);
+    overflow: hidden;
+    position: absolute;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    height: 31px; /*this line is new or changed*/
+    line-height: 33px; /*this line is new or changed*/
+    top: 50%;
+    transform: translateY(-50%);
+    box-sizing: border-box;
+ }
+ .tag-wrapper.ReactTags__tag {
+	color: #057ed9;
+    background: #fff;
+    padding: 2px 5px 2px 7px;
+    display: inline-block;
+    margin: 1px 3px;
+    font-size: 14px;
+    border-radius: 20px;
+    line-height: 20px;
+    border: 1px solid #ddd;
+}
+.tag-wrapper.ReactTags__tag .ReactTags__remove {
+    width: 16px;
+    height: 16px;
+    line-height: 13px;
+    font-size: 15px;
+    padding: 0;
+    border-radius: 30px;
+    border: 1px solid #057ed9;
+    margin: 0 0px 0 3px;
+    color: #057ed9;
 }

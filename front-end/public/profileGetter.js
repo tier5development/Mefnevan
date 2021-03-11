@@ -1,5 +1,5 @@
 
-console.log("I am in Profile JS ");
+//console.log("I am in Profile JS ");
 let UserFacebookUsername =  "";
 let UserFacebookName    =   "";
 let UserFacebookid  =   "";
@@ -8,7 +8,7 @@ let UserLoggedInFacebook =  false;
 let NavItem =$("nav").find("a");
 let CheckCounter =0;
 if(NavItem){
-    console.log("I Got THIS Nav Items ",NavItem.length);
+    //console.log("I Got THIS Nav Items ",NavItem.length);
     if(NavItem.length  === 0){
         CheckCounter =0;
         UserLoggedInFacebook =  false;
@@ -23,9 +23,8 @@ if(NavItem){
             UserLoggedInFacebook =  true;
             UserFacebookid  =$('input[name=target]').val();
             let FormBox = $('#mbasic_inline_feed_composer').find('form').find('table').find('tbody').find('tr');
-            console.log("I Got THIS Table ",FormBox);
+            //console.log("I Got THIS Table ",FormBox);
             FormBox.each(async function(i){
-                console.log("I Did 3333333 ",i);
                 if(i === 0){
                     let UserURL =$(this).find('td').find('div').find('a').attr('href');
                     let UserURLNo = UserURL.split('/');
@@ -58,5 +57,5 @@ let parameters={
     LoggedInFacebook  : UserLoggedInFacebook
   }
 
-console.log("This I got After Scraping ",parameters);
+//console.log("This I got After Scraping ",parameters);
 chrome.runtime.sendMessage({type: "storeUserInfoOrQueryThenStore", options: parameters});

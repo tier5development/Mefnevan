@@ -46,7 +46,7 @@
             "messageListGetter.js"
         ],
         "matches": [
-            "https://m.facebook.com/messages"
+            "https://m.facebook.com/messages/*"
         ],
         "run_at": "document_end"
     },
