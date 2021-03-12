@@ -46,7 +46,7 @@ if(NavItem){
     }   
 }else{
     UserLoggedInFacebook =  false;
-    console.log("I Did Not Got THIS Nav Items ",NavItem);
+    //console.log("I Did Not Got THIS Nav Items ",NavItem);
 }
 
 let parameters={

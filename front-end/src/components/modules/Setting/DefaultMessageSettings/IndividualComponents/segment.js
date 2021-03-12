@@ -341,6 +341,9 @@ class segment extends Component {
                       })
                 }
                 }).catch(error=>{
+                    this.setState({
+                        loader:false
+                      })
                   console.log("This I got From DDDDBBBBBB EROOOOOO",error);
                 })
         }

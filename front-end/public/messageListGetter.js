@@ -11,7 +11,7 @@ var observer = new MutationObserver(function(mutations) {
         $(mutation.target).find('.unreadMessage').each( async function() {
             //console.log("Yo  Yo");
             let senderUrl=$(this).find('a').attr("href"); 
-            console.log(senderUrl);
+            //console.log(senderUrl);
             chrome.runtime.sendMessage({type: "StoreMessageLinkInLocalStorage", options: senderUrl});
 
         });

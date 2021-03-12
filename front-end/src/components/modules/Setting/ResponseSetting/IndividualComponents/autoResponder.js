@@ -359,8 +359,9 @@ class responseSetting extends Component {
             }
             
           }
+          this.setState({loader:false});
         }).catch(error=>{
-            //this.setState({loader:false});
+            this.setState({loader:false});
             this.setState({autoresponderListValue:[],loader:false})
         });
     }
