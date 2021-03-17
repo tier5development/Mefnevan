@@ -60,13 +60,13 @@ port.onMessage.addListener(async function(msg) {
           MessageSenderType:"last_default_message_time",
           LocationDetails:LocationDetails.href
           };
-        //console.log("RESPONSE To Save  and Close With Link",setDefaultMessageSaveONEX);
+        console.log("RESPONSE To Save  and Close With Link",setDefaultMessageSaveONEX);
         port.postMessage({MessageDetails: setDefaultMessageSaveONEX,ConFlag:"STOREANDCLOSE"});
   }
   if (msg.ConFlagBack == "AUTOMESSAGEBACK"){
     $('#composerInput').val(msg.userInfoDetails);
     $( "#composer_form" ).submit();
-    //console.log("RESPONSE To USER With AutoResponder Message",msg.userInfoDetails);
+    console.log("RESPONSE To USER With AutoResponder Message",msg.userInfoDetails);
     
     let Nowtime=$.now();
         let setDefaultMessageSaveONEX={
@@ -81,7 +81,7 @@ port.onMessage.addListener(async function(msg) {
         MessageSenderType:"last_contact_outgoing",
         LocationDetails:LocationDetails.href
         };
-        //console.log("RESPONSE To Save  and Close With Link",msg);
+        console.log("RESPONSE To Save  and Close With Link",msg);
         port.postMessage({MessageDetails: setDefaultMessageSaveONEX,ConFlag:"STOREANDCLOSE"});
   }
 })
