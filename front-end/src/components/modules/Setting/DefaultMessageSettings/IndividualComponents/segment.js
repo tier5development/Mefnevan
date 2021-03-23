@@ -25,7 +25,10 @@ class segment extends Component {
             default_message_text_edit:"",
             loader:true,
             csn:false,
-            esn:false
+            esn:false,
+            notifier:false,
+            notifier_head:"",
+            notifier_message:""
         }
       }
         /**
@@ -118,9 +121,18 @@ class segment extends Component {
                             segmentCreate:0,
                             segmentEdit:0,
                             message_block:[],
-                            sagment_name:""
-
-                            })  
+                            sagment_name:"",
+                            notifier:true,
+                            notifier_head:"Well Done !",
+                            notifier_message:"Aww yeah, you successfully Added an Segment"
+                            });
+                            setInterval(() => {
+                                this.setState({
+                                        notifier:false,
+                                        notifier_head:"",
+                                        notifier_message:""
+                                });
+                            },2000);  
                         }else{
                             this.setState({
                                 loader:false,
@@ -128,10 +140,38 @@ class segment extends Component {
                                 segmentCreate:0,
                                 segmentEdit:0,
                                 message_block:[],
-                                sagment_name:""
-                                })
+                                sagment_name:"",
+                                notifier:true,
+                                notifier_head:"OOhh Snap !",
+                                notifier_message:"Something went Wrong  Please try again after sometime"
+                                });
+                                setInterval(() => {
+                                    this.setState({
+                                            notifier:false,
+                                            notifier_head:"",
+                                            notifier_message:""
+                                    });
+                                },2000);
                         }
                     }).catch(error=>{
+                        this.setState({
+                            loader:false,
+                            segmentList:1,
+                            segmentCreate:0,
+                            segmentEdit:0,
+                            message_block:[],
+                            sagment_name:"",
+                            notifier:true,
+                            notifier_head:"OOhh Snap !",
+                            notifier_message:"Something went Wrong  Please try again after sometime"
+                            });
+                            setInterval(() => {
+                                this.setState({
+                                        notifier:false,
+                                        notifier_head:"",
+                                        notifier_message:""
+                                });
+                            },2000);
                         console.log("This I got From DDDDBBBBBB EROOOOOO",error);
                     })
     
@@ -185,8 +225,18 @@ class segment extends Component {
                     segmentEdit:0,
                     message_block_edit:[],
                     sagment_name_edit:"",
-                    sagment_id_edit:""
-                    })  
+                    sagment_id_edit:"",
+                    notifier:true,
+                    notifier_head:"Well Done !",
+                    notifier_message:"Aww yeah, you successfully Updated an Segment"
+                    });
+                    setInterval(() => {
+                        this.setState({
+                                notifier:false,
+                                notifier_head:"",
+                                notifier_message:""
+                        });
+                    },2000); 
                 }else{
                     this.setState({
                         loader:false,
@@ -195,10 +245,37 @@ class segment extends Component {
                         segmentEdit:0,
                         message_block_edit:[],
                         sagment_name_edit:"",
-                        sagment_id_edit:""
-                        })
+                        sagment_id_edit:"",
+                        notifier_head:"OOhh Snap !",
+                        notifier_message:"Something went Wrong  Please try again after sometime"
+                        });
+                        setInterval(() => {
+                            this.setState({
+                                    notifier:false,
+                                    notifier_head:"",
+                                    notifier_message:""
+                            });
+                        },2000);
                 }
             }).catch(error=>{
+                this.setState({
+                    loader:false,
+                    segmentList:1,
+                    segmentCreate:0,
+                    segmentEdit:0,
+                    message_block:[],
+                    sagment_name:"",
+                    notifier:true,
+                    notifier_head:"OOhh Snap !",
+                    notifier_message:"Something went Wrong  Please try again after sometime"
+                    });
+                    setInterval(() => {
+                        this.setState({
+                                notifier:false,
+                                notifier_head:"",
+                                notifier_message:""
+                        });
+                    },2000);
                 console.log("this is more ERRRRROOOOOORRRRRR",error);
             })
             }
@@ -355,6 +432,14 @@ class segment extends Component {
                     <div className="subtabcontent">
                             {this.state.loader && (   
                                 <div className="after_login_refresh"><img src={biglogo} alt=""/></div>
+                            )}
+                            {this.state.notifier  && (
+                                <div className="group_delete_sreen">
+                                    <div className="group_delete_popup">
+                                        <h3>{this.state.notifier_head}</h3>
+                                        <p>{this.state.notifier_message}</p>
+                                    </div>
+                                </div>
                             )}
                         { this.state.message_block_List.length != 0 ?
                             <div>

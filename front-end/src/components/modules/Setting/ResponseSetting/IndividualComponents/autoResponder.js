@@ -30,7 +30,11 @@ class responseSetting extends Component {
             auto_responder_name_edit:"",
             auto_responder_message_edit:"",
             auto_responder_status_edit:1,
-            auto_responder_keywords_edits:[]
+            auto_responder_keywords_edits:[],
+            loader:false,
+            notifier:false,
+            notifier_head:"",
+            notifier_message:""
         }
         this.handleDelete = this.handleDelete.bind(this);
         this.handleAddition = this.handleAddition.bind(this);
@@ -155,6 +159,7 @@ class responseSetting extends Component {
         this.setState({ [event.target.name]: event.target.value })
     }
     createAutoResponderGroupHandler =  (event) =>{
+        this.setState({loader:true});
         event.preventDefault();
         let Token=localStorage.getItem("kyubi_user_token");
         let payload = {
@@ -166,7 +171,7 @@ class responseSetting extends Component {
         }
       
          AutoResponderService.createAutoResponder(payload).then(response =>{
-            console.log("This I gottttt",payload);
+            console.log("This I gottttt AFTER CREATING AR",payload);
           if(response.data.code == 1){
             let UserTokenNew=localStorage.getItem("kyubi_user_token");
             let payloadNew ={
@@ -177,6 +182,8 @@ class responseSetting extends Component {
                     console.log("This is what i Got",responsex.data.payload);
                     if(responsex.data.payload.autokey.length>0){
                         console.log("This is what i Got",responsex.data.payload.autokey);
+                        console.log("This is what i Got the  List",responsex.data.payload.listkey);
+                        localStorage.setItem('keywordsTally', JSON.stringify(responsex.data.payload.listkey));
                         this.setState({
                                         autoresponderListValue:responsex.data.payload.autokey,
                                         autoResponsederList:1,
@@ -186,7 +193,19 @@ class responseSetting extends Component {
                                         auto_responder_keywords: [],
                                         auto_responder_message:"",
                                         auto_responder_status:1,
-                        })
+                                        loader:false,
+                                        notifier:true,
+                                        notifier_head:"Well Done !",
+                                        notifier_message:"Aww yeah, you successfully create an AutoResponder"
+                        });
+                        setInterval(() => {
+                                    this.setState({
+                                            notifier:false,
+                                            notifier_head:"",
+                                            notifier_message:""
+                                    });
+                        },2000);
+
                     }
                   }
             })
@@ -220,6 +239,7 @@ class responseSetting extends Component {
                     console.log("This is what i Got",responsex.data.payload);
                     if(responsex.data.payload.autokey.length>0){
                         console.log("This is what i Got",responsex.data.payload.autokey);
+                        localStorage.setItem('keywordsTally', JSON.stringify(responsex.data.payload.listkey));
                         this.setState({
                                         autoresponderListValue:responsex.data.payload.autokey,
                                         autoResponsederList:1,
@@ -230,8 +250,18 @@ class responseSetting extends Component {
                                         auto_responder_keywords_edits:[],
                                         auto_responder_message_edit:"",
                                         auto_responder_status_edit:1,
-                                        loader:false
-                        })
+                                        loader:false,
+                                        notifier:true,
+                                        notifier_head:"Well Done !",
+                                        notifier_message:"Aww yeah, you successfully Edited an AutoResponder"
+                        });
+                        setInterval(() => {
+                            this.setState({
+                                    notifier:false,
+                                    notifier_head:"",
+                                    notifier_message:""
+                            });
+                        },2000);
                     }
                   }
             })
@@ -375,6 +405,15 @@ class responseSetting extends Component {
                     {this.state.loader && (   
                                 <div className="after_login_refresh"><img src={LoaderLogo} alt=""/></div>
                     )}
+                    {this.state.notifier  && (
+                        <div className="group_delete_sreen">
+                            <div className="group_delete_popup">
+                                <h3>{this.state.notifier_head}</h3>
+                                <p>{this.state.notifier_message}</p>
+                            </div>
+                        </div>
+                    )}
+                    
                     { this.state.autoresponderListValue.length != 0 ?
 
                         <div>
@@ -417,7 +456,6 @@ class responseSetting extends Component {
                                 )
                             })}
                             </div>
-
                         </div>
                             
                     :
