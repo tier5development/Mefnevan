@@ -5,7 +5,9 @@ import  plog from "../../../images/avatar_a.png";
 import  sideMenuLogo from "../../../images/side_menu.svg";
 import  SettingServices from "../../../services/setting";
 import  LoadingLogo from "../../../images/Loader.gif";
-import loginHelper from  "../../../helper/loginHelper.js"
+import loginHelper from  "../../../helper/loginHelper.js";
+import { connect } from 'react-redux';
+import * as authAction from '../../../store/actions/Auth/authAction';
 class header extends Component {
     constructor(props) {
         super(props)
@@ -139,6 +141,7 @@ class header extends Component {
       }
     
     componentDidMount(){
+      console.log("I am in sidebar -- header =====",this.props.login_user_profile_info);
       this.setState({loader:true});
         let fb_username=localStorage.getItem('fb_username');
         let fb_image=localStorage.getItem('fb_image');
@@ -224,4 +227,25 @@ class header extends Component {
         )
     }
 }
-export default header;
+/**
+ * @mapStateToProps
+ * get the values from redux store for updating the front end
+*/
+const mapStateToProps = (state) => {
+  return {
+    login_user_profile_info: state.auth.payload
+  }
+}
+
+
+
+/**
+ * @mapDispatchToProps
+ * send the values to redux store when an admin user is created, suspended or activated
+ */
+const mapDispatchToProps = dispatch => {
+  return {
+      setProfileInfo: load => dispatch(authAction.addProfileInfo(load))
+  };
+};
+export default connect(mapStateToProps, mapDispatchToProps)(header);

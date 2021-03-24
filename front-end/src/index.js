@@ -1,12 +1,34 @@
 import React, { Suspense } from "react";
 import ReactDOM from "react-dom";
+import { Provider } from 'react-redux';
+import { createStore, combineReducers, applyMiddleware } from 'redux';
 import "./App.css";
 import reportWebVitals from "./reportWebVitals";
 import App from "./App";
+import thunk from 'redux-thunk';
+import authReducer from './store/reducers/Auth/authReducer';
+import userReducer from './store/reducers/User/userReducer';
+const rootReducer = combineReducers({
+  "auth": authReducer,
+  "user": userReducer
+})
+
+const logger = (store) => {
+  return (next) => {
+      return (action) => {
+          // console.log("[Middleware dispatching : ", action)
+          const result = next(action)
+          // console.log("[Middleware] next state : ", store.getState())
+          return result
+      }
+  }
+}
+
+const store = createStore(rootReducer, applyMiddleware(logger, thunk))
 
 ReactDOM.render(
   <Suspense fallback={<div>Loading</div>}>
-    <App />
+    <Provider store={store}><App /></Provider>
   </Suspense>,
   document.getElementById("root")
 );

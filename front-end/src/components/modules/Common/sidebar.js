@@ -1,7 +1,9 @@
 import React, { Component } from "react";
 import logo from "../../../image/Logo_Side.png";
 import { NavLink } from "react-router-dom";
+import { connect } from 'react-redux';
 import {Animated} from "react-animated-css";
+import * as authAction from '../../../store/actions/Auth/authAction';
 class sidebar extends Component {
     constructor(props) {
       super(props)
@@ -26,7 +28,8 @@ class sidebar extends Component {
       })
     }
     componentDidMount(){
-        //console.log(this.props.shownav);
+      
+        console.log("I am in sidebar =====",this.props.login_user_profile_info);
     }
     render() {
         return (
@@ -104,4 +107,25 @@ class sidebar extends Component {
     }
 }
 
-export default sidebar;
+/**
+ * @mapStateToProps
+ * get the values from redux store for updating the front end
+*/
+const mapStateToProps = (state) => {
+  return {
+    login_user_profile_info: state.auth.payload
+  }
+}
+
+
+
+/**
+ * @mapDispatchToProps
+ * send the values to redux store when an admin user is created, suspended or activated
+ */
+const mapDispatchToProps = dispatch => {
+  return {
+      setProfileInfo: load => dispatch(authAction.addProfileInfo(load))
+  };
+};
+export default connect(mapStateToProps, mapDispatchToProps)(sidebar);

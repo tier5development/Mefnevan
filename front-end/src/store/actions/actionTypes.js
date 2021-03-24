@@ -1,0 +1,2 @@
+export const ADD_PROFILE_INFO = 'ADD_PROFILE_INFO'
+export const ADD_USER_INFO = 'ADD_USER_INFO'
