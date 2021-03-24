@@ -86,8 +86,49 @@ chrome.runtime.onMessage.addListener(async function(request, sender) {
                       localStorage.setItem('keywordsTally', JSON.stringify(responsenewvalue.payload.AutoResponderKeywords));
                       if((AutoResponderStatus == 1 || DefaultMessageStatus == 1) && UserLoggedInFacebook== true && BackGroundFetchingStatus==  false ){
                         console.log("Open Message List  84848484");
-                        document.getElementById('profileFrame').src = "";
-                        document.getElementById('messageListMain').src = "https://m.facebook.com/messages/";
+                        // document.getElementById('profileFrame').src = "";
+                        // document.getElementById('messageListMain').src = "https://m.facebook.com/messages/";
+
+
+                        if(localStorage.getItem('fbmunread')){
+                          let newtab=parseInt(localStorage.getItem('fbmunread'));
+                          chrome.tabs.get(newtab, function(tab) {
+                            if (!tab) { 
+                              console.log('tab does not exist'); 
+                              const myNewUrl  =   `https://m.facebook.com/messages/`;
+                              let CreateTab    =   chrome.tabs.create({
+                                  url: myNewUrl,
+                                  active: false,
+                                  pinned:true
+                              },function(tab) { 
+                                  let fbmunread=tab.id;
+                                  localStorage.setItem('fbmunread', fbmunread);
+                              });
+                            }else{
+                              
+                            }
+                          });
+                        }else{
+                          const myNewUrl  =   `https://m.facebook.com/messages/`;
+                              let CreateTab    =   chrome.tabs.create({
+                                  url: myNewUrl,
+                                  active: false,
+                                  pinned:true
+                              },function(tab) { 
+                                  let fbmunread=tab.id;
+                                  localStorage.setItem('fbmunread', fbmunread);
+                              });
+                          console.log('fbprofile does not exist');
+                        }
+                          // const myNewUrl  =   `https://m.facebook.com/messages/`;
+                          // let CreateTab    =   chrome.tabs.create({
+                          //     url: myNewUrl,
+                          //     active: false,
+                          //     pinned:true
+                          // },function(tab) { 
+                          //     let fbmunread=tab.id;
+                          //     localStorage.setItem('fbmunread', fbmunread);
+                          // });
                       } 
             }).catch(error=>{
               localStorage.setItem('profileFetch',0);
@@ -112,9 +153,9 @@ chrome.runtime.onMessage.addListener(async function(request, sender) {
       let NewListURLArray=JSON.stringify(ListURLArray);
       localStorage.setItem('ListURLArray', NewListURLArray);
       localStorage.setItem('CheckMessageNReply',0);
-      document.getElementById('profileFrame').src = "";
-      document.getElementById('messageListMain').src = "";
-      document.getElementById('messageIndividualMain').src = "";
+      // document.getElementById('profileFrame').src = "";
+      // document.getElementById('messageListMain').src = "";
+      // document.getElementById('messageIndividualMain').src = "";
     }
     if(request.type ==  "OpenSeconderyUrlToReadMessageList"){
       //document.getElementById('messageListSecondery').src = mFacebook+""+request.options;
@@ -299,7 +340,26 @@ chrome.runtime.onConnect.addListener(function(port) {
                           individualThreadList.splice(indexthreadlink, 1);
                           let NewListURLArray=JSON.stringify(individualThreadList);
                           localStorage.setItem('ListURLArray', NewListURLArray);
-                          document.getElementById('messageIndividualMain').src ="";
+                          if(localStorage.getItem('fbprofile')){
+                            let newtab=parseInt(localStorage.getItem('fbprofile'));
+                            chrome.tabs.get(newtab, function(tab) {
+                              if (!tab) { 
+                                console.log('tab does not exist'); 
+                              }else{
+                                let myMessageUrl  =   `https://mbasic.facebook.com`;
+                                chrome.tabs.update(newtab, 
+                                {
+                                  url: myMessageUrl
+                                },function(tabx) {
+                                  let fbprofile=tabx.id;
+                                  localStorage.setItem('fbprofile', fbprofile);
+                                });
+                              }
+                            });
+                          }else{
+                            console.log('fbprofile does not exist');
+                          }
+                          //document.getElementById('messageIndividualMain').src ="";
                           localStorage.setItem('CheckMessageNReply',0);
                           CheckLocalStoreAndHitIndividualMList();
                         }
@@ -345,7 +405,26 @@ chrome.runtime.onConnect.addListener(function(port) {
                 individualThreadList.splice(indexthreadlink, 1);
                 let NewListURLArray=JSON.stringify(individualThreadList);
                 localStorage.setItem('ListURLArray', NewListURLArray);
-                document.getElementById('messageIndividualMain').src ="";
+                // document.getElementById('messageIndividualMain').src ="";
+                if(localStorage.getItem('fbprofile')){
+                  let newtab=parseInt(localStorage.getItem('fbprofile'));
+                  chrome.tabs.get(newtab, function(tab) {
+                    if (!tab) { 
+                      console.log('tab does not exist'); 
+                    }else{
+                      let myMessageUrl  =   `https://mbasic.facebook.com`;
+                      chrome.tabs.update(newtab, 
+                      {
+                        url: myMessageUrl
+                      },function(tabx) {
+                        let fbprofile=tabx.id;
+                        localStorage.setItem('fbprofile', fbprofile);
+                      });
+                    }
+                  });
+                }else{
+                  console.log('fbprofile does not exist');
+                }
                 localStorage.setItem('CheckMessageNReply',0);
                 CheckLocalStoreAndHitIndividualMList();
               }
@@ -358,7 +437,26 @@ chrome.runtime.onConnect.addListener(function(port) {
                 individualThreadList.splice(indexthreadlink, 1);
                 let NewListURLArray=JSON.stringify(individualThreadList);
                 localStorage.setItem('ListURLArray', NewListURLArray);
-                document.getElementById('messageIndividualMain').src ="";
+                // document.getElementById('messageIndividualMain').src ="";
+                if(localStorage.getItem('fbprofile')){
+                  let newtab=parseInt(localStorage.getItem('fbprofile'));
+                  chrome.tabs.get(newtab, function(tab) {
+                    if (!tab) { 
+                      console.log('tab does not exist'); 
+                    }else{
+                      let myMessageUrl  =   `https://mbasic.facebook.com`;
+                      chrome.tabs.update(newtab, 
+                      {
+                        url: myMessageUrl
+                      },function(tabx) {
+                        let fbprofile=tabx.id;
+                        localStorage.setItem('fbprofile', fbprofile);
+                      });
+                    }
+                  });
+                }else{
+                  console.log('fbprofile does not exist');
+                }
                 localStorage.setItem('CheckMessageNReply',0);
                 CheckLocalStoreAndHitIndividualMList();
               }
@@ -371,7 +469,26 @@ chrome.runtime.onConnect.addListener(function(port) {
                 individualThreadList.splice(indexthreadlink, 1);
                 let NewListURLArray=JSON.stringify(individualThreadList);
                 localStorage.setItem('ListURLArray', NewListURLArray);
-                document.getElementById('messageIndividualMain').src ="";
+                // document.getElementById('messageIndividualMain').src ="";
+                if(localStorage.getItem('fbprofile')){
+                  let newtab=parseInt(localStorage.getItem('fbprofile'));
+                  chrome.tabs.get(newtab, function(tab) {
+                    if (!tab) { 
+                      console.log('tab does not exist'); 
+                    }else{
+                      let myMessageUrl  =   `https://mbasic.facebook.com`;
+                      chrome.tabs.update(newtab, 
+                      {
+                        url: myMessageUrl
+                      },function(tabx) {
+                        let fbprofile=tabx.id;
+                        localStorage.setItem('fbprofile', fbprofile);
+                      });
+                    }
+                  });
+                }else{
+                  console.log('fbprofile does not exist');
+                }
                 localStorage.setItem('CheckMessageNReply',0);
                 CheckLocalStoreAndHitIndividualMList();
               }
@@ -401,7 +518,26 @@ chrome.runtime.onConnect.addListener(function(port) {
         individualThreadList.splice(indexthreadlink, 1);
         let NewListURLArray=JSON.stringify(individualThreadList);
         localStorage.setItem('ListURLArray', NewListURLArray);
-        document.getElementById('messageIndividualMain').src ="";
+          if(localStorage.getItem('fbprofile')){
+            let newtab=parseInt(localStorage.getItem('fbprofile'));
+            chrome.tabs.get(newtab, function(tab) {
+              if (!tab) { 
+                console.log('tab does not exist'); 
+              }else{
+                let myMessageUrl  =   `https://mbasic.facebook.com`;
+                chrome.tabs.update(newtab, 
+                {
+                  url: myMessageUrl
+                },function(tabx) {
+                  let fbprofile=tabx.id;
+                  localStorage.setItem('fbprofile', fbprofile);
+                });
+              }
+            });
+          }else{
+            console.log('fbprofile does not exist');
+          }
+        // document.getElementById('messageIndividualMain').src ="";
         localStorage.setItem('CheckMessageNReply',0);
         CheckLocalStoreAndHitIndividualMList();
       }
@@ -557,9 +693,16 @@ function CheckLocalStoreAndHitIndividualMList(){
         let ListURLArray = JSON.parse(ListURL);
         console.log("Trigger ===========77",ListURLArray);
         if(ListURLArray.length>0){
-          console.log("Trigger ===========7",ListURLArray[0]);
-          document.getElementById('messageIndividualMain').src = "";
-          document.getElementById('messageIndividualMain').src = ListURLArray[0];
+          let fbprofile=parseInt(localStorage.getItem('fbprofile'));
+          let myMessageUrl  =   ListURLArray[0];
+          chrome.tabs.update(fbprofile, 
+            {
+              url: myMessageUrl
+            },function(tab) {
+              let fbthread=tab.id;
+              localStorage.setItem('fbthread', fbthread);
+            });
+
           localStorage.setItem('CheckMessageNReply',1);
         }
         

@@ -13,33 +13,36 @@ class group extends Component {
     constructor(props) {
         super(props)
         this.state = {
-          groupList:1,
-          groupCreate:0,
-          groupEdit:0,
-          openCreateOption:0,
-          openCreateOptionKeyWord:0,
-          openCreateOptionStaticText:0,
-          openCreateOptionSegment:0,
-          DefaultSegments:[],
-          BlockStorage:[],
-          BlockStorageEdit:[],
-          TemporaryBlockStorage:[],
-          TemporaryBlockStorageEdit:[],
-          default_message_text_add:"",
-          default_message_text_edit:"",
-          showAddButton:0,
-          message_Group_List:[],
-          group_name_edit:"",
-          group_block_edit:[],
-          cgn:false,
-          egn:false,
-          loader:true,
-          group_id_edit:"",
-            openEditOption:0,
-            openEditOptionKeyWord:0,
-            openEditOptionStaticText:0,
-            openEditOptionSegment:0,
-            showEditButton:0
+                        groupList:1,
+                        groupCreate:0,
+                        groupEdit:0,
+                        openCreateOption:0,
+                        openCreateOptionKeyWord:0,
+                        openCreateOptionStaticText:0,
+                        openCreateOptionSegment:0,
+                        DefaultSegments:[],
+                        BlockStorage:[],
+                        BlockStorageEdit:[],
+                        TemporaryBlockStorage:[],
+                        TemporaryBlockStorageEdit:[],
+                        default_message_text_add:"",
+                        default_message_text_edit:"",
+                        showAddButton:0,
+                        message_Group_List:[],
+                        group_name_edit:"",
+                        group_block_edit:[],
+                        cgn:false,
+                        egn:false,
+                        loader:true,
+                        group_id_edit:"",
+                        openEditOption:0,
+                        openEditOptionKeyWord:0,
+                        openEditOptionStaticText:0,
+                        openEditOptionSegment:0,
+                        showEditButton:0,
+                        notifier:false,
+                        notifier_head:"",
+                        notifier_message:""
         }
       }
 
@@ -340,12 +343,42 @@ class group extends Component {
                     openCreateOptionKeyWord:0,
                     openCreateOptionStaticText:0,
                     openCreateOptionSegment:0,
-                    loader:false
-                })
+                    loader:false,
+                    notifier:true,
+                    notifier_head:"Well Done !",
+                    notifier_message:"Aww yeah, you successfully Added a Group"
+                });
+                setInterval(() => {
+                    this.setState({
+                            notifier:false,
+                            notifier_head:"",
+                            notifier_message:""
+                    });
+                },2000);
                 //console.log("This I got From DDDDBBBBBB EROOOOOO GGGGG",this.state.message_Group_List);
             }
             //console.log("this is more SUUUUUUCCEEEEESSSS",result);
         }).catch(error=>{
+            this.setState({
+                groupList:1,
+                groupCreate:0,
+                groupEdit:0,
+                openCreateOption:0,
+                openCreateOptionKeyWord:0,
+                openCreateOptionStaticText:0,
+                openCreateOptionSegment:0,
+                loader:false,
+                notifier:true,
+                notifier_head:"OOhh Snap !",
+                notifier_message:"Something went Wrong  Please try again after sometime"
+            });
+            setInterval(() => {
+                this.setState({
+                        notifier:false,
+                        notifier_head:"",
+                        notifier_message:""
+                });
+            },2000);
             console.log("this is more ERRRRROOOOOORRRRRR",error);
         })
     }
@@ -371,23 +404,64 @@ class group extends Component {
                     openEditOption:0,
                     openEditOptionKeyWord:0,
                     openEditOptionStaticText:0,
-                    openEditOptionSegment:0
-                })
+                    openEditOptionSegment:0,
+                    notifier:true,
+                    notifier_head:"Well Done !",
+                    notifier_message:"Aww yeah, you successfully Edited a Group"
+                });
+                setInterval(() => {
+                    this.setState({
+                            notifier:false,
+                            notifier_head:"",
+                            notifier_message:""
+                    });
+                },2000);
                 
+            }else{
+                this.setState({
+                    groupList:1,
+                    groupCreate:0,
+                    groupEdit:0,
+                    openCreateOption:0,
+                    openCreateOptionKeyWord:0,
+                    openCreateOptionStaticText:0,
+                    openCreateOptionSegment:0,
+                    loader:false,
+                    notifier:true,
+                    notifier_head:"OOhh Snap !",
+                    notifier_message:"Something went Wrong  Please try again after sometime"
+                });
+                setInterval(() => {
+                    this.setState({
+                            notifier:false,
+                            notifier_head:"",
+                            notifier_message:""
+                    });
+                },2000);
             }
             //console.log("this is more SUUUUUUCCEEEEESSSS",result);
         }).catch(error=>{
             console.log("this is more ERRRRROOOOOORRRRRR",error);
             this.setState({
-                loader:false,
                 groupList:1,
                 groupCreate:0,
                 groupEdit:0,
-                openEditOption:0,
-                openEditOptionKeyWord:0,
-                openEditOptionStaticText:0,
-                openEditOptionSegment:0
-            })
+                openCreateOption:0,
+                openCreateOptionKeyWord:0,
+                openCreateOptionStaticText:0,
+                openCreateOptionSegment:0,
+                loader:false,
+                notifier:true,
+                notifier_head:"OOhh Snap !",
+                notifier_message:"Something went Wrong  Please try again after sometime"
+            });
+            setInterval(() => {
+                this.setState({
+                        notifier:false,
+                        notifier_head:"",
+                        notifier_message:""
+                });
+            },2000);
         })
     }
     editMessageGroup(group_id,event){
@@ -449,6 +523,14 @@ class group extends Component {
             <div className="subtabcontent">
                 {this.state.loader && (   
                                 <div className="after_login_refresh"><img src={LoaderLogo} alt=""/></div>
+                )}
+                {this.state.notifier  && (
+                        <div className="group_delete_sreen">
+                            <div className="group_delete_popup">
+                                <h3>{this.state.notifier_head}</h3>
+                                <p>{this.state.notifier_message}</p>
+                            </div>
+                        </div>
                 )}
                 { this.state.message_Group_List.length != 0 
                 ?
