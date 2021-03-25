@@ -265,6 +265,21 @@ class responseSetting extends Component {
                     }
                   }
             })
+          }else{
+            this.setState({
+                loader:false,
+                notifier:true,
+                notifier_head:"OOhh Snap !",
+                notifier_message:"Something went Wrong  Please try again after sometime"
+              });
+              setInterval(() => {
+                this.setState({
+                        loader:false,
+                        notifier:false,
+                        notifier_head:"",
+                        notifier_message:""
+                });
+              },2000);
           }
           console.log("This Is I Got ====== ",response);
         });
@@ -324,15 +339,41 @@ class responseSetting extends Component {
                     console.log("This is what i Got",responsex.data.payload);
                     if(responsex.data.payload.autokey.length>0){
                         console.log("This is what i Got",responsex.data.payload.autokey);
+                        localStorage.setItem('keywordsTally', JSON.stringify(responsex.data.payload.listkey));
                         this.setState({
                                         autoresponderListValue:responsex.data.payload.autokey,
                                         autoResponsederList:1,
                                         autoResponsederCreate:0,
                                         autoResponsederEdit:0,
-                                        loader:false
+                                        loader:false,
+                                        notifier:true,
+                                        notifier_head:"Well Done !",
+                                        notifier_message:"Aww yeah, you successfully Updated the Status of an AutoResponder"
                                         
                         })
+                        setInterval(() => {
+                            this.setState({
+                                    notifier:false,
+                                    notifier_head:"",
+                                    notifier_message:""
+                            });
+                        },2000);
                     }
+                  }else{
+                    this.setState({
+                        loader:false,
+                        notifier:true,
+                        notifier_head:"OOhh Snap !",
+                        notifier_message:"Something went Wrong  Please try again after sometime"
+                      });
+                      setInterval(() => {
+                        this.setState({
+                                loader:false,
+                                notifier:false,
+                                notifier_head:"",
+                                notifier_message:""
+                        });
+                      },2000);
                   }
             })
           }
@@ -357,14 +398,39 @@ class responseSetting extends Component {
             }
             AutoResponderService.listAutoResponder(payloadNew).then(async responsex =>{
                 if(responsex.data.payload !=  "" ){
+                    localStorage.setItem('keywordsTally', JSON.stringify(responsex.data.payload.listkey));
                         this.setState({
                                         autoresponderListValue:responsex.data.payload.autokey,
                                         autoResponsederList:1,
                                         autoResponsederCreate:0,
                                         autoResponsederEdit:0,
-                                        loader:false
-                                        
-                        })
+                                        loader:false,  
+                                        notifier:true,
+                                        notifier_head:"Well Done !",
+                                        notifier_message:"Aww yeah, you successfully Deleted an AutoResponder"
+                        });
+                        setInterval(() => {
+                            this.setState({
+                                    notifier:false,
+                                    notifier_head:"",
+                                    notifier_message:""
+                            });
+                        },2000);
+                  }else{
+                    this.setState({
+                        loader:false,
+                        notifier:true,
+                        notifier_head:"OOhh Snap !",
+                        notifier_message:"Something went Wrong  Please try again after sometime"
+                      });
+                      setInterval(() => {
+                        this.setState({
+                                loader:false,
+                                notifier:false,
+                                notifier_head:"",
+                                notifier_message:""
+                        });
+                      },2000);
                   }
             })
           }

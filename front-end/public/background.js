@@ -139,7 +139,7 @@ chrome.runtime.onMessage.addListener(async function(request, sender) {
 
     }
     if (request.type == "OpenMessageProfileToRead"){
-      //console.log("User Details",request.options);
+      //ToDo
       localStorage.setItem('profileFetch',1);
       document.getElementById('profileFrame').src = request.options;
       let ListURLArray =[];
