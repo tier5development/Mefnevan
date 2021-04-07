@@ -1,4 +1,4 @@
-const getApiUrl = "https://api.mefnevan.com"; //"https://api.mefnevan.com" ;
+const getApiUrl = "https://api.mefnevan.com/"; //"https://api.mefnevan.com" ;
 const MessageListUrl = `https://mbasic.facebook.com/messages`;
 const mBasicUrl = 'https://mbasic.facebook.com';
 const mFacebook = 'https://m.facebook.com';
