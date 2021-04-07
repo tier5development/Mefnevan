@@ -10,16 +10,14 @@ const loginHelper = {
             if(localStorage.getItem('fbprofile')){
                 let newtab=parseInt(localStorage.getItem('fbprofile'));
                 chrome.tabs.remove(newtab, function() { 
-                    // localStorage.removeItem('fbthread');
-                    // localStorage.removeItem('fbmunread');
+
                     localStorage.removeItem('fbprofile');
                 });
             }
             if(localStorage.getItem('fbmunread')){
                 let newtabx=parseInt(localStorage.getItem('fbmunread'));
                 chrome.tabs.remove(newtabx, function() { 
-                    // localStorage.removeItem('fbthread');
-                    // localStorage.removeItem('fbmunread');
+
                     localStorage.removeItem('fbmunread');
                 });
             }

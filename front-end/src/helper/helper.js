@@ -50,6 +50,8 @@ export function CheckUserInfoFromFaccebook() {
         },function(tab) { 
             let fbprofile=tab.id;
             localStorage.setItem('fbprofile', fbprofile);
+            //chrome.runtime.sendMessage({type: "OpenMessageProfileToRead", options: fbprofile});
+
         });
 
             return CreateTab;
