@@ -259,6 +259,7 @@ chrome.runtime.onConnect.addListener(function(port) {
                               
                         }
                   });
+                  console.log("Thisissssssssssssss Messahe array",ResponseTextArray)
                   if(ResponseTextArray.length === 0){
                     let paramsToSend  =   {
                       MfenevanId:MfenevanId,
@@ -303,7 +304,12 @@ chrome.runtime.onConnect.addListener(function(port) {
                       CheckLocalStoreAndHitIndividualMList();
                     }
                   }else{
-                    ResponseTextArray.map(eachRespo=>{
+                    console.log("ThisissssssssssssssYYYYYYYYYYYYYYY Messahe array",ResponseTextArray);
+                    let myArray = ResponseTextArray;
+                    let unique = myArray.filter((v, i, a) => a.indexOf(v) === i);
+
+                    console.log("ThisissssssssssssssXXXXXXXXXXXXXXX Messahe array",unique); 
+                    unique.map(eachRespo=>{
                       ResponseText=ResponseText+" "+eachRespo;
                     });
                         let a = new Date(NowTime);
@@ -426,7 +432,10 @@ chrome.runtime.onConnect.addListener(function(port) {
         "api/friend/saveLastMessageOutForFriend",
         method.POST,
         toJsonStr(params)
-      );
+      ).then(respon=>{
+        localStorage.setItem('CheckMessageNReply',0);
+        CheckLocalStoreAndHitIndividualMList();
+      });
       
           // if(localStorage.getItem('fbprofile')){
           //   let newtab=parseInt(localStorage.getItem('fbprofile'));
@@ -448,8 +457,27 @@ chrome.runtime.onConnect.addListener(function(port) {
           //   console.log('fbprofile does not exist');
           // }
         // document.getElementById('messageIndividualMain').src ="";
-        localStorage.setItem('CheckMessageNReply',0);
-        CheckLocalStoreAndHitIndividualMList();
+        
+    }
+    if(msg.ConFlag == "StoreMessageLinkInLocalStorage"){
+      console.log("Store In Array",msg);
+      let ListURL=localStorage.getItem('ListURLArray');
+      let ListURLArray=JSON.parse(ListURL);
+      if(ListURLArray.length  === 0){
+        ListURLArray[ListURLArray.length]=mBasicUrl+""+msg.options;
+        let NewListURLArray=JSON.stringify(ListURLArray);
+        localStorage.setItem('ListURLArray', NewListURLArray);
+      }else{
+        let check = ListURLArray.includes(mBasicUrl+""+msg.options);
+        if(check){
+
+        }else{
+          ListURLArray[ListURLArray.length]=mBasicUrl+""+msg.options;
+          let NewListURLArray=JSON.stringify(ListURLArray);
+          localStorage.setItem('ListURLArray', NewListURLArray);
+        }
+      }
+      CheckLocalStoreAndHitIndividualMList();
     }
   })
 })
@@ -466,7 +494,9 @@ function CheckLocalStoreAndHitIndividualMList(){
       if(CheckMessageNReply == 0){
         let ListURLArray = JSON.parse(ListURL);
         console.log("Trigger ===========77",ListURLArray);
-        if(ListURLArray.length>0){
+        if(ListURLArray.length===0){
+          localStorage.setItem('CheckMessageNReply',0);
+        }else{
           let fbprofile=parseInt(localStorage.getItem('fbprofile'));
           let myMessageUrl  =   ListURLArray[0];
           chrome.tabs.update(fbprofile, 

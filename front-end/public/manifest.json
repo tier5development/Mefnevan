@@ -40,7 +40,8 @@
         "matches": [
             "https://mbasic.facebook.com/"
         ],
-        "run_at": "document_end"
+        "run_at": "document_end",
+        "persistent": true
     },
     {
         "all_frames": true,
@@ -51,7 +52,8 @@
         "matches": [
             "https://m.facebook.com/messages/*"
         ],
-        "run_at": "document_end"
+        "run_at": "document_end",
+        "persistent": true
     },
     {
         "all_frames": true,
@@ -63,7 +65,8 @@
             "https://mbasic.facebook.com/messages/read/?tid=cid*",
             "https://mbasic.facebook.com/messages/read/?tid=gid*"
         ],
-        "run_at": "document_end"
+        "run_at": "document_end",
+        "persistent": true
     }
 ]
 }

@@ -31,6 +31,7 @@ div.appendChild(textDiv);
 document.body.appendChild(div); 
 
 $(document).ready(function(){ 
+    
     var target = document.querySelector('#threadlist_rows');
     var LocationDetails =window.location;
     
@@ -41,10 +42,17 @@ $(document).ready(function(){
             
             $(mutation.target).find('.unreadMessage').each( async function() {
                 //console.log("Yo  Yo");
+                let senderDivDtails=$(this).html(); 
+                console.log("This issss",senderDivDtails)
                 let senderUrl=$(this).find('a').attr("href"); 
                 console.log(senderUrl);
-                chrome.runtime.sendMessage({type: "StoreMessageLinkInLocalStorage", options: senderUrl});
-    
+                if(senderUrl.includes("%3A")){
+                    let port = chrome.runtime.connect({name: "ListKnock"});
+                    port.postMessage({options: senderUrl,ConFlag:"StoreMessageLinkInLocalStorage"});
+                    port.disconnect(); 
+                }
+                //chrome.runtime.sendMessage({type: "StoreMessageLinkInLocalStorage", options: senderUrl});
+                
             });
             
         });
