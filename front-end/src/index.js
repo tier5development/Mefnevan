@@ -7,10 +7,8 @@ import reportWebVitals from "./reportWebVitals";
 import App from "./App";
 import thunk from 'redux-thunk';
 import authReducer from './store/reducers/Auth/authReducer';
-import userReducer from './store/reducers/User/userReducer';
 const rootReducer = combineReducers({
-  "auth": authReducer,
-  "user": userReducer
+  "auth": authReducer
 })
 
 const logger = (store) => {

@@ -13,7 +13,6 @@ import IconLogo from "../../../images/icon.svg";
 import AvatarLogo from "../../../images/Avatar.png";
 import LoaderLogo from "../../../images/Loader.gif";
 import * as authAction from '../../../store/actions/Auth/authAction';
-import * as userAction from '../../../store/actions/User/userAction';
 
 class Dashboard extends Component {
   constructor(props) {
@@ -62,7 +61,7 @@ class Dashboard extends Component {
       createStatePayload['UserAutoResponder']=localStorage.getItem('autoresponder');
       createStatePayload['UserDefaultMessage']=localStorage.getItem('default_message');
       
-      this.props.setUserInfo(createStatePayload);
+      this.props.setProfileInfo(createStatePayload);
       this.setState({
         fb_image:fb_image,
         fb_username:fb_username,
@@ -123,24 +122,39 @@ class Dashboard extends Component {
                         is_user_logged_in_facebook:localStorage.getItem('fb_logged_id'),
                         loader:false
                   })
+                  // let createStatePayload = [{
+                  // UserName:UserName,
+                  // UserImage:UserImage,
+                  // UserLoginFacebook:UserLoginFacebook,
+                  // UserAutoResponder:UserAutoResponder,
+                  // UserDefaultMessage:UserDefaultMessage
+                  // }];
                   let createStatePayload = [];
                   createStatePayload['UserName']=UserName;
                   createStatePayload['UserImage']=UserImage;
                   createStatePayload['UserLoginFacebook']=UserLoginFacebook;
                   createStatePayload['UserAutoResponder']=UserAutoResponder;
                   createStatePayload['UserDefaultMessage']=UserDefaultMessage;
-          
-                  this.props.setUserInfo(createStatePayload);
+                  
+                  this.props.setProfileInfo(createStatePayload);
                   
         }else{
+          // let createStatePayload = [{
+          //   UserName:localStorage.getItem('fb_username'),
+          //   UserImage:localStorage.getItem('fb_image'),
+          //   UserLoginFacebook:localStorage.getItem('fb_logged_id'),
+          //   UserAutoResponder:localStorage.getItem('autoresponder'),
+          //   UserDefaultMessage:localStorage.getItem('default_message')
+          //   }];
           let createStatePayload = [];
           createStatePayload['UserName']=localStorage.getItem('fb_username');
           createStatePayload['UserImage']=localStorage.getItem('fb_image');
           createStatePayload['UserLoginFacebook']=localStorage.getItem('fb_logged_id');
           createStatePayload['UserAutoResponder']=localStorage.getItem('autoresponder');
           createStatePayload['UserDefaultMessage']=localStorage.getItem('default_message');
-          
-          this.props.setUserInfo(createStatePayload);
+          // let NewCreateStatePayload = JSON.stringify(createStatePayload);
+
+          this.props.setProfileInfo(createStatePayload);
           this.setState({
             fb_image:localStorage.getItem('fb_image'),
             fb_name:localStorage.getItem('fb_name'),
@@ -153,7 +167,7 @@ class Dashboard extends Component {
       }).catch(error=>{
         console.log("This I got From backGround EROOOOOO",error);
       })
-      localStorage.setItem("redux",this.props.login_user_mefnevan_info.userInfo.payload);
+      localStorage.setItem("redux",this.props.ProfileInfo.profileInfo);
   }
     render() {
         return (
@@ -170,7 +184,7 @@ class Dashboard extends Component {
                 <h3>{this.state.fb_username}</h3>
               </div>
               <div className="fb_login_request">
-                {this.state.is_user_logged_in_facebook == "true" ?
+                {this.props.ProfileInfo.profileInfo["UserLoginFacebook"] == "true" ?
                 "" 
                 :
                 <div className="login_caution">
@@ -190,25 +204,21 @@ class Dashboard extends Component {
 }
 /**
  * @mapStateToProps
- * get the values from redux store for updating the front end
-*/
-const mapStateToProps = (state) => {
-  return {
-    login_user_profile_info: state.auth.payload,
-    login_user_mefnevan_info: state.user.payload
-  }
-}
-
-
-
-/**
- * @mapDispatchToProps
- * send the values to redux store when an admin user is created, suspended or activated
+ * grab the values from redux store
  */
-const mapDispatchToProps = dispatch => {
+ const mapStateToProps = state => {
   return {
-      setProfileInfo: load => dispatch(authAction.addProfileInfo(load)),
-      setUserInfo:  load  =>  dispatch(userAction.addUserInfo(load))
+    ProfileInfo: state.auth.payload
   };
 };
-export default connect(mapStateToProps, mapDispatchToProps)(Dashboard);
+/**
+* @mapDispatchToProps 
+* sending the values to redux store
+*/
+
+const mapDispatchToProps = (dispatch) => {
+  return {
+      setProfileInfo: (load) => dispatch(authAction.addProfileInfo(load))
+  }
+}
+export default connect(mapStateToProps, mapDispatchToProps)(withRouter(Dashboard));

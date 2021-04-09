@@ -3,10 +3,9 @@ import * as actionNames from '../../actions/actionTypes'
 
 const initialState = {
     payload: {
-        profileInfo: {}
+        profileInfo: []
     }
 }
-
 
 
 const addProfileInfo = (state, action) => {
@@ -18,6 +17,7 @@ const addProfileInfo = (state, action) => {
         }
     }
 }
+
 
 
 const authReducer = (state = initialState, action) => {

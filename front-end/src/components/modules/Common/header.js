@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import { Redirect, withRouter } from 'react-router-dom'
 import logo from "../../../images/logo.svg";
 import { NavLink } from "react-router-dom";
 import  plog from "../../../images/avatar_a.png";
@@ -84,6 +85,15 @@ class header extends Component {
                   }
                   
                   localStorage.setItem('keywordsTally', JSON.stringify(responsenewvalue.payload.AutoResponderKeywords));
+                  let createStatePayload = [];
+                  createStatePayload['UserName']=localStorage.getItem('fb_username');
+                  createStatePayload['UserImage']=localStorage.getItem('fb_image');
+                  createStatePayload['UserLoginFacebook']=localStorage.getItem('fb_logged_id');
+                  createStatePayload['UserAutoResponder']=localStorage.getItem('autoresponder');
+                  createStatePayload['UserDefaultMessage']=localStorage.getItem('default_message');
+                  // let NewCreateStatePayload = JSON.stringify(createStatePayload);
+
+                  this.props.setProfileInfo(createStatePayload);
                   this.setState({
                     autoresponder_status:localStorage.getItem('autoresponder'),
                     default_message:localStorage.getItem('default_message')
@@ -141,41 +151,51 @@ class header extends Component {
       }
     
     componentDidMount(){
-      console.log("I am in sidebar -- header =====",this.props.login_user_profile_info);
+      console.log("I am in sidebar -- header1 =====",this.props.ProfileInfo);
+      console.log("I am in sidebar -- header1 =====",this.props.ProfileInfo.profileInfo);
+      console.log("I am in sidebar -- header1 =====",this.props.ProfileInfo.profileInfo["UserImage"]);
+      // this.props.ProfileInfo.profileInfo[0].map(result=>{
+      //   console.log("User Name ===",result)
+      // })
+      
+      //const{UserLoginFacebook,UserAutoResponder,UserDefaultMessage} = this.props.ProfileInfo.profileInfo[0];
+      // console.log("User Name ===",NewPropsState.UserLoginFacebook)
+      // console.log("User Name ===",NewPropsState.UserAutoResponder)
+      // console.log("User Name ===",NewPropsState.UserDefaultMessage)
       this.setState({loader:true});
         let fb_username=localStorage.getItem('fb_username');
         let fb_image=localStorage.getItem('fb_image');
         let autoresponder=localStorage.getItem('autoresponder');
         let default_message=localStorage.getItem('default_message');
         console.log("I am In Header");
-        if(fb_username){
+        if(this.props.ProfileInfo.profileInfo["UserName"]){
           this.setState({
-            user_name:fb_username
+            user_name:this.props.ProfileInfo.profileInfo["UserName"]
         });
         }
-        if(fb_image){
+        if(this.props.ProfileInfo.profileInfo["UserImage"]){
           this.setState({
-            user_image:fb_image
+            user_image:this.props.ProfileInfo.profileInfo["UserImage"]
         });
         }
-        if(autoresponder){
-          if(autoresponder=="1"){
+        if(this.props.ProfileInfo.profileInfo["UserAutoResponder"]){
+          if(this.props.ProfileInfo.profileInfo["UserAutoResponder"]=="1"){
             this.setState({
             meven_status:1
             });
           }
           this.setState({
-            autoresponder_status:autoresponder
+            autoresponder_status:this.props.ProfileInfo.profileInfo["UserAutoResponder"]
           });
         }
-        if(default_message){
-          if(default_message=="1"){
+        if(this.props.ProfileInfo.profileInfo["UserDefaultMessage"]){
+          if(this.props.ProfileInfo.profileInfo["UserDefaultMessage"]=="1"){
             this.setState({
             meven_status:1
             });
           }
           this.setState({
-            default_message:default_message
+            default_message:this.props.ProfileInfo.profileInfo["UserDefaultMessage"]
           });
         }
         this.setState({loader:false});
@@ -229,23 +249,21 @@ class header extends Component {
 }
 /**
  * @mapStateToProps
- * get the values from redux store for updating the front end
-*/
-const mapStateToProps = (state) => {
-  return {
-    login_user_profile_info: state.auth.payload
-  }
-}
-
-
-
-/**
- * @mapDispatchToProps
- * send the values to redux store when an admin user is created, suspended or activated
+ * grab the values from redux store
  */
-const mapDispatchToProps = dispatch => {
+ const mapStateToProps = state => {
   return {
-      setProfileInfo: load => dispatch(authAction.addProfileInfo(load))
+    ProfileInfo: state.auth.payload
   };
 };
-export default connect(mapStateToProps, mapDispatchToProps)(header);
+/**
+* @mapDispatchToProps 
+* sending the values to redux store
+*/
+
+const mapDispatchToProps = (dispatch) => {
+  return {
+      setProfileInfo: (load) => dispatch(authAction.addProfileInfo(load))
+  }
+}
+export default connect(mapStateToProps, mapDispatchToProps)(withRouter(header));

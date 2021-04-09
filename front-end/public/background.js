@@ -437,26 +437,7 @@ chrome.runtime.onConnect.addListener(function(port) {
         CheckLocalStoreAndHitIndividualMList();
       });
       
-          // if(localStorage.getItem('fbprofile')){
-          //   let newtab=parseInt(localStorage.getItem('fbprofile'));
-          //   chrome.tabs.get(newtab, function(tab) {
-          //     if (!tab) { 
-          //       console.log('tab does not exist'); 
-          //     }else{
-          //       let myMessageUrl  =   `https://mbasic.facebook.com`;
-          //       chrome.tabs.update(newtab, 
-          //       {
-          //         url: myMessageUrl
-          //       },function(tabx) {
-          //         let fbprofile=tabx.id;
-          //         localStorage.setItem('fbprofile', fbprofile);
-          //       });
-          //     }
-          //   });
-          // }else{
-          //   console.log('fbprofile does not exist');
-          // }
-        // document.getElementById('messageIndividualMain').src ="";
+
         
     }
     if(msg.ConFlag == "StoreMessageLinkInLocalStorage"){
@@ -524,3 +505,111 @@ function CheckLocalStoreAndHitIndividualMList(){
     }
   }
 }
+// function restartTabfun(){
+//   if(localStorage.getItem('fbprofile')){
+//     let newtab=parseInt(localStorage.getItem('fbprofile'));
+//     chrome.tabs.get(newtab, function(tab) {
+//       if (!tab) { 
+
+//       }
+//       else{
+//             chrome.tabs.remove(newtab, function() { 
+//                 localStorage.removeItem('fbprofile');
+//             });
+//       }
+//     })
+//   }
+//   if(localStorage.getItem('fbmunread')){
+//       let newtabx=parseInt(localStorage.getItem('fbmunread'));
+//       chrome.tabs.get(newtabx, function(tab) {
+//         if (!tab) { 
+
+//         }
+//         else{
+//           chrome.tabs.remove(newtabx, function() { 
+//             localStorage.removeItem('fbmunread');
+//           });
+//         }
+//       })
+//   }
+//   chrome.tabs.query({},function(tabs){     
+//     console.log("\n/////////////////////\n");
+//     tabs.forEach(function(tab){
+//       console.log(tab.url," and ID is",tab.id);
+//       if(tab.url == "https://mbasic.facebook.com/"){
+//         chrome.tabs.remove(tab.id, function() { 
+//           //localStorage.removeItem('fbprofile');
+//         });
+//       }
+//     });
+//  });
+//   localStorage.setItem('CheckMessageNReply',0);
+//   localStorage.removeItem('fbthread');
+//   const myNewUrl  =   `https://mbasic.facebook.com`;
+//   let CreateTab    =   chrome.tabs.create({
+//       url: myNewUrl,
+//       active: false,
+//       pinned:true
+//   },function(tab) { 
+//       let fbprofile=tab.id;
+//       localStorage.setItem('fbprofile', fbprofile);
+//       CheckLocalStoreAndHitIndividualMList();
+//   });
+  
+// }
+
+setInterval(async function(){
+  //restartTabfun()
+
+  if(localStorage.getItem('fbmunread')){
+      let newtabx=parseInt(localStorage.getItem('fbmunread'));
+     
+          chrome.tabs.remove(newtabx, function() { 
+            localStorage.removeItem('fbmunread');
+          });
+       
+  }
+  if(localStorage.getItem('fbthread')){
+    let newtax=parseInt(localStorage.getItem('fbthread'));
+
+        chrome.tabs.remove(newtax, function() { 
+          localStorage.removeItem('fbthread');
+        });
+    
+}
+await chrome.tabs.query({},async function(tabs){     
+    console.log("\n/////////////////////\n");
+    await tabs.forEach(function(tab){
+      console.log(tab.url," and ID is",tab.id);
+      if(tab.url == "https://mbasic.facebook.com/"){
+        chrome.tabs.remove(tab.id, function() { 
+          //localStorage.removeItem('fbprofile');
+        });
+      }
+      var inputString = tab.url ;
+var findme = "https://m.facebook.com/messages/read/?";
+
+if ( inputString.indexOf(findme) > -1 ) {
+  chrome.tabs.remove(tab.id, function() { 
+    //localStorage.removeItem('fbprofile');
+  });
+} else {
+    //alert( "not found" );
+}
+    });
+});
+const myNewUrl  =   `https://mbasic.facebook.com`;
+await chrome.tabs.create({
+    url: myNewUrl,
+    active: false,
+    pinned:true
+},function(ltab) { 
+    let fbprofile=parseInt(ltab.id);
+    console.log("I am setttinggg");
+    localStorage.setItem('fbprofile', fbprofile);
+    
+});
+localStorage.setItem('CheckMessageNReply',0);
+
+//CheckLocalStoreAndHitIndividualMList();
+}, 60000)

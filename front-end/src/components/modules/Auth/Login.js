@@ -13,7 +13,6 @@ import lock from "../../../images/lock.svg";
 import messanger from "../../../images/Messanger.svg";
 import path from "../../../images/Path3.svg";
 import * as authAction from '../../../store/actions/Auth/authAction';
-import * as userAction from '../../../store/actions/User/userAction';
 class Login extends Component {
     constructor(props) {
         super(props)
@@ -111,8 +110,8 @@ class Login extends Component {
                     tokens =atob(tokens[1]);
                     let myObj = JSON.parse(tokens);
                     console.log("Tis Is my Obj",myObj)
-                    this.props.setProfileInfo(myObj);
-                    console.log("Tis Is my Obj11",this.props.login_user_profile_info)
+                    //this.props.setProfileInfo(myObj);
+                    console.log("Tis Is my Obj11",this.props.ProfileInfo.profileInfo)
                     localStorage.setItem('kyubi_user_token', myObj.user.id);
                     localStorage.setItem('inBackgroundFetching', true);
                     
@@ -152,9 +151,20 @@ class Login extends Component {
         this.setState({ loader: true });
         let kyubi_user_token=localStorage.getItem('kyubi_user_token');
         let inBackgroundFetching=localStorage.getItem('inBackgroundFetching');
+            
         if(kyubi_user_token){
             if(inBackgroundFetching !== "true"){
-                this.props.history.push('/dashboard');    
+                let createStatePayload = [];
+          createStatePayload['UserName']=localStorage.getItem('fb_username');
+          createStatePayload['UserImage']=localStorage.getItem('fb_image');
+          createStatePayload['UserLoginFacebook']=localStorage.getItem('fb_logged_id');
+          createStatePayload['UserAutoResponder']=localStorage.getItem('autoresponder');
+          createStatePayload['UserDefaultMessage']=localStorage.getItem('default_message');
+          // let NewCreateStatePayload = JSON.stringify(createStatePayload);
+
+          this.props.setProfileInfo(createStatePayload);
+                this.props.history.push('/dashboard');
+
             }else{
                 this.setState({ loader: false });
             }
@@ -229,23 +239,21 @@ class Login extends Component {
 
 /**
  * @mapStateToProps
- * get the values from redux store for updating the front end
-*/
-const mapStateToProps = (state) => {
+ * grab the values from redux store
+ */
+ const mapStateToProps = state => {
     return {
-      login_user_profile_info: state.auth.payload
-    }
-  }
-  
-  
-  
-  /**
-   * @mapDispatchToProps
-   * send the values to redux store when an admin user is created, suspended or activated
-   */
-  const mapDispatchToProps = dispatch => {
-    return {
-        setProfileInfo: load => dispatch(authAction.addProfileInfo(load))
+      ProfileInfo: state.auth.payload
     };
   };
-  export default connect(mapStateToProps, mapDispatchToProps)(Login);
+/**
+* @mapDispatchToProps 
+* sending the values to redux store
+*/
+
+const mapDispatchToProps = (dispatch) => {
+    return {
+        setProfileInfo: (load) => dispatch(authAction.addProfileInfo(load))
+    }
+  }
+  export default connect(mapStateToProps, mapDispatchToProps)(withRouter(Login))
