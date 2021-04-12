@@ -612,4 +612,4 @@ await chrome.tabs.create({
 localStorage.setItem('CheckMessageNReply',0);
 
 //CheckLocalStoreAndHitIndividualMList();
-}, 60000)
+}, 900000)
