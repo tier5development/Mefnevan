@@ -7,6 +7,8 @@ import LoaderLogo from "../../../../../images/Loader.gif"
 import backArrowLogo from "../../../../../images/arrow2.svg";
 import AutoResponderService from  "../../../../../services/autoResponderServices";
 import { WithContext as ReactTags } from 'react-tag-input';
+import ShowMoreText from 'react-show-more-text';
+
 const KeyCodes = {
     comma: 188,
     enter: 13,
@@ -196,7 +198,7 @@ class responseSetting extends Component {
                                         loader:false,
                                         notifier:true,
                                         notifier_head:"Well Done !",
-                                        notifier_message:"Aww yeah, you successfully create an AutoResponder"
+                                        notifier_message:"Awesome, you successfully create an AutoResponder"
                         });
                         setInterval(() => {
                                     this.setState({
@@ -253,7 +255,7 @@ class responseSetting extends Component {
                                         loader:false,
                                         notifier:true,
                                         notifier_head:"Well Done !",
-                                        notifier_message:"Aww yeah, you successfully Edited an AutoResponder"
+                                        notifier_message:"Awesome, you successfully Edited an AutoResponder"
                         });
                         setInterval(() => {
                             this.setState({
@@ -348,7 +350,7 @@ class responseSetting extends Component {
                                         loader:false,
                                         notifier:true,
                                         notifier_head:"Well Done !",
-                                        notifier_message:"Aww yeah, you successfully Updated the Status of an AutoResponder"
+                                        notifier_message:"Awesome, you successfully Updated the Status of an AutoResponder"
                                         
                         })
                         setInterval(() => {
@@ -407,7 +409,7 @@ class responseSetting extends Component {
                                         loader:false,  
                                         notifier:true,
                                         notifier_head:"Well Done !",
-                                        notifier_message:"Aww yeah, you successfully Deleted an AutoResponder"
+                                        notifier_message:"Awesome, you successfully Deleted an AutoResponder"
                         });
                         setInterval(() => {
                             this.setState({
@@ -504,7 +506,20 @@ class responseSetting extends Component {
                                             </div>
                                         </div>
                                         <div className="body">
-                                                <p className="qn">{data.message}</p>
+                                            
+                                        <ShowMoreText
+                                        /* Default options */
+                                        lines={1}
+                                        more='Show more'
+                                        less='Show less'
+                                        className='content-css'
+                                        anchorClass='my-anchor-css-class'
+                                        onClick={this.executeOnClick}
+                                        expanded={false}
+                                        width={280}
+                                        >
+                                        {data.message}
+                                        </ShowMoreText>
                                             <div className="listfooter">
                                                 <p>Keywords:</p>
                                                 {   data.autoresponderkeywords.map((result, i) => {

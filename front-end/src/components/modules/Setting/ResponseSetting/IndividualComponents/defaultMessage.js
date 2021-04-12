@@ -141,7 +141,7 @@ class defaultMessage extends Component {
                         loader:false,
                         notifier:true,
                         notifier_head:"Well Done !",
-                        notifier_message:"Aww yeah, you successfully Updated the Default Settings"
+                        notifier_message:"Awesome, you successfully Updated the Default Settings"
                       });
                       setInterval(() => {
                         this.setState({

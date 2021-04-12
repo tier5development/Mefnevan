@@ -12,6 +12,17 @@ body{
 	padding-top: 0px;
 }
 
+body::-webkit-scrollbar {
+    width: 5px;
+  }
+
+body::-webkit-scrollbar-track {
+    background: #ddd;
+  }
+   
+body::-webkit-scrollbar-thumb {
+    background: #85b1ea; 
+  }
 .App-wrapper {
 	width: 367px;
 	height: 600px;
@@ -654,7 +665,11 @@ ul.maintab li a.active{
 	border-radius: 0 0 22px 22px;
 	border: 1px solid #D9E3EC;
 	background: #fff;
-	padding: 15px 20px 45px;
+	padding: 15px 20px 10px;
+    display: flex;
+    flex-wrap: wrap;
+    flex-direction: column;
+    justify-content: space-between;
 	min-height: 125px;
 	position: relative;
 }
@@ -733,8 +748,9 @@ input[type="checkbox"].switch_2{
 }
 
 .listing_card .body .listfooter{
-	position: absolute;
-	bottom: 12px;
+	position: relative;
+    bottom: auto;
+    width: 305px;
 }
 .listing_card .body .listfooter p{
 	color: #ADADAD;
@@ -747,7 +763,7 @@ input[type="checkbox"].switch_2{
     color: #565656;
     padding: 2px 7px;
     display: inline-block;
-    margin: 3px 6px 3px 0;
+    margin: 2px 6px 1px 0;
     font-size: 12px;
     border-radius: 3px;
 }
@@ -1151,7 +1167,7 @@ new style added for modification
 }
 
 .listingholder {
-	height: 256px;
+	height: 250px;
     overflow: auto;
     /* margin: 0px 0; */
     margin-top: 10px;
@@ -1159,7 +1175,17 @@ new style added for modification
     margin-right: -14px;
     margin-bottom: -25px;
 }   /*this is the new class for auto responder container for scrolling */
+.listingholder::-webkit-scrollbar {
+    width: 3px;
+  }
 
+.listingholder::-webkit-scrollbar-track {
+    background: #ddd;
+  }
+   
+.listingholder::-webkit-scrollbar-thumb {
+    background: #85b1ea; 
+  }
 .insert_msg .insert span img {
     vertical-align: baseline;
 }

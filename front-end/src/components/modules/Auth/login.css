@@ -69,6 +69,17 @@
     background-color: #fff;
   }
   
+body::-webkit-scrollbar {
+  width: 5px;
+}
+
+body::-webkit-scrollbar-track {
+  background: #ddd;
+}
+ 
+body::-webkit-scrollbar-thumb {
+  background: #85b1ea; 
+}
   [tabindex="-1"]:focus:not(:focus-visible) {
     outline: 0 !important;
   }
@@ -32970,7 +32981,7 @@ color: #fff;
 }
 
 .listingholder {
-  height: 256px;
+  height: 250px;
   overflow: auto;
   /* margin: 0px 0; */
   margin-top: 10px;
@@ -32978,7 +32989,17 @@ color: #fff;
   margin-right: -14px;
   margin-bottom: -25px;
 }   /*this is the new class for auto responder container for scrolling */
+.listingholder::-webkit-scrollbar {
+  width: 3px;
+}
 
+.listingholder::-webkit-scrollbar-track {
+  background: #ddd;
+}
+ 
+.listingholder::-webkit-scrollbar-thumb {
+  background: #85b1ea; 
+}
 .insert_msg .insert span img {
   vertical-align: baseline;
 }
