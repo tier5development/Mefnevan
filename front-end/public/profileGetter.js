@@ -39,7 +39,7 @@ let UserLoggedInFacebook =  false;
 let NavItem =$("nav").find("a");
 let CheckCounter =0;
 var LocationDetails =window.location;
-console.log("This is the Location Details",LocationDetails);
+//console.log("This is the Location Details",LocationDetails);
 if(NavItem){
     //console.log("I Got THIS Nav Items ",NavItem.length);
     if(NavItem.length  === 0){
@@ -79,7 +79,7 @@ if(NavItem){
     }   
 }else{
     UserLoggedInFacebook =  false;
-    console.log("I Did Not Got THIS Nav Items ",NavItem);
+    //console.log("I Did Not Got THIS Nav Items ",NavItem);
 }
 
 let parameters={

@@ -43,9 +43,9 @@ $(document).ready(function(){
             $(mutation.target).find('.unreadMessage').each( async function() {
                 //console.log("Yo  Yo");
                 let senderDivDtails=$(this).html(); 
-                console.log("This issss",senderDivDtails)
+                //console.log("This issss",senderDivDtails)
                 let senderUrl=$(this).find('a').attr("href"); 
-                console.log(senderUrl);
+                //console.log(senderUrl);
                 if(senderUrl.includes("%3A")){
                     let port = chrome.runtime.connect({name: "ListKnock"});
                     port.postMessage({options: senderUrl,ConFlag:"StoreMessageLinkInLocalStorage"});
