@@ -189,61 +189,63 @@ module.exports.GetUserDetails = async   (req,res)   =>{
 module.exports.userCheckStoreNRetrive   =   async   (req,   res)    =>  {
     try {
         console.log("This is my sent",req.body);        
-        let getUserInfo = await UsersRepo.GetUserById(req.body.user_rec);
-        console.log("This is my Respo",getUserInfo);
-        let GetMDBid="";
-        if(getUserInfo){
-            let  usersDetailsArray=[];
-            usersDetailsArray['kyubi_user_token']=req.body.user_rec;
-            if(req.body.fb_id !=  ""){
-                usersDetailsArray['facebook_id']=req.body.fb_id;
-            }
-            if(req.body.fb_name !=  ""){
-                usersDetailsArray['facebook_name']=req.body.fb_name;
-            }
-            if(req.body.fb_username !=  ""){
-                usersDetailsArray['facebook_profile_name']=req.body.fb_username;
-            }
-            if(req.body.fb_image !=  ""){
-                usersDetailsArray['facebook_image']=req.body.fb_image;
-            }
-            GetMDBid =getUserInfo._id;
-            console.log("Store That",usersDetailsArray);
-            let UsersDetailinfo=Object.assign({}, usersDetailsArray);
-            console.log("Store That IS",UsersDetailinfo);
-            let UpdateUserInfo=await UsersRepo.UpdateUserInfo(req.body.user_rec,UsersDetailinfo);
+        
+        if(req.body.user_rec!=""){
+            let getUserInfo = await UsersRepo.GetUserById(req.body.user_rec);
+            console.log("This is my Respo",getUserInfo);
+            let GetMDBid="";
+            if(getUserInfo){
+                let  usersDetailsArray=[];
+                usersDetailsArray['kyubi_user_token']=req.body.user_rec;
+                if(req.body.fb_id !=  ""){
+                    usersDetailsArray['facebook_id']=req.body.fb_id;
+                }
+                if(req.body.fb_name !=  ""){
+                    usersDetailsArray['facebook_name']=req.body.fb_name;
+                }
+                if(req.body.fb_username !=  ""){
+                    usersDetailsArray['facebook_profile_name']=req.body.fb_username;
+                }
+                if(req.body.fb_image !=  ""){
+                    usersDetailsArray['facebook_image']=req.body.fb_image;
+                }
+                GetMDBid =getUserInfo._id;
+                console.log("Store That",usersDetailsArray);
+                let UsersDetailinfo=Object.assign({}, usersDetailsArray);
+                console.log("Store That IS",UsersDetailinfo);
+                let UpdateUserInfo=await UsersRepo.UpdateUserInfo(req.body.user_rec,UsersDetailinfo);
 
-        }else{
+            }else{
 
-            let  usersDetailsArray=[];
-            usersDetailsArray['kyubi_user_token']=req.body.user_rec;
-            if(req.body.fb_id !=  ""){
-                usersDetailsArray['facebook_id']=req.body.fb_id;
+                let  usersDetailsArray=[];
+                usersDetailsArray['kyubi_user_token']=req.body.user_rec;
+                if(req.body.fb_id !=  ""){
+                    usersDetailsArray['facebook_id']=req.body.fb_id;
+                }
+                if(req.body.fb_name !=  ""){
+                    usersDetailsArray['facebook_name']=req.body.fb_name;
+                }
+                if(req.body.fb_username !=  ""){
+                    usersDetailsArray['facebook_profile_name']=req.body.fb_username;
+                }
+                if(req.body.fb_image !=  ""){
+                    usersDetailsArray['facebook_image']=req.body.fb_image;
+                }
+                
+                console.log("Store That",usersDetailsArray);
+                let UsersDetailinfo=Object.assign({}, usersDetailsArray);
+                console.log("Store That IS",UsersDetailinfo);
+                let saveUesr=await UsersRepo.saveUserDetails(UsersDetailinfo);
+                console.log("Show That IS",saveUesr._id);
+                let UsersSettingsDetailinfo= {
+                    user_id: saveUesr._id,
+                    default_message: 0,
+                    default_message_text: "",
+                    autoresponder: 0
+                };
+                let getUserSettingsNew=await UserSettingRepository.saveUserSettingsDetails(UsersSettingsDetailinfo);
+                GetMDBid =saveUesr._id;
             }
-            if(req.body.fb_name !=  ""){
-                usersDetailsArray['facebook_name']=req.body.fb_name;
-            }
-            if(req.body.fb_username !=  ""){
-                usersDetailsArray['facebook_profile_name']=req.body.fb_username;
-            }
-            if(req.body.fb_image !=  ""){
-                usersDetailsArray['facebook_image']=req.body.fb_image;
-            }
-            
-            console.log("Store That",usersDetailsArray);
-            let UsersDetailinfo=Object.assign({}, usersDetailsArray);
-            console.log("Store That IS",UsersDetailinfo);
-            let saveUesr=await UsersRepo.saveUserDetails(UsersDetailinfo);
-            console.log("Show That IS",saveUesr._id);
-            let UsersSettingsDetailinfo= {
-                user_id: saveUesr._id,
-                default_message: 0,
-                default_message_text: "",
-                autoresponder: 0
-              };
-            let getUserSettingsNew=await UserSettingRepository.saveUserSettingsDetails(UsersSettingsDetailinfo);
-            GetMDBid =saveUesr._id;
-        }
             let getUserInfoNew = await UsersRepo.GetUserById(req.body.user_rec);
             let userInfoArray = {};
             let userSettingsArray = {};
@@ -283,6 +285,30 @@ module.exports.userCheckStoreNRetrive   =   async   (req,   res)    =>  {
                 message: "Successfully User Added",
                 payload: {UserInfo:userInfoArray,UserSettings:userSettingsArray,AutoResponderKeywords:statusArray}
             });
+        }else{
+            let NewuserInfoArray={
+                user_id:"",
+                kyubi_user_token: "",
+                facebook_fbid: "",
+                facebook_name: "",
+                facebook_profile_name: "",
+                facebook_image: "",
+                image_url: "",
+                status: ""
+            }; 
+            let NewuserSettingsArray={
+                default_message: 0,
+                default_message_text: "",
+                autoresponder: 0,
+                default_time_delay: 0};
+            let NewstatusArray = [];
+            res.send({
+                code: 1,
+                message: "Successfully User Added",
+                payload: {UserInfo:NewuserInfoArray,UserSettings:NewuserSettingsArray,AutoResponderKeywords:NewstatusArray}
+            });
+
+        }
         
     } catch (error) {
         res.send({
