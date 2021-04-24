@@ -190,7 +190,30 @@ module.exports.userCheckStoreNRetrive   =   async   (req,   res)    =>  {
     try {
         console.log("This is my sent",req.body);        
         
-        if(req.body.user_rec!="null"){
+        if(req.body.user_rec==="null" ||req.body.user_rec===null || req.body.user_rec===""){
+            let NewuserInfoArray={
+                user_id:"",
+                kyubi_user_token: "",
+                facebook_fbid: "",
+                facebook_name: "",
+                facebook_profile_name: "",
+                facebook_image: "",
+                image_url: "",
+                status: ""
+            }; 
+            let NewuserSettingsArray={
+                default_message: 0,
+                default_message_text: "",
+                autoresponder: 0,
+                default_time_delay: 0};
+            let NewstatusArray = [];
+            res.send({
+                code: 1,
+                message: "Successfully User Added",
+                payload: {UserInfo:NewuserInfoArray,UserSettings:NewuserSettingsArray,AutoResponderKeywords:NewstatusArray}
+            });
+
+        }else{
             let getUserInfo = await UsersRepo.GetUserById(req.body.user_rec);
             console.log("This is my Respo",getUserInfo);
             let GetMDBid="";
@@ -285,29 +308,7 @@ module.exports.userCheckStoreNRetrive   =   async   (req,   res)    =>  {
                 message: "Successfully User Added",
                 payload: {UserInfo:userInfoArray,UserSettings:userSettingsArray,AutoResponderKeywords:statusArray}
             });
-        }else{
-            let NewuserInfoArray={
-                user_id:"",
-                kyubi_user_token: "",
-                facebook_fbid: "",
-                facebook_name: "",
-                facebook_profile_name: "",
-                facebook_image: "",
-                image_url: "",
-                status: ""
-            }; 
-            let NewuserSettingsArray={
-                default_message: 0,
-                default_message_text: "",
-                autoresponder: 0,
-                default_time_delay: 0};
-            let NewstatusArray = [];
-            res.send({
-                code: 1,
-                message: "Successfully User Added",
-                payload: {UserInfo:NewuserInfoArray,UserSettings:NewuserSettingsArray,AutoResponderKeywords:NewstatusArray}
-            });
-
+            
         }
         
     } catch (error) {
