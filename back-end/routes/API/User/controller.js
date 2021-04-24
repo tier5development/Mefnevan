@@ -190,7 +190,7 @@ module.exports.userCheckStoreNRetrive   =   async   (req,   res)    =>  {
     try {
         console.log("This is my sent",req.body);        
         
-        if(req.body.user_rec!=""){
+        if(req.body.user_rec!="null"){
             let getUserInfo = await UsersRepo.GetUserById(req.body.user_rec);
             console.log("This is my Respo",getUserInfo);
             let GetMDBid="";
