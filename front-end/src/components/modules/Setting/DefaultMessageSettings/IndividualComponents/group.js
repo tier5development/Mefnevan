@@ -13,6 +13,13 @@ class group extends Component {
     constructor(props) {
         super(props)
         this.state = {
+                        deleteGroupId:"",
+                        deleteGroupblock:false,
+                        deleteGrouptext:"",
+                        deleteGroupHead:"",
+                        deleteGroupCancle:false,
+                        deleteGroupDelete:false,
+                        deleteGroupClose:false,
                         groupList:1,
                         groupCreate:0,
                         groupEdit:0,
@@ -485,6 +492,43 @@ class group extends Component {
           }
         })
     }
+    deleteMessageGroup(group_id,event){
+        event.preventDefault();
+        this.setState({
+            deleteGroupId:group_id,
+            deleteGroupblock:true,
+            deleteGrouptext:"Are you sure you want to delete this Group ?",
+            deleteGroupHead:"Delete Group",
+            deleteGroupCancle:true,
+            deleteGroupDelete:true,
+            deleteGroupClose:false
+
+        })
+    }
+    deleteMessageGroupCancel(event){
+        event.preventDefault();
+        this.setState({
+            deleteGroupId:"",
+            deleteGroupblock:false,
+            deleteGrouptext:"",
+            deleteGroupHead:"",
+            deleteGroupCancle:false,
+            deleteGroupDelete:false,
+            deleteGroupClose:false
+        })
+    }
+    deleteMessageGroupClose(event){
+        event.preventDefault();
+        this.setState({
+            deleteGroupId:"",
+            deleteGroupblock:false,
+            deleteGrouptext:"",
+            deleteGroupHead:"",
+            deleteGroupCancle:false,
+            deleteGroupDelete:false,
+            deleteGroupClose:false
+        })
+    }
     componentDidMount(){
         this.setState({loader:true})
         let  params ={
@@ -539,11 +583,32 @@ class group extends Component {
                         <span>Message Group</span> <a href="" onClick={this.addGroupHandler} className="createbtn"><img src={plusLogo}/> Create New</a>
                     </div>
                     <div className="segmentlists">
+                    { this.state.deleteGroupblock  && ( 
+                        <div class="group_delete_sreen">
+                            <div className="group_delete_popup">
+                            <h3>{this.state.deleteGroupHead}</h3>
+                            <p>{this.state.deleteGrouptext}</p>
+                            <div className="text-right">
+                            { this.state.deleteGroupCancle  && ( 
+                                <a href="#" onClick={(event) => this.deleteMessageGroupCancel(event)} className="bluelink1">Cancel</a>
+                            )} 
+                            { this.state.deleteGroupDelete  && ( 
+                                <a href="#" onClick={(event) => this.deleteMessageGroupConfirm(event)} className="redlink">Delete</a>
+                            )}
+                            { this.state.deleteGroupClose  && ( 
+                                <a href="#" onClick={(event) => this.deleteMessageGroupClose(event)} className="redlink">Close</a>
+                            )} 
+                            </div>
+                            </div>
+                        </div>
+                    )} 
                     {this.state.message_Group_List && this.state.message_Group_List.map((data, index) =>
                         <div className="segmentlist">
                             <span className="txt">{data.title}</span>
+                            <span className="txt">{data.associate_blocks.length}<br/> Blocks </span>
                             <div className="action">
                             <a href="#" onClick={(event) => this.editMessageGroup(data._id,event)} ><img src={editLogo} alt=""/></a>
+                            <a href="#" onClick={(event) => this.deleteMessageGroup(data._id,event)} ><img src={deleteLogo} alt=""/></a>
                             </div>
                         </div>
                     )}

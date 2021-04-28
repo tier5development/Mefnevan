@@ -163,7 +163,7 @@ class Login extends Component {
           // let NewCreateStatePayload = JSON.stringify(createStatePayload);
 
           this.props.setProfileInfo(createStatePayload);
-                this.props.history.push('/dashboard');
+                this.props.history.push('/setting');
 
             }else{
                 this.setState({ loader: false });

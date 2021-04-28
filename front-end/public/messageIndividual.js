@@ -60,7 +60,7 @@ if($("#messageGroup  > div").length  > 0){
       let content=" ";
       $("#messageGroup  > div").last().find(' > div:nth-child('+valll+')').find(' > div:nth-child('+1+')').find('div').find('span').each( async function(ThisCountElem) { 
         //console.log("Tis Chunk", $(this).html());
-        //content = content + " " +$(this).html();
+        content = content + " " +$(this).html()+ " ";
       });
       //console.log("Tis  Total Chunk", content);
       let MessageDetails = {

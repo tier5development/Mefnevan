@@ -6,7 +6,13 @@ import EmptyFileLogo from "../../../../../images/empty_file.svg";
 import LoaderLogo from "../../../../../images/Loader.gif"
 import backArrowLogo from "../../../../../images/arrow2.svg";
 import AutoResponderService from  "../../../../../services/autoResponderServices";
+import GroupServices from "../../../../../services/groupServices";
 import { WithContext as ReactTags } from 'react-tag-input';
+import Select from 'react-select';
+const options = [
+    {value:0,label:"Text  Message"},
+    {value:1,label:"Message Group"}
+  ];
 const KeyCodes = {
     comma: 188,
     enter: 13,
@@ -17,24 +23,34 @@ class responseSetting extends Component {
     constructor(props) {
         super(props)
         this.state = {
-          autoResponsederList:1,
-          autoResponsederCreate:0,
-          autoResponsederEdit:0,
-          autoresponderListValue:[],
-          auto_responder_name:"",
-          auto_responder_keywords: [],
-          auto_responder_message:"",
-          auto_responder_status:1,
-            loader:false,
-            auto_responder_id_edit:"",
-            auto_responder_name_edit:"",
-            auto_responder_message_edit:"",
-            auto_responder_status_edit:1,
-            auto_responder_keywords_edits:[],
-            loader:false,
-            notifier:false,
-            notifier_head:"",
-            notifier_message:""
+                selectedOption:  {value:0,label:"Text  Message"},
+                selectedGPL:null,
+                GPL:[],
+                GPLEdit:[],
+                MessageGroupListEdit:null,
+                selectedOptionEdit:  {value:0,label:"Text  Message"},
+                autoreponder_message_group:"",
+                edit_group_id:"",
+                autoreponder_message_type:0,
+                autoreponder_message_type_edit:0,
+                autoResponsederList:1,
+                autoResponsederCreate:0,
+                autoResponsederEdit:0,
+                autoresponderListValue:[],
+                auto_responder_name:"",
+                auto_responder_keywords: [],
+                auto_responder_message:"",
+                auto_responder_status:1,
+                loader:false,
+                auto_responder_id_edit:"",
+                auto_responder_name_edit:"",
+                auto_responder_message_edit:"",
+                auto_responder_status_edit:1,
+                auto_responder_keywords_edits:[],
+                loader:false,
+                notifier:false,
+                notifier_head:"",
+                notifier_message:""
         }
         this.handleDelete = this.handleDelete.bind(this);
         this.handleAddition = this.handleAddition.bind(this);
@@ -58,7 +74,28 @@ class responseSetting extends Component {
             this.setState({auto_responder_status_edit:0})
         }
     }
-
+    handleChange = selectedOption => {
+        this.setState({ selectedOption });
+        console.log(`Option selected:`, selectedOption);
+        console.log(`Opppppppppppp`, selectedOption.value);
+        this.setState({autoreponder_message_type:selectedOption.value});
+    };
+    handleChangeEdit = selectedOptionEdit => {
+        this.setState({ selectedOptionEdit });
+        
+        this.setState({autoreponder_message_type_edit:selectedOptionEdit.value});
+    };
+    handleChangeGPL = selectedGPL =>  {
+        this.setState({ selectedGPL });
+        console.log(`Option selected:`, selectedGPL);
+        console.log(`Opppppppppppp`, selectedGPL.value);
+        this.setState({autoreponder_message_group:selectedGPL.value});
+    }
+    handleChangeGPLEdit = MessageGroupListEdit =>  {
+        this.setState({ MessageGroupListEdit });
+        
+        this.setState({edit_group_id:MessageGroupListEdit.value});
+    }
     handleDelete(i) {
         const { auto_responder_keywords } = this.state;
         this.setState({
@@ -167,7 +204,9 @@ class responseSetting extends Component {
             auto_responder_name:this.state.auto_responder_name,
             auto_responder_keywords:this.state.auto_responder_keywords,
             auto_responder_message:this.state.auto_responder_message,
-            auto_responder_status:this.state.auto_responder_status
+            auto_responder_status:this.state.auto_responder_status,
+            autoreponder_message_type:this.state.autoreponder_message_type,
+            autoreponder_message_group:this.state.autoreponder_message_group
         }
       
          AutoResponderService.createAutoResponder(payload).then(response =>{
@@ -223,7 +262,9 @@ class responseSetting extends Component {
             auto_responder_name:this.state.auto_responder_name_edit,
             auto_responder_keywords:this.state.auto_responder_keywords_edits,
             auto_responder_message:this.state.auto_responder_message_edit,
-            auto_responder_status:this.state.auto_responder_status_edit
+            auto_responder_status:this.state.auto_responder_status_edit,
+            edit_group_id:this.state.edit_group_id,
+            autoreponder_message_type:this.state.autoreponder_message_type_edit
         }
         console.log("This I am Getting",payload)
       
@@ -290,6 +331,7 @@ class responseSetting extends Component {
         let payload = { 
             Id: autoresponder_id 
         }; 
+        let GPDID="";
         AutoResponderService.editAutoResponder(payload).then(async response=>{
             console.log("O)OO)O)O",response);
             if(response.data.code === 1){
@@ -298,6 +340,17 @@ class responseSetting extends Component {
                     console.log(result.keywords);
                     newKey.push({"id":result.keywords,"text":result.keywords})
                 });
+                let opt= {};
+                let edopt = 0;
+                if(response.data.payload[0].type == "0"){
+                    
+                    opt= {value:0,label:"Text  Message"}
+                    edopt = 0;
+                }else{
+                   
+                    opt= {value:1,label:"Message Group"}
+                    edopt = 1;
+                }
                 this.setState({
                     auto_responder_id_edit:response.data.payload[0]._id,
                     auto_responder_name_edit:response.data.payload[0].auto_responder_name,
@@ -307,12 +360,45 @@ class responseSetting extends Component {
                     autoResponsederList:0,
                     autoResponsederCreate:0,
                     autoResponsederEdit:1,
+                    selectedOptionEdit:opt,
+                    autoreponder_message_type_edit:edopt,
                     loader:false
+                  })
+                  GPDID=response.data.payload[0].message_group;
+                  let GroupParams = {
+                    user_id    :   localStorage.getItem('user_id')
+                  }
+                  await GroupServices.getGroup(GroupParams).then(async resultu=>{
+                    if(resultu.data.code == 1){
+                        let resultGroupList =  [];
+                        
+                        resultu.data.payload.map(datax=>{
+                          
+                          resultGroupList.push({value:datax._id,label:datax.title})
+                          console.log("This is GPID",GPDID);
+                          if(GPDID != "" && GPDID==datax._id){
+          
+                            this.setState({
+                                MessageGroupListEdit:{value:datax._id,label:datax.title}
+                            });
+                          }
+                        });
+                        this.setState({
+                        edit_group_id:GPDID,
+                          GPLEdit:resultGroupList
+                        })
+                        
+                        
+                    }
+                    
+                  }).catch(error=>{
+                    console.log("This I got From DDDDBBBBBB EROOOOOO",error);
                   })
             }
         }).catch(error=>{
 
         })
+        
     }
     editAutoResponderStatus(autoresponder_id,prestatus){
         this.setState({loader:true})
@@ -460,9 +546,31 @@ class responseSetting extends Component {
             this.setState({loader:false});
             this.setState({autoresponderListValue:[],loader:false})
         });
+        let GroupParams = {
+            user_id    :   localStorage.getItem('user_id')
+          }
+          GroupServices.getGroup(GroupParams).then(async result=>{
+            if(result.data.code == 1){
+                let resultGroupList =  [];
+                
+                result.data.payload.map(data=>{
+                  
+                  resultGroupList.push({value:data._id,label:data.title})
+                  
+                });
+                this.setState({
+                  GPL:resultGroupList
+                })
+                
+                
+            }
+            
+          }).catch(error=>{
+            console.log("This I got From DDDDBBBBBB EROOOOOO",error);
+          })
     }
       render() {
-        const { auto_responder_keywords,auto_responder_keywords_edits } = this.state;
+        const { selectedOption,selectedGPL,GPL,auto_responder_keywords,auto_responder_keywords_edits,selectedOptionEdit,GPLEdit,MessageGroupListEdit} = this.state;
         return (
         <div>
                 {this.state.autoResponsederList ?
@@ -504,7 +612,13 @@ class responseSetting extends Component {
                                             </div>
                                         </div>
                                         <div className="body">
-                                                <p className="qn">{data.message}</p>
+                                                {data.type=="1"
+                                                ?
+                                                <p className="qn">Group : {data.messageGroup[0].title}</p>
+                                                :
+                                                <p className="qn">Text : {data.message}</p>
+                                                }
+                                                
                                             <div className="listfooter">
                                                 <p>Keywords:</p>
                                                 {   data.autoresponderkeywords.map((result, i) => {
@@ -564,21 +678,40 @@ class responseSetting extends Component {
                             handleAddition={this.handleAddition}
                             allowUnique={true}
                             delimiters={delimiters} />
-                            
-                        <label>Auto Response Message</label>
-                            <textarea className="withtag" 
-                            name="auto_responder_message"
-                            id="auto_responder_message"
-                            rows="3"  
-                            placeholder="Please enter the response message...."
-                            value={this.state.auto_responder_message}
-                            onChange={this.inputChangeHandller}
-                            ></textarea>
-                            <button type="button" onClick={() => this.insertTagAtMessageSegments('auto_responder_message', '{first_name}')} className="formtag">[ First Name ]</button> 
-                            <button type="button" onClick={() => this.insertTagAtMessageSegments('auto_responder_message', '{last_name}')} class="formtag">[ Last Name ]</button>
-                            <button type="button" onClick={() => this.insertTagAtMessageSegments('auto_responder_message', '{date}')} class="formtag">[ Todays Date ]</button>
 
-
+                            <div className="selectbox">
+                                <Select
+                                
+                                value={selectedOption}
+                                onChange={this.handleChange}
+                                options={options}
+                                />
+                            </div>
+                            {this.state.autoreponder_message_type ? 
+                                <div className="selectbox">
+                                    <Select
+                                    
+                                    value={selectedGPL}
+                                    onChange={this.handleChangeGPL}
+                                    options={GPL}
+                                    />
+                                </div>
+                            : 
+                                <div>
+                                    <label>Auto Response Message</label>
+                                    <textarea className="withtag" 
+                                    name="auto_responder_message"
+                                    id="auto_responder_message"
+                                    rows="3"  
+                                    placeholder="Please enter the response message...."
+                                    value={this.state.auto_responder_message}
+                                    onChange={this.inputChangeHandller}
+                                    ></textarea>
+                                    <button type="button" onClick={() => this.insertTagAtMessageSegments('auto_responder_message', '{first_name}')} className="formtag">[ First Name ]</button> 
+                                    <button type="button" onClick={() => this.insertTagAtMessageSegments('auto_responder_message', '{last_name}')} class="formtag">[ Last Name ]</button>
+                                    <button type="button" onClick={() => this.insertTagAtMessageSegments('auto_responder_message', '{date}')} class="formtag">[ Todays Date ]</button>
+                                </div>
+                            }
                             
                         <label>
                             {this.state.auto_responder_status ?
@@ -607,37 +740,57 @@ class responseSetting extends Component {
                     <form>
                         <label>
                             Auto Responder Name
-                        </label>
-                            <input type="text" 
-                            name="auto_responder_name_edit" 
-                            id="auto_responder_name_edit" 
-                            placeholder="Auto-Responder Name" 
-                            value={this.state.auto_responder_name_edit}
-                            onChange={this.inputChangeHandller}/>
-                        <label>
+                                </label>
+                                    <input type="text" 
+                                    name="auto_responder_name_edit" 
+                                    id="auto_responder_name_edit" 
+                                    placeholder="Auto-Responder Name" 
+                                    value={this.state.auto_responder_name_edit}
+                                    onChange={this.inputChangeHandller}/>
+                                <label>
                             Keywords
-                        </label>
-                            <ReactTags 
-                            placeholder="Press enter Or Press , to Create Autoresponder Keywords"
-                            tags={auto_responder_keywords_edits}
-                            handleDelete={this.handleEditDelete}
-                            handleAddition={this.handleEditAddition}
-                            allowUnique={true}
-                            delimiters={delimiters} />
-                        
-                        <label>Auto Response Message</label>
-                            <textarea className="withtag" 
-                            name="auto_responder_message_edit"
-                            id="auto_responder_message_edit"
-                            rows="3"  
-                            placeholder="Please enter the response message...."
-                            value={this.state.auto_responder_message_edit}
-                            onChange={this.inputChangeHandller}
-                            ></textarea>
-                            <button type="button" onClick={() => this.insertTagAtMessageSegments('auto_responder_message_edit', '{first_name}')} className="formtag">[ First Name ]</button> 
-                            <button type="button" onClick={() => this.insertTagAtMessageSegments('auto_responder_message_edit', '{last_name}')} class="formtag">[ Last Name ]</button>
-                            <button type="button" onClick={() => this.insertTagAtMessageSegments('auto_responder_message_edit', '{date}')} class="formtag">[ Todays Date ]</button>
-
+                                </label>
+                                <ReactTags 
+                                placeholder="Press enter Or Press , to Create Autoresponder Keywords"
+                                tags={auto_responder_keywords_edits}
+                                handleDelete={this.handleEditDelete}
+                                handleAddition={this.handleEditAddition}
+                                allowUnique={true}
+                                delimiters={delimiters} />
+                                <div className="selectbox">
+                                    
+                                        <Select
+                                        
+                                        value={selectedOptionEdit}
+                                        onChange={this.handleChangeEdit}
+                                        options={options}
+                                        />
+                                </div>
+                            {this.state.autoreponder_message_type_edit ? 
+                                <div className="selectbox">
+                                    <Select
+                                    
+                                    value={MessageGroupListEdit}
+                                    onChange={this.handleChangeGPLEdit}
+                                    options={GPLEdit}
+                                    />
+                                </div>
+                            : 
+                                <div>
+                                    <label>Auto Response Message</label>
+                                    <textarea className="withtag" 
+                                    name="auto_responder_message_edit"
+                                    id="auto_responder_message_edit"
+                                    rows="3"  
+                                    placeholder="Please enter the response message...."
+                                    value={this.state.auto_responder_message_edit}
+                                    onChange={this.inputChangeHandller}
+                                    ></textarea>
+                                    <button type="button" onClick={() => this.insertTagAtMessageSegments('auto_responder_message_edit', '{first_name}')} className="formtag">[ First Name ]</button> 
+                                    <button type="button" onClick={() => this.insertTagAtMessageSegments('auto_responder_message_edit', '{last_name}')} class="formtag">[ Last Name ]</button>
+                                    <button type="button" onClick={() => this.insertTagAtMessageSegments('auto_responder_message_edit', '{date}')} class="formtag">[ Todays Date ]</button>
+                                </div>
+                        }
                         <label>
                             {this.state.auto_responder_status_edit ?
                                 <input className="checking" type="checkbox" id="checkboxPrimary3" name="auto_responder_status_edit" onChange={this.autoSettingEdit} checked/>

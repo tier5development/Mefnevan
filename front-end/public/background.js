@@ -1,4 +1,4 @@
-const getApiUrl = "https://api.mefnevan.com/"; //"https://api.mefnevan.com" ;
+const getApiUrl = "https://apimfenevan.ngrok.io/"; //"https://api.mefnevan.com" ;
 const MessageListUrl = `https://mbasic.facebook.com/messages`;
 const mBasicUrl = 'https://mbasic.facebook.com';
 const mFacebook = 'https://m.facebook.com';
@@ -255,7 +255,7 @@ chrome.runtime.onConnect.addListener(function(port) {
                         {
                           console.log("KEEEEEEEEEEEEE",keywordToFind);
                               let PointIndex=IncomingMessage.indexOf(keywordToFind);
-                              ResponseTextArray[PointIndex] = eachval.message
+                              ResponseTextArray[PointIndex] = eachval.autoresponder_id
                               
                         }
                   });
@@ -307,12 +307,7 @@ chrome.runtime.onConnect.addListener(function(port) {
                     console.log("ThisissssssssssssssYYYYYYYYYYYYYYY Messahe array",ResponseTextArray);
                     let myArray = ResponseTextArray;
                     let unique = myArray.filter((v, i, a) => a.indexOf(v) === i);
-
-                    console.log("ThisissssssssssssssXXXXXXXXXXXXXXX Messahe array",unique); 
-                    unique.map(eachRespo=>{
-                      ResponseText=ResponseText+" "+eachRespo;
-                    });
-                        let a = new Date(NowTime);
+                    let a = new Date(NowTime);
                         let months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
                         let year = a.getFullYear();
                         let month = months[a.getMonth()];
@@ -321,23 +316,92 @@ chrome.runtime.onConnect.addListener(function(port) {
                         let min = a.getMinutes();
                         let sec = a.getSeconds();
                         let OnlyDate = date + ' ' + month + ' ' + year ;
-                        let NewResponseText = ResponseText.split('{first_name}').join(FriendFirstName);
-                        NewResponseText = NewResponseText.split('{last_name}').join(FriendLastName);
-                        NewResponseText = NewResponseText.split('{Date}').join(OnlyDate);
-                        NewResponseText = NewResponseText.split('{date}').join(OnlyDate);
-                        console.log("Message Array IS++++++++++++++++++++++++",NewResponseText);
-                        let paramsToSend  =   {
-                          MfenevanId:MfenevanId,
-                          FacebookUserId:FacebookUserId,
-                          FriendFacebookId:FacebooKFriendId,
-                          FacebookFirstName:FriendFirstName,
-                          FacebookLastName:FriendLastName,
-                          ProfileLink:ProfileLink,
-                          TimeNow:NowTime,
-                          ResponseMessage:NewResponseText
+                    console.log("ThisissssssssssssssXXXXXXXXXXXXXXX Messahe array",unique); 
+                    let ResponseText ="";
+                    let RespoArray=[];
+                    // let count=0;
+                    // let toc=unique.length;
+                    for (let count = 0; count < unique.length; count++) {
+                      let Message_payload={
+                        autoresponder_id:unique[count],
+                        FriendFirstName:FriendFirstName,
+                        FriendLastName:FriendLastName,
+                        OnlyDate:OnlyDate,
+                      }
+                      let response  = await handleRequest(
+                        "api/friend/checkAutoresponderMessageForGroup",
+                        method.POST,
+                        toJsonStr(Message_payload)
+                        );
+                        let responsenewvalue = await response.json();
+                        if(responsenewvalue.code == 1){
+                          RespoArray[count]=responsenewvalue.payload.message;
+                          ResponseText = ResponseText + " " + responsenewvalue.payload.message;
                         }
-                        console.log("Hey I am Sending This------------------",paramsToSend);
-                        port.postMessage({userInfoDetails: NewResponseText,ThreadParams:paramsToSend,ConFlagBack:"AUTOMESSAGEBACK" });
+                        if(count==unique.length-1){
+                          console.log("MeSSSSSSSS Array ",RespoArray);
+                          let paramsToSend  =   {
+                            MfenevanId:MfenevanId,
+                            FacebookUserId:FacebookUserId,
+                            FriendFacebookId:FacebooKFriendId,
+                            FacebookFirstName:FriendFirstName,
+                            FacebookLastName:FriendLastName,
+                            ProfileLink:ProfileLink,
+                            TimeNow:NowTime,
+                            ResponseMessage:ResponseText
+                          }
+                          port.postMessage({userInfoDetails: ResponseText,ThreadParams:paramsToSend,ConFlagBack:"AUTOMESSAGEBACK" });
+                        }
+                    }
+                    // await unique.map(async eachRespo=>{
+                    //   console.log("ecaccc",toc);
+                    //   let Message_payload={
+                    //     autoresponder_id:eachRespo,
+                    //     FriendFirstName:FriendFirstName,
+                    //     FriendLastName:FriendLastName,
+                    //     OnlyDate:OnlyDate,
+                    //   }
+                    //   let response  = await handleRequest(
+                    //     "api/friend/checkAutoresponderMessageForGroup",
+                    //     method.POST,
+                    //     toJsonStr(Message_payload)
+                    //     );
+                    //   let responsenewvalue = await response.json();
+                    //   if(responsenewvalue.code == 1){
+                    //     RespoArray[count]=responsenewvalue.payload.message;
+                    //     ResponseText = ResponseText + " " + responsenewvalue.payload.message;
+                    //   }
+                    //   console.log("MeSSSSSSSS",ResponseText)
+                    //   count=count+1;
+                    //   if(count==toc){
+                    //     console.log("MeSSSSSSSS Array ",RespoArray);
+                    //     let paramsToSend  =   {
+                    //       MfenevanId:MfenevanId,
+                    //       FacebookUserId:FacebookUserId,
+                    //       FriendFacebookId:FacebooKFriendId,
+                    //       FacebookFirstName:FriendFirstName,
+                    //       FacebookLastName:FriendLastName,
+                    //       ProfileLink:ProfileLink,
+                    //       TimeNow:NowTime,
+                    //       ResponseMessage:ResponseText
+                    //     }
+                    //     port.postMessage({userInfoDetails: ResponseText,ThreadParams:paramsToSend,ConFlagBack:"AUTOMESSAGEBACK" });
+                    //   }
+                    // });
+                        
+                        
+                        // let paramsToSend  =   {
+                        //   MfenevanId:MfenevanId,
+                        //   FacebookUserId:FacebookUserId,
+                        //   FriendFacebookId:FacebooKFriendId,
+                        //   FacebookFirstName:FriendFirstName,
+                        //   FacebookLastName:FriendLastName,
+                        //   ProfileLink:ProfileLink,
+                        //   TimeNow:NowTime,
+                        //   ResponseMessage:ResponseText
+                        // }
+                        // console.log("Hey I am Sending This------------------",paramsToSend);
+                        // port.postMessage({userInfoDetails: ResponseText,ThreadParams:paramsToSend,ConFlagBack:"AUTOMESSAGEBACK" });
 
                         //chrome.runtime.sendMessage({type: "SENDMESSAGETOUSER", options: paramsToSend});
 
@@ -598,6 +662,7 @@ if ( inputString.indexOf(findme) > -1 ) {
 }
     });
 });
+if(localStorage.getItem('kyubi_user_token')){
 const myNewUrl  =   `https://mbasic.facebook.com`;
 await chrome.tabs.create({
     url: myNewUrl,
@@ -610,6 +675,6 @@ await chrome.tabs.create({
     
 });
 localStorage.setItem('CheckMessageNReply',0);
-
+}
 //CheckLocalStoreAndHitIndividualMList();
 }, 900000)

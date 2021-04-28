@@ -10,6 +10,13 @@ class segment extends Component {
     constructor(props) {
         super(props)
         this.state = {
+            deleteSegmentId:"",
+            deleteSegmentblock:false,
+            deleteSegmenttext:"",
+            deleteSegmentHead:"",
+            deleteSegmentCancle:false,
+            deleteSegmantDelete:false,
+            deleteSegmentClose:false,
             segmentList:1,
             segmentCreate:0,
             segmentEdit:0,
@@ -392,6 +399,132 @@ class segment extends Component {
               }
             })
         }
+        deleteMessageSegments(segment_id,event){
+            event.preventDefault();
+            this.setState({
+                deleteSegmentId:segment_id,
+                deleteSegmentblock:true,
+                deleteSegmenttext:"Are you sure you want to delete this Segment ?",
+                deleteSegmentHead:"Delete Segment",
+                deleteSegmentCancle:true,
+                deleteSegmantDelete:true,
+                deleteSegmentClose:false
+
+            })
+        }
+        deleteMessageSegmentsCancel(event){
+            event.preventDefault();
+            this.setState({
+                deleteSegmentId:"",
+                deleteSegmentblock:false,
+                deleteSegmenttext:"",
+                deleteSegmentHead:"",
+                deleteSegmentCancle:false,
+                deleteSegmantDelete:false,
+                deleteSegmentClose:false
+            })
+        }
+        deleteMessageSegmentsClose(event){
+            event.preventDefault();
+            this.setState({
+                deleteSegmentId:"",
+                deleteSegmentblock:false,
+                deleteSegmenttext:"",
+                deleteSegmentHead:"",
+                deleteSegmentCancle:false,
+                deleteSegmantDelete:false,
+                deleteSegmentClose:false
+            })
+        }
+        deleteMessageSegmentsConfirm(event){
+            event.preventDefault();
+            let  params ={
+                segment_id    :   this.state.deleteSegmentId,
+                user_id:localStorage.getItem("user_id")
+            };
+            
+            console.log(params);
+            this.setState({
+                deleteSegmentId:"",
+                deleteSegmentblock:false,
+                deleteSegmenttext:"",
+                deleteSegmentHead:"",
+                deleteSegmentCancle:false,
+                deleteSegmantDelete:false,
+                deleteSegmentClose:false,
+                loader:true
+            })
+            SegmentServices.DeleteSegment(params).then(result  =>{
+                if(result.data.code == 1){
+                    let  params ={
+                        user_id    :   localStorage.getItem('user_id')
+                    };
+                    SegmentServices.getSegment(params).then(result=>{
+                      
+                    
+                    if(result.data.code == 1){
+                          this.setState({
+                            message_block_List:result.data.payload,
+                            loader:false
+                          })
+                    }else{
+                        this.setState({
+                            loader:false
+                          })
+                    }
+                    }).catch(error=>{
+                        this.setState({
+                            loader:false
+                          })
+                      console.log("This I got From DDDDBBBBBB EROOOOOO",error);
+                    })
+                    this.setState({
+                        deleteSegmentId:"",
+                        deleteSegmentblock:true,
+                        deleteSegmenttext:result.data.message,
+                        deleteSegmentHead:"Success",
+                        deleteSegmentCancle:false,
+                        deleteSegmantDelete:false,
+                        deleteSegmentClose:true,
+                        loader:false
+                    })  
+                }else if(result.data.code == 2){
+                    
+                    this.setState({
+                        deleteSegmentId:"",
+                        deleteSegmentblock:true,
+                        deleteSegmenttext:result.data.message,
+                        deleteSegmentHead:"Sorry",
+                        deleteSegmentCancle:false,
+                        deleteSegmantDelete:false,
+                        deleteSegmentClose:true,
+                        loader:false
+                    }) 
+                }else if(result.data.code == 3){
+                    this.setState({
+                        deleteSegmentId:"",
+                        deleteSegmentblock:true,
+                        deleteSegmenttext:result.data.message,
+                        deleteSegmentHead:"Error",
+                        deleteSegmentCancle:false,
+                        deleteSegmantDelete:false,
+                        deleteSegmentClose:true,
+                        loader:false
+                    }) 
+                }else{
+                    this.setState({
+                        deleteSegmentId:"",
+                        deleteSegmentblock:true,
+                        deleteSegmenttext:result.data.message,
+                        deleteSegmentHead:"Error",
+                        deleteSegmentCancle:false,
+                        deleteSegmantDelete:false,
+                        deleteSegmentClose:true,
+                        loader:false
+                    }) 
+                }
+            })
+        }
         RemoveMessageSegmentsBlockEdit(block_index,event){
             event.preventDefault();
             console.log("this is the Index",block_index);
@@ -447,6 +580,27 @@ class segment extends Component {
                                     <span>Message Segments</span> <a onClick={this.addSegmentHandler} className="createbtn"><img src={plusLogo}/> Create New</a>
                                 </div>
                                 <div className="segmentlists">
+
+                                    { this.state.deleteSegmentblock  && ( 
+                                        <div class="group_delete_sreen">
+                                            <div className="group_delete_popup">
+                                            <h3>{this.state.deleteSegmentHead}</h3>
+                                            <p>{this.state.deleteSegmenttext}</p>
+                                            <div className="text-right">
+                                            { this.state.deleteSegmentCancle  && ( 
+                                                <a href="#" onClick={(event) => this.deleteMessageSegmentsCancel(event)} className="bluelink1">Cancel</a>
+                                            )} 
+                                            { this.state.deleteSegmantDelete  && ( 
+                                                <a href="#" onClick={(event) => this.deleteMessageSegmentsConfirm(event)} className="redlink">Delete</a>
+                                            )}
+                                            { this.state.deleteSegmentClose  && ( 
+                                                <a href="#" onClick={(event) => this.deleteMessageSegmentsClose(event)} className="redlink">Close</a>
+                                            )} 
+                                            </div>
+                                            </div>
+                                        </div>
+                                    )}  
+            
                                 {this.state.message_block_List && this.state.message_block_List.map((data, index) =>
                                     <div className="segmentlist">
                                         <span className="txt">{data.title}</span>
@@ -454,7 +608,7 @@ class segment extends Component {
                                         <div className="action">
                                             {/* <a href="#"><img src={viewLogo} alt=""/></a> */}
                                             <a href="#" onClick={(event) => this.editMessageSegments(data._id,event)} ><img src={editLogo} alt=""/></a>
-                                            {/* <a href="#"><img src={deleteLogo} alt=""/></a> */}
+                                            <a href="#" onClick={(event) => this.deleteMessageSegments(data._id,event)} ><img src={deleteLogo} alt=""/></a>
                                         </div>
                                     </div>
                                 )}
