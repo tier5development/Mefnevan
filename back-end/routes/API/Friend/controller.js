@@ -3,6 +3,7 @@ const   FriendsRepo =   require('../../../models/repositories/friends.repository
 const   UserSettingRepository   =   require('../../../models/repositories/settings.repository');
 const   MessageGroup    =   require('../../../models/repositories/messagegroup.repository');
 const   MessageSegment  =   require('../../../models/repositories/messagesegment.repository');
+const   AutoResponderRepo   =   require('../../../models/repositories/autoresponder.repository')
 var typecast = require('typecast');
 module.exports.FriendsCreateOrUpdate    =   async   (req,   res)    =>  {
     try{
@@ -504,7 +505,72 @@ module.exports.fetchMessageGroupAndContents =   async   (req,   res)    =>  {
         })
     }
 }
-
+module.exports.checkAutoresponderMessageForGroup    =   async   (req,   res)    =>  {
+    try{
+        console.log("This is my sent",req.body);
+        let AutoResponderDetails= await AutoResponderRepo.GetAutoResponderResponderWithId(req.body.autoresponder_id);
+        console.log("This is my Autoresponder",AutoResponderDetails[0]);
+        let KeywordParams={
+            ChangeDate:req.body.OnlyDate,
+            ChangeFirstName:req.body.FriendFirstName,
+            ChangeLastName:req.body.FriendLastName
+        }
+        if(AutoResponderDetails[0].type == "1"){
+            await MessageGroup.GetMessageGroup(AutoResponderDetails[0].message_group).then(async resultGroup=>{
+                let TotalNumberofBlocks=resultGroup.associate_blocks.length;
+                let CointNum=Math.floor(Math.random() * TotalNumberofBlocks);
+                let randomBlock = resultGroup.associate_blocks[CointNum];
+                if(randomBlock.length>0){
+                    let i = 0
+                    let finalMessage = []
+                    sendResponse = (data) =>{
+                    res.status(200).send({
+                        code: 1,
+                        message: "Succefully fetched random message from the selected group",
+                        payload: {
+                        message: data
+                        }
+                    })
+                    }
+                    constructMessage(i,randomBlock,finalMessage,sendResponse,KeywordParams);
+                    
+                }else{
+                    res.status(200).send({
+                        code: 2,
+                        message: "UnSuccefully fetched random message from the selected group",
+                        payload: { }
+                    }) 
+                }
+            });
+            // res.send({
+            //     code: 1,
+            //     message: "Succefully fetched random message from the selected group1",
+            //     payload: {
+            //     message: AutoResponderDetails[0].message_group
+            //     }
+            // })  
+        }else{
+            let newText=AutoResponderDetails[0].message.replace('{first_name}'," "+KeywordParams.ChangeFirstName);
+                newText=newText.replace('{last_name}'," "+KeywordParams.ChangeLastName);
+                newText=newText.replace('{date}'," "+KeywordParams.ChangeDate);
+                newText=newText.replace('{Date}'," "+KeywordParams.ChangeDate);
+            res.send({
+                code: 1,
+                message: "Succefully fetched random message from text",
+                payload: {
+                message: newText
+                }
+            })  
+        }
+        
+    }catch(error){
+        res.send({
+            code: 3,
+            message: error.message,
+            payload: error
+        })
+    }
+}
 async function constructMessage(i,messageBlock,finalMessage,__callback,KeywordParams){
     if(messageBlock[i].type == "id"){
                 let MessageSegmentDetails=await MessageSegment.GetMessageSegment(messageBlock[i].value);

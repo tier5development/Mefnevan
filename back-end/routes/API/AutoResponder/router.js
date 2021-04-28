@@ -24,5 +24,8 @@ controller.AutoResponderUpdateStatus
 router.post('/delete',
 controller.AutoResponderDelete  
 )
+router.post('/backthrust_type_group',
+controller.BackThrustAutoresponderTypeGroup
+)
 
 module.exports = router

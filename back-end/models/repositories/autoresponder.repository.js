@@ -62,6 +62,14 @@ const AutoresponderRepository   =   {
               }
             },
             {
+              $lookup: {
+                from: 'messagegroups',
+                localField: 'message_group',
+                foreignField: '_id',
+                as: 'messagegroup'
+              }
+            },
+            {
               $group: {
                 '_id': '$_id',
                 auto_responder_name: {
@@ -82,12 +90,21 @@ const AutoresponderRepository   =   {
                 updatedAt: {
                   $first: '$updatedAt'
                 },
+                type: {
+                  $first: '$type'
+                },
+                message_group:{
+                  $first: '$message_group'
+                },
                 autoresponderkeywords: {
                   $push: '$autoresponderkeywords'
                 },
                 users: {
                   $first: '$users'
-                }
+                },
+                messageGroup: {
+                  $first: '$messagegroup'
+                },
               }
             }
           ]).exec();
@@ -130,6 +147,14 @@ const AutoresponderRepository   =   {
             }
           },
           {
+            $lookup: {
+              from: 'messagegroups',
+              localField: 'message_group',
+              foreignField: '_id',
+              as: 'messagegroup'
+            }
+          },
+          {
             $group: {
               '_id': '$_id',
               auto_responder_name: {
@@ -150,12 +175,21 @@ const AutoresponderRepository   =   {
               updatedAt: {
                 $first: '$updatedAt'
               },
+              type: {
+                $first: '$type'
+              },
+              message_group:{
+                $first: '$message_group'
+              },
               autoresponderkeywords: {
                 $push: '$autoresponderkeywords'
               },
               users: {
                 $first: '$users'
-              }
+              },
+              messageGroup: {
+                $first: '$messagegroup'
+              },
             }
           }
         ]).exec();
@@ -247,7 +281,19 @@ GetAutoResponderKeywords: async (autoUserId) => {
   }
 },
 
-
+  /**
+    * 
+    * Update AutoResponder 
+  */
+UpdateAutoResponderGlobal: async () => {
+  try{
+      // console.log("Let Me Delete All The Notificationnnnnnn");
+      let AutoResponderGlobal = await AutoResponder.updateMany({  }, { type: 0 ,message_group:null}).exec();
+      return AutoResponderGlobal;
+    } catch (e) {
+      throw e;
+    }
+}
 
 };
 

@@ -7,6 +7,11 @@ const AutoResponderSchema = new Schema({
         ref: 'Users',
         default: null
     },
+    type: {
+        type: Number,
+        default: 0,
+        enum: [0, 1]
+    },
     auto_responder_name: {
         type: String,
         default: ''
@@ -14,6 +19,11 @@ const AutoResponderSchema = new Schema({
     message: {
         type: String,
         default: ''
+    },
+    message_group: {
+        type: Schema.Types.ObjectId,
+        ref: 'MessageGroups',
+        default: null
     },
     status: {
         type: Number,

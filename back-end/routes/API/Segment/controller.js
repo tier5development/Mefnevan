@@ -1,5 +1,6 @@
 
 const MessageSegment    =   require('../../../models/repositories/messagesegment.repository');
+const MessageGroup  =   require('../../../models/repositories/messagegroup.repository');
 module.exports.createSegment = async (req, res) => {
     try {
         let mess="";
@@ -95,7 +96,6 @@ module.exports.editSegment  =   async   (req,   res)    =>  {
         })
     }
 }
-
 module.exports.updateSegment  = async   (req    ,res)   =>  {
     try{
         let mess="";
@@ -119,6 +119,58 @@ module.exports.updateSegment  = async   (req    ,res)   =>  {
             message: mess,
             payload: messageSegment
         })    
+    } catch (error) {
+        res.send({
+            code: 3,
+            message: error.message,
+            payload: error
+        })
+    }
+}
+module.exports.deleteSegment    =   async   (req,   res)    =>  {
+    try{
+        //console.log("This is my sent",req.body);
+        let AllGroupassociate=[];
+        let countt =0;
+        let GetMessageGroup=await MessageGroup.GetAllMessageGroup(req.body.user_id).then(async AllGroup =>{
+            console.log("The Groups are",AllGroup);
+            
+            await AllGroup.map(async EachGroup=>{
+                EachGroup.associate_blocks.map(async  Eachblocks=>{
+                    console.log("The Blocks are",Eachblocks);
+                    Eachblocks.map(async eachone=>{
+                        //console.log("The One are",eachone);
+                        if(eachone.type =="id"  && eachone.value == req.body.segment_id){
+                            
+                            countt=countt+1;
+                        }
+                    })
+                })
+            })
+
+        }).catch(error =>{
+            res.send({
+                code: 3,
+                message: error.message,
+                payload: error
+            })
+        });
+        if(countt!=0){
+            res.send({
+                code: 2,
+                message: "This Segment is Used in "+countt+" Blocks of Group. Please remove them first to delete  it",
+                payload: {}
+            }) 
+        }else{
+            let DeleteSegments=await MessageSegment.DeleteSegments(req.body.segment_id);
+            res.send({
+                code: 1,
+                message: "Segment is deleted successfully",
+                payload: {}
+            }) 
+        }
+        
+
     } catch (error) {
         res.send({
             code: 3,

@@ -20,6 +20,9 @@ controller.CheckFriendReadyToReciveDefaultMessage
 router.post('/friendsUpdateDefaut',
 controller.friendsUpdateDefaut
 )
+router.post('/checkAutoresponderMessageForGroup',
+controller.checkAutoresponderMessageForGroup
+)
 
 router.post('/friendsSaveLastMessageOut',
 controller.friendsSaveLastMessageOut

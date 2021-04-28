@@ -51,7 +51,19 @@ const MessageSegmentRepository   =   {
       } catch (e) {
         throw e;
       }
-    }
+    },
+  /**
+    * @DeleteSegments
+    * Delete Segments By ID
+  */
+   DeleteSegments: async (SegmentId) => {
+  try {
+    let MessageSegmentDelete = await MessageSegment.deleteMany({ _id: mongoose.Types.ObjectId(SegmentId) });
+    return MessageSegmentDelete;
+  } catch (e) {
+    throw e;
+  }
+},
 }
 
 module.exports = MessageSegmentRepository;

@@ -191,7 +191,7 @@ module.exports.getautoresponderkeywords =   async   (req, res)  =>  {
                         if(result.length>0){
                             
                             await result.map(async individual => {
-                                    statusArray.push({keyword:individual.keywords, message:individual.autoresponders[0].message});
+                                    statusArray.push({keyword:individual.keywords, message:individual.autoresponders[0].message,autoresponder_id:individual.autoresponders[0]._id});
                             })
                             
                         }

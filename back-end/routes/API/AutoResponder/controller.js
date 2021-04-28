@@ -8,12 +8,25 @@ module.exports.AutoResponderCreate  =   async   (req,   res)    =>  {
         console.log("This is my sent",req.body);
         let getUserInfo = await UsersRepo.GetUserById(req.body.user_id);
         if(getUserInfo._id){
-            let UsersAutoResponderinfo= {
-                user_id: getUserInfo._id,
-                auto_responder_name: req.body.auto_responder_name,
-                message:req.body.auto_responder_message,
-                status:req.body.auto_responder_status
-              };
+            let UsersAutoResponderinfo={}
+            if(req.body.autoreponder_message_type == "1"){
+                 UsersAutoResponderinfo= {
+                    user_id: getUserInfo._id,
+                    auto_responder_name: req.body.auto_responder_name,
+                    status:req.body.auto_responder_status,
+                    type:req.body.autoreponder_message_type,
+                    message_group:req.body.autoreponder_message_group,
+                  };
+            }else{
+                 UsersAutoResponderinfo= {
+                    user_id: getUserInfo._id,
+                    auto_responder_name: req.body.auto_responder_name,
+                    message:req.body.auto_responder_message,
+                    status:req.body.auto_responder_status,
+                    type:req.body.autoreponder_message_type,
+                  };
+            }
+            
             let AutoResponderGroup=await AutoResponderRepo.CreateAutoResponderGroup(UsersAutoResponderinfo);
 
             console.log("This is my AutoresponderGroup",UsersAutoResponderinfo);
@@ -60,7 +73,7 @@ module.exports.AutoResponderList    =   async   (req,   res)    =>  {
                 if(result.length>0){
                     await result.map(async individual => {
                         if(individual.autoresponders[0].status===1){
-                            statusArray.push({keyword:individual.keywords, message:individual.autoresponders[0].message});
+                            statusArray.push({keyword:individual.keywords, message:individual.autoresponders[0].message,autoresponder_id:individual.autoresponders[0]._id});
                         }                                    
                     })
                     console.log("this are=======================",statusArray);
@@ -122,11 +135,23 @@ module.exports.AutoResponderUpdate  =   async   (req,   res)    =>  {
         let AutoResponderDetails= await AutoResponderRepo.GetAutoResponderResponderWithId(req.body.auto_responder_id);
         let getUserInfo = await UsersRepo.GetUserById(req.body.user_id);
         if(AutoResponderDetails){
-            let UsersAutoResponderinfo= {
-                auto_responder_name: req.body.auto_responder_name,
-                message:req.body.auto_responder_message,
-                status:req.body.auto_responder_status
-              };
+            
+              let UsersAutoResponderinfo={}
+            if(req.body.autoreponder_message_type == "1"){
+                 UsersAutoResponderinfo= {
+                    auto_responder_name: req.body.auto_responder_name,
+                    status:req.body.auto_responder_status,
+                    type:req.body.autoreponder_message_type,
+                    message_group:req.body.edit_group_id,
+                  };
+            }else{
+                 UsersAutoResponderinfo= {
+                    auto_responder_name: req.body.auto_responder_name,
+                    status:req.body.auto_responder_status,
+                    message:req.body.auto_responder_message,
+                    type:req.body.autoreponder_message_type,
+                  };
+            }
               let updateAutoResponder=await AutoResponderRepo.updateAutoResponderById(UsersAutoResponderinfo,req.body.auto_responder_id);
               let DeleteAssociatedKeywords=await AutoResponderRepo.DeleteAssociatedAutoResponderKeywords(req.body.auto_responder_id,getUserInfo._id);
               
@@ -196,6 +221,32 @@ module.exports.AutoResponderDelete    =   async   (req,   res)    =>  {
                 code: 1,
                 message: "Successfull",
                 payload:DeleteAutoResponder
+            });
+          }else{
+            res.send({
+                code: 2,
+                message: "Error",
+                payload:"Error"
+            });
+          }
+    }catch(error){
+        res.send({
+            code: 3,
+            message: "Error",
+            payload: error.message
+        })
+    }
+}
+module.exports.BackThrustAutoresponderTypeGroup =   async   (req,   res)    =>  {
+    try{
+        console.log("This is my sent",req.body);
+        
+        let UpdateAutoResponderGlobalFun= await AutoResponderRepo.UpdateAutoResponderGlobal();
+        if(UpdateAutoResponderGlobalFun){
+            res.send({
+                code: 1,
+                message: "Successfull",
+                payload:UpdateAutoResponderGlobalFun
             });
           }else{
             res.send({

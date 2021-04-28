@@ -51,7 +51,26 @@ GetAllMessageGroup: async (id) => {
       } catch (e) {
         throw e;
       }
+    },
+    /**
+    * @CheckMessageSegmentPresentInGroup
+    * Check Message Segment Present In Group BY Segment Id
+    */
+    CheckMessageSegmentPresentInGroup:  async (SegmentId) =>  {
+      try {
+        let MessageGroupInfo = await MessageGroup.find( { 
+                                                          "associate_blocks": {   
+                                                                                "$elemMatch":{ 
+                                                                                  "value": SegmentId 
+                                                                                } 
+                                                                              }
+                                                        } ).exec();
+        return MessageGroupInfo;
+      } catch (e) {
+        throw e;
+      }
     }
+
 }
 
 module.exports = MessageGroupRepository;

@@ -15,4 +15,7 @@ controller.editSegment
 router.post('/update',
 controller.updateSegment  
 )
+router.post('/delete',
+controller.deleteSegment
+)
 module.exports = router
