@@ -1,5 +1,5 @@
 import React, { Component} from "react";
-import { Redirect, withRouter } from 'react-router-dom';
+import { NavLink, withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
 import {kyubiExtensionId}  from "../../../config";
 import "./login.css";
@@ -213,12 +213,10 @@ class Login extends Component {
                                     />
                                 </label>
                                 <div className="text-right gap1">
-                                    <a href="#" className="link">Forgot Password?</a>
+                                    <NavLink className="link" to="/forgetPassword">Forgot Password?</NavLink>
                                 </div>
                                 <button type="button" className="blue_btn" onClick={this.loginHandler} >LOGIN</button>
-                                <div className="login_signup">
-                                    Don’t have an account? <a href="#">Sign up</a>
-                                </div>
+                                
                                 {this.state.error && (   
                                     <div className="error"> {this.state.errorMessage} *</div>
                                 )}

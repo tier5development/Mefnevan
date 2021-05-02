@@ -33,7 +33,7 @@ const AppRoute = ({ sidebarIsOpen, toggleSidebar }) => {
         <Route  exact  path="/autoresponder" component={AutoResponder} />
         <Route  exact  path="/autorespondercreate" component={AutoResponderCreate} />
         <Route  exact  path="/autoresponderedit/:idfy"  component={AutoResponderEdit} />
-        
+        <Route  exact  path="/forgetPassword" component={ForgotPassword} />
         <Route  exact  path="/logout"  component={Logout} />
         </Switch>
       </Container>
