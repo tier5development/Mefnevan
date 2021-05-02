@@ -52,7 +52,9 @@ const UserSettingRepository   =   {
   */
  UpdateUserSettingsWithoutGroup: async (user_id,default_message_type,default_message_text,default_time_delay) => {
   try {
+    console.log("I am hear",default_message_text);
     let UserSettingInfo = await UserSetting.updateOne({ user_id:mongoose.Types.ObjectId(user_id)  }, {
+          default_message_group:null,
           default_message_type: default_message_type,
           default_message_text: default_message_text,
           default_time_delay: default_time_delay
@@ -71,7 +73,7 @@ const UserSettingRepository   =   {
     let UserSettingInfo = await UserSetting.updateOne({ user_id:mongoose.Types.ObjectId(user_id)  }, {
           default_message_group:mongoose.Types.ObjectId(default_message_group),
           default_message_type: default_message_type,
-          default_message_text: default_message_text,
+          default_message_text: "",
           default_time_delay: default_time_delay
     }).exec();
     return UserSettingInfo;
@@ -94,7 +96,7 @@ UpdateUserSettingsById: async (userId,autoresponder) => {
     throw e;
   }
   },
-    /**
+/**
   * @UpdateUserSettingsById
   * update User Settings BY Id
 */
@@ -109,6 +111,19 @@ UpdateUserSettingsLoad: async (userId,LoadStatus) => {
     throw e;
   }
   },
+  /**
+    * 
+    * Update AutoResponder 
+  */
+   UpdateSettingGlobal: async () => {
+    try{
+        // console.log("Let Me Delete All The Notificationnnnnnn");
+        let AutoResponderGlobal = await UserSetting.updateMany({ default_message_type: 0 }, { default_message_group:null}).exec();
+        return AutoResponderGlobal;
+      } catch (e) {
+        throw e;
+      }
+  }
 };
 
 

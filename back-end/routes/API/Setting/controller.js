@@ -229,14 +229,14 @@ module.exports.setsetting   =   async   (req,   res)    =>  {
             let getUserSettings= await UserSettingRepository.GetUserSettingById(getUserInfo._id);
             if(getUserSettings){
                 console.log("This arexxxxxxxxxxxxx",getUserSettings);
-                if(req.body.default_message_group==""){
+                if(req.body.default_message_type=="0"){
                     let UpdateUserSettingsNew=await UserSettingRepository.UpdateUserSettingsWithoutGroup(
                         getUserInfo._id,
                         cast.number(req.body.default_message_type),
                         req.body.default_message_text,
                         cast.number(req.body.default_time_delay)
                     ).then(resu=>{
-                        console.log(resu);
+                        console.log("XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX",resu);
                     }).catch(error=>{
                         console.log(error);
                     });
@@ -395,6 +395,30 @@ module.exports.updateLoadStatus =   async   (req,   res)    =>  {
                     });
             }
         }
+    }catch(error){
+        res.send({
+            code: 3,
+            message: "Error",
+            payload: error
+        })
+    }
+}
+module.exports.backthrustUserSettings   =   async   (req,   res)    =>  {
+    try{
+        let UpdateSettingGlobalFun= await UserSettingRepository.UpdateSettingGlobal();
+        if(UpdateSettingGlobalFun){
+            res.send({
+                code: 1,
+                message: "Successfull",
+                payload:UpdateSettingGlobalFun
+            });
+          }else{
+            res.send({
+                code: 2,
+                message: "Error",
+                payload:"Error"
+            });
+          }
     }catch(error){
         res.send({
             code: 3,

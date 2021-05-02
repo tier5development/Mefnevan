@@ -16,12 +16,14 @@ module.exports.AutoResponderCreate  =   async   (req,   res)    =>  {
                     status:req.body.auto_responder_status,
                     type:req.body.autoreponder_message_type,
                     message_group:req.body.autoreponder_message_group,
+                    message:""
                   };
             }else{
                  UsersAutoResponderinfo= {
                     user_id: getUserInfo._id,
                     auto_responder_name: req.body.auto_responder_name,
                     message:req.body.auto_responder_message,
+                    message_group:null,
                     status:req.body.auto_responder_status,
                     type:req.body.autoreponder_message_type,
                   };
@@ -143,12 +145,14 @@ module.exports.AutoResponderUpdate  =   async   (req,   res)    =>  {
                     status:req.body.auto_responder_status,
                     type:req.body.autoreponder_message_type,
                     message_group:req.body.edit_group_id,
+                    message:""
                   };
             }else{
                  UsersAutoResponderinfo= {
                     auto_responder_name: req.body.auto_responder_name,
                     status:req.body.auto_responder_status,
                     message:req.body.auto_responder_message,
+                    message_group:null,
                     type:req.body.autoreponder_message_type,
                   };
             }

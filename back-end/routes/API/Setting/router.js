@@ -33,4 +33,8 @@ controller.getUserDetails
 router.post('/updateLoadStatus',
 controller.updateLoadStatus
 )
+
+router.post('/backthrust_user_setting',
+controller.backthrustUserSettings
+)
 module.exports = router

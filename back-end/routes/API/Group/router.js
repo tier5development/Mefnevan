@@ -15,5 +15,7 @@ controller.editGroup
 router.post('/update',
 controller.updateGroup  
 )
-
+router.post('/delete',
+controller.deleteGroup
+)
 module.exports = router

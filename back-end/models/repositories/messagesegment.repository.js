@@ -63,7 +63,7 @@ const MessageSegmentRepository   =   {
   } catch (e) {
     throw e;
   }
-},
+}
 }
 
 module.exports = MessageSegmentRepository;

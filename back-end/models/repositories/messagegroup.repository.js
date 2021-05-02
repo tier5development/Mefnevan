@@ -69,6 +69,18 @@ GetAllMessageGroup: async (id) => {
       } catch (e) {
         throw e;
       }
+    },
+      /**
+    * @DeleteGroup
+    * Delete Group By ID
+    */
+       DeleteGroup: async (id) => {
+      try {
+        let MessageGroupDelete = await MessageGroup.deleteMany({ _id: mongoose.Types.ObjectId(id) });
+        return MessageGroupDelete;
+      } catch (e) {
+        throw e;
+      }
     }
 
 }
