@@ -1,6 +1,6 @@
 
 //console.log("I am in Profile JS ");
-
+chrome.runtime.sendMessage({type: "OverlayTriggerIndividual", options: "MessageIndividual"});
 let UserFacebookUsername =  "";
 let UserFacebookName    =   "";
 let UserFacebookid  =   "";
@@ -61,4 +61,41 @@ let parameters={
   }
 
 //console.log("This I got After Scraping ",parameters);
+chrome.runtime.onMessage.addListener(async function(request, sender) {
+    console.log("This is the Request  From BackGround",request)
+    if(request.type =="OverlayCreate"){
+        console.log("This issssssssssssssssssssssssssssss")
+        var div=document.createElement("div");
+        var textDiv =document.createElement("div");
+        var imgURL = chrome.extension.getURL('images/128X128.png');
+        div.style.width= "100%";
+        div.style.height= "100%";
+        div.style.position= "absolute";
+        div.style.zIndex = "10000";
+        div.style.background= "rgba(235,239,242,0.85)";
+        div.style.isplay= "flex";
+        div.style.flexWrap= "wrap";
+        div.style.alignContent= "center";
+        div.style.justifyContent= "center";
+        div.style.position = 'fixed';
+        div.style.top = '0';
+        div.style.left = '0';
+        var img = document.createElement("IMG");
+        img.src = imgURL;
+        img.style.position= "fixed";
+        img.style.top= "50%";
+        img.style.left= "50%";
+        img.style.transform= "translate(-50%, -50%)";
+        textDiv.innerHTML="MeFn Evan Is Using This Tab Please Don`t Close It";
+        textDiv.style.top= "70%";
+        textDiv.style.left= "27%";
+        textDiv.style.position = 'fixed';
+        textDiv.style.width= "100%";
+        textDiv.style.fontSize="41px";
+        textDiv.style.color= "#057ed9";
+        div.appendChild(img);
+        div.appendChild(textDiv);
+        document.body.appendChild(div); 
+    }
+})
 chrome.runtime.sendMessage({type: "storeUserInfoOrQueryThenStore", options: parameters});

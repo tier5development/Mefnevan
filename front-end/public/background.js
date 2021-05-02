@@ -135,6 +135,19 @@ chrome.runtime.onMessage.addListener(async function(request, sender) {
         }
       }
       CheckLocalStoreAndHitIndividualMList();
+  }else if(request.type == "OverlayTrigger"){
+    let newtabx=parseInt(localStorage.getItem('fbmunread'));
+    let senderTabId=parseInt(sender.tab.id);
+    if(newtabx === senderTabId){
+      chrome.tabs.sendMessage(newtabx,{type: "OverlayCreate", options: "FromBackGround"}); 
+    }
+  }else if(request.type == "OverlayTriggerIndividual"){
+    let fbthreadID=parseInt(localStorage.getItem('fbthread'));
+    let fbprofileID=parseInt(localStorage.getItem('fbprofile'));
+    let senderTabId=parseInt(sender.tab.id);
+    if(fbthreadID === senderTabId || fbprofileID === senderTabId){
+      chrome.tabs.sendMessage(senderTabId,{type: "OverlayCreate", options: "FromBackGround"}); 
+    }
   }
 });
 
@@ -153,7 +166,6 @@ chrome.runtime.onConnect.addListener(function(port) {
         FacebooKFriendId=msg.MessageDetails.facebook_Id[0].trim()
       }
       if(fb_Name!=m_username){
-
         let fb_logged_id=localStorage.getItem('fb_logged_id');
         let inBackgroundFetching=localStorage.getItem('inBackgroundFetching');
         let default_message=localStorage.getItem('default_message');
@@ -264,25 +276,7 @@ chrome.runtime.onConnect.addListener(function(port) {
                       console.log("Hey I am Sending This-----------------------",paramsToSend);
                       port.postMessage({userInfoDetails: responsenewvalue.payload.message,ThreadParams:paramsToSend,ConFlagBack:"DEFAULTMESSAGEBACK" });
                     }else{
-                      // if(localStorage.getItem('fbprofile')){
-                      //   let newtab=parseInt(localStorage.getItem('fbprofile'));
-                      //   chrome.tabs.get(newtab, function(tab) {
-                      //     if (!tab) { 
-                      //       console.log('tab does not exist'); 
-                      //     }else{
-                      //       let myMessageUrl  =   `https://mbasic.facebook.com`;
-                      //       chrome.tabs.update(newtab, 
-                      //       {
-                      //         url: myMessageUrl
-                      //       },function(tabx) {
-                      //         let fbprofile=tabx.id;
-                      //         localStorage.setItem('fbprofile', fbprofile);
-                      //       });
-                      //     }
-                      //   });
-                      // }else{
-                      //   console.log('fbprofile does not exist');
-                      // }
+                    
                       localStorage.setItem('CheckMessageNReply',0);
                       CheckLocalStoreAndHitIndividualMList();
                     }
@@ -291,14 +285,14 @@ chrome.runtime.onConnect.addListener(function(port) {
                     let myArray = ResponseTextArray;
                     let unique = myArray.filter((v, i, a) => a.indexOf(v) === i);
                     let a = new Date(NowTime);
-                        let months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
-                        let year = a.getFullYear();
-                        let month = months[a.getMonth()];
-                        let date = a.getDate();
-                        let hour = a.getHours();
-                        let min = a.getMinutes();
-                        let sec = a.getSeconds();
-                        let OnlyDate = date + ' ' + month + ' ' + year ;
+                    let months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+                    let year = a.getFullYear();
+                    let month = months[a.getMonth()];
+                    let date = a.getDate();
+                    let hour = a.getHours();
+                    let min = a.getMinutes();
+                    let sec = a.getSeconds();
+                    let OnlyDate = date + ' ' + month + ' ' + year ;
                     console.log("ThisissssssssssssssXXXXXXXXXXXXXXX Messahe array",unique); 
                     let ResponseText ="";
                     let RespoArray=[];
@@ -336,129 +330,17 @@ chrome.runtime.onConnect.addListener(function(port) {
                           port.postMessage({userInfoDetails: ResponseText,ThreadParams:paramsToSend,ConFlagBack:"AUTOMESSAGEBACK" });
                         }
                     }
-                    // await unique.map(async eachRespo=>{
-                    //   console.log("ecaccc",toc);
-                    //   let Message_payload={
-                    //     autoresponder_id:eachRespo,
-                    //     FriendFirstName:FriendFirstName,
-                    //     FriendLastName:FriendLastName,
-                    //     OnlyDate:OnlyDate,
-                    //   }
-                    //   let response  = await handleRequest(
-                    //     "api/friend/checkAutoresponderMessageForGroup",
-                    //     method.POST,
-                    //     toJsonStr(Message_payload)
-                    //     );
-                    //   let responsenewvalue = await response.json();
-                    //   if(responsenewvalue.code == 1){
-                    //     RespoArray[count]=responsenewvalue.payload.message;
-                    //     ResponseText = ResponseText + " " + responsenewvalue.payload.message;
-                    //   }
-                    //   console.log("MeSSSSSSSS",ResponseText)
-                    //   count=count+1;
-                    //   if(count==toc){
-                    //     console.log("MeSSSSSSSS Array ",RespoArray);
-                    //     let paramsToSend  =   {
-                    //       MfenevanId:MfenevanId,
-                    //       FacebookUserId:FacebookUserId,
-                    //       FriendFacebookId:FacebooKFriendId,
-                    //       FacebookFirstName:FriendFirstName,
-                    //       FacebookLastName:FriendLastName,
-                    //       ProfileLink:ProfileLink,
-                    //       TimeNow:NowTime,
-                    //       ResponseMessage:ResponseText
-                    //     }
-                    //     port.postMessage({userInfoDetails: ResponseText,ThreadParams:paramsToSend,ConFlagBack:"AUTOMESSAGEBACK" });
-                    //   }
-                    // });
-                        
-                        
-                        // let paramsToSend  =   {
-                        //   MfenevanId:MfenevanId,
-                        //   FacebookUserId:FacebookUserId,
-                        //   FriendFacebookId:FacebooKFriendId,
-                        //   FacebookFirstName:FriendFirstName,
-                        //   FacebookLastName:FriendLastName,
-                        //   ProfileLink:ProfileLink,
-                        //   TimeNow:NowTime,
-                        //   ResponseMessage:ResponseText
-                        // }
-                        // console.log("Hey I am Sending This------------------",paramsToSend);
-                        // port.postMessage({userInfoDetails: ResponseText,ThreadParams:paramsToSend,ConFlagBack:"AUTOMESSAGEBACK" });
-
-                        //chrome.runtime.sendMessage({type: "SENDMESSAGETOUSER", options: paramsToSend});
-
-                      }
+                  }
                 }
           }else{
-            //TODO CLEAR
-            // if(localStorage.getItem('fbprofile')){
-            //   let newtab=parseInt(localStorage.getItem('fbprofile'));
-            //   chrome.tabs.get(newtab, function(tab) {
-            //     if (!tab) { 
-            //       console.log('tab does not exist'); 
-            //     }else{
-            //       let myMessageUrl  =   `https://mbasic.facebook.com`;
-            //       chrome.tabs.update(newtab, 
-            //       {
-            //         url: myMessageUrl
-            //       },function(tabx) {
-            //         let fbprofile=tabx.id;
-            //         localStorage.setItem('fbprofile', fbprofile);
-            //       });
-            //     }
-            //   });
-            // }else{
-            //   console.log('fbprofile does not exist');
-            // }
             localStorage.setItem('CheckMessageNReply',0);
             CheckLocalStoreAndHitIndividualMList();
-            }
+          }
         }else{
-          //TODO CLEAR
-          // if(localStorage.getItem('fbprofile')){
-          //   let newtab=parseInt(localStorage.getItem('fbprofile'));
-          //   chrome.tabs.get(newtab, function(tab) {
-          //     if (!tab) { 
-          //       console.log('tab does not exist'); 
-          //     }else{
-          //       let myMessageUrl  =   `https://mbasic.facebook.com`;
-          //       chrome.tabs.update(newtab, 
-          //       {
-          //         url: myMessageUrl
-          //       },function(tabx) {
-          //         let fbprofile=tabx.id;
-          //         localStorage.setItem('fbprofile', fbprofile);
-          //       });
-          //     }
-          //   });
-          // }else{
-          //   console.log('fbprofile does not exist');
-          // }
           localStorage.setItem('CheckMessageNReply',0);
           CheckLocalStoreAndHitIndividualMList();
         }
-        
       }else{
-        // if(localStorage.getItem('fbprofile')){
-        //   let newtab=parseInt(localStorage.getItem('fbprofile'));
-        //   chrome.tabs.get(newtab, function(tab) {
-        //     if (!tab) { 
-        //       console.log('tab does not exist'); 
-        //     }else{
-        //       let myMessageUrl  =   `https://mbasic.facebook.com`;
-        //       chrome.tabs.update(newtab, 
-        //       {
-        //         url: myMessageUrl
-        //       },function(tabx) {
-        //         let fbprofile=tabx.id;
-        //         localStorage.setItem('fbprofile', fbprofile);
-        //       });
-        //     }
-        //   });
-        // }else{
-        //   console.log('fbprofile does not exist');
-        // }
         localStorage.setItem('CheckMessageNReply',0);
         CheckLocalStoreAndHitIndividualMList();
       }

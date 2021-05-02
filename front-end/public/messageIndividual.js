@@ -1,35 +1,4 @@
-///console.log("I am in in Individual JS ",window.location.search);
-var div=document.createElement("div");
-var textDiv =document.createElement("div");
-var imgURL = chrome.extension.getURL('images/128X128.png');
-div.style.width= "100%";
-div.style.height= "100%";
-div.style.position= "absolute";
-div.style.zIndex = "10000";
-div.style.background= "rgba(235,239,242,0.85)";
-div.style.isplay= "flex";
-div.style.flexWrap= "wrap";
-div.style.alignContent= "center";
-div.style.justifyContent= "center";
-div.style.position = 'fixed';
-div.style.top = '0';
-div.style.left = '0';
-var img = document.createElement("IMG");
-img.src = imgURL;
-img.style.position= "fixed";
-img.style.top= "50%";
-img.style.left= "50%";
-img.style.transform= "translate(-50%, -50%)";
-textDiv.innerHTML="MeFn Evan Is Using This Tab Please Don`t Close It";
-textDiv.style.top= "70%";
-textDiv.style.left= "27%";
-textDiv.style.position = 'fixed';
-textDiv.style.width= "100%";
-textDiv.style.fontSize="41px";
-textDiv.style.color= "#057ed9";
-div.appendChild(img);
-div.appendChild(textDiv);
-document.body.appendChild(div); 
+
 let port = chrome.runtime.connect({name: "knockknock"});
 let WindowURL=window.location.search;
 var LocationDetails =window.location;
@@ -37,7 +6,8 @@ let newWindowURL=WindowURL.replace('?tid=cid.c.', ' ');
 newWindowURL=newWindowURL.replace('?tid=cid.g.', ' ');
 let reslinksplit = newWindowURL.split("&");
 let FacebookIdString  = reslinksplit[0].split("%3A");
-//console.log("This are Facebook User Details",FacebookIdString);
+console.log("This are Facebook User Details",FacebookIdString);
+chrome.runtime.sendMessage({type: "OverlayTriggerIndividual", options: "MessageIndividual"});
 if($("#messageGroup  > div").length  > 0){
     //console.log("I am Hear to  Check the Message");
     let valll =$("#messageGroup  > div").last().find(' > div').length;
@@ -80,8 +50,43 @@ if($("#messageGroup  > div").length  > 0){
 }else{
   ////console.log("Clear the CheckMessageREAD")
 }
+
 chrome.runtime.onMessage.addListener(async function(request, sender) {
-  //console.log("This is the Request  From Contentsssssssssssss",request)
+  console.log("This is the Request  From BackGround",request)
+  if(request.type =="OverlayCreate"){
+      console.log("This issssssssssssssssssssssssssssss")
+      var div=document.createElement("div");
+      var textDiv =document.createElement("div");
+      var imgURL = chrome.extension.getURL('images/128X128.png');
+      div.style.width= "100%";
+      div.style.height= "100%";
+      div.style.position= "absolute";
+      div.style.zIndex = "10000";
+      div.style.background= "rgba(235,239,242,0.85)";
+      div.style.isplay= "flex";
+      div.style.flexWrap= "wrap";
+      div.style.alignContent= "center";
+      div.style.justifyContent= "center";
+      div.style.position = 'fixed';
+      div.style.top = '0';
+      div.style.left = '0';
+      var img = document.createElement("IMG");
+      img.src = imgURL;
+      img.style.position= "fixed";
+      img.style.top= "50%";
+      img.style.left= "50%";
+      img.style.transform= "translate(-50%, -50%)";
+      textDiv.innerHTML="MeFn Evan Is Using This Tab Please Don`t Close It";
+      textDiv.style.top= "70%";
+      textDiv.style.left= "27%";
+      textDiv.style.position = 'fixed';
+      textDiv.style.width= "100%";
+      textDiv.style.fontSize="41px";
+      textDiv.style.color= "#057ed9";
+      div.appendChild(img);
+      div.appendChild(textDiv);
+      document.body.appendChild(div); 
+  }
 })
 port.onMessage.addListener(async function(msg) {
   //console.log("This is the Request  From CCCCCCCCCCCCCCCCCCCCCC",msg)

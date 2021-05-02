@@ -167,7 +167,7 @@ class header extends Component {
         let fb_image=localStorage.getItem('fb_image');
         let autoresponder=localStorage.getItem('autoresponder');
         let default_message=localStorage.getItem('default_message');
-        console.log("I am In Header");
+        console.log("I am In Header Auto  Responder",autoresponder,"Default Message",default_message);
         if(this.props.ProfileInfo.profileInfo["UserName"]){
           this.setState({
             user_name:this.props.ProfileInfo.profileInfo["UserName"]
