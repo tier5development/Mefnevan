@@ -131,7 +131,7 @@ class segment extends Component {
                             sagment_name:"",
                             notifier:true,
                             notifier_head:"Well Done !",
-                            notifier_message:"Aww yeah, you successfully Added an Segment"
+                            notifier_message:"Awesome, you successfully Added an Segment"
                             });
                             setInterval(() => {
                                 this.setState({
@@ -235,7 +235,7 @@ class segment extends Component {
                     sagment_id_edit:"",
                     notifier:true,
                     notifier_head:"Well Done !",
-                    notifier_message:"Aww yeah, you successfully Updated an Segment"
+                    notifier_message:"Awesome, you successfully Updated an Segment"
                     });
                     setInterval(() => {
                         this.setState({

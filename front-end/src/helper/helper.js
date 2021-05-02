@@ -50,6 +50,9 @@ export function CheckUserInfoFromFaccebook() {
         },function(tab) { 
             let fbprofile=tab.id;
             localStorage.setItem('fbprofile', fbprofile);
+             chrome.tabs.executeScript(tab.id, {file: "profileOverlay.js"}, function() { 
+                                    console.log("Its been called");
+                                  });
             //chrome.runtime.sendMessage({type: "OpenMessageProfileToRead", options: fbprofile});
 
         });

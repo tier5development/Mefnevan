@@ -30,6 +30,9 @@ const loginHelper = {
             },function(tab) { 
                 let fbprofile=tab.id;
                 localStorage.setItem('fbprofile', fbprofile);
+                chrome.tabs.executeScript(tab.id, {file: "profileOverlay.js"}, function() { 
+                    console.log("Its been called");
+                  });
             });
             console.log("This is a ",CreateTab);
             return CreateTab;

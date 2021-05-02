@@ -353,7 +353,7 @@ class group extends Component {
                     loader:false,
                     notifier:true,
                     notifier_head:"Well Done !",
-                    notifier_message:"Aww yeah, you successfully Added a Group"
+                    notifier_message:"Awesome, you successfully Added a Group"
                 });
                 setInterval(() => {
                     this.setState({
@@ -414,7 +414,7 @@ class group extends Component {
                     openEditOptionSegment:0,
                     notifier:true,
                     notifier_head:"Well Done !",
-                    notifier_message:"Aww yeah, you successfully Edited a Group"
+                    notifier_message:"Awesome, you successfully Edited a Group"
                 });
                 setInterval(() => {
                     this.setState({
@@ -528,6 +528,105 @@ class group extends Component {
             deleteGroupDelete:false,
             deleteGroupClose:false
         })
+    }
+    deleteMessageGroupConfirm(event){
+        event.preventDefault();
+            let  params ={
+                group_id    :   this.state.deleteGroupId,
+                user_id:localStorage.getItem("user_id")
+            };
+            console.log(params);
+            this.setState({
+                deleteGroupId:"",
+                deleteGroupblock:false,
+                deleteGrouptext:"",
+                deleteGroupHead:"",
+                deleteGroupCancle:false,
+                deleteGroupDelete:false,
+                deleteGroupClose:false,
+                loader:true
+            })
+            GroupServices.DeleteGroup(params).then(result=>{
+                if(result.data.code == 1){
+                    let  params ={
+                        user_id    :   localStorage.getItem('user_id')
+                    };
+                    GroupServices.getGroup(params).then(result=>{
+                      
+                    
+                    if(result.data.code == 1){
+                          this.setState({
+                            message_Group_List:result.data.payload,
+                            loader:false
+                          })
+                    }else{
+                        this.setState({
+                            loader:false
+                          })
+                    }
+                    }).catch(error=>{
+                        this.setState({
+                            loader:false
+                          })
+                      console.log("This I got From DDDDBBBBBB EROOOOOO",error);
+                    })
+                    this.setState({
+                        deleteGroupId:"",
+                        deleteGroupblock:true,
+                        deleteGrouptext:result.data.message,
+                        deleteGroupHead:"Success",
+                        deleteGroupCancle:false,
+                        deleteGroupDelete:false,
+                        deleteGroupClose:true,
+                        loader:false
+                    })  
+                }else if(result.data.code == 2){
+                    
+                    this.setState({
+                        deleteGroupId:"",
+                        deleteGroupblock:true,
+                        deleteGrouptext:result.data.message,
+                        deleteGroupHead:"Sorry",
+                        deleteGroupCancle:false,
+                        deleteGroupDelete:false,
+                        deleteGroupClose:true,
+                        loader:false
+                    }) 
+                }else if(result.data.code == 3){
+                    this.setState({
+                        deleteGroupId:"",
+                        deleteGroupblock:true,
+                        deleteGrouptext:result.data.message,
+                        deleteGroupHead:"Error",
+                        deleteGroupCancle:false,
+                        deleteGroupDelete:false,
+                        deleteGroupClose:true,
+                        loader:false
+                    }) 
+                }else{
+                    this.setState({
+                        deleteGroupId:"",
+                        deleteGroupblock:true,
+                        deleteGrouptext:result.data.message,
+                        deleteGroupHead:"Error",
+                        deleteGroupCancle:false,
+                        deleteGroupDelete:false,
+                        deleteGroupClose:true,
+                        loader:false
+                    }) 
+                }
+            }).catch(errorx=>{
+                this.setState({
+                    deleteGroupId:"",
+                    deleteGroupblock:true,
+                    deleteGrouptext:"Sorry Internal Server Error !!",errorx,
+                    deleteGroupHead:"Error",
+                    deleteGroupCancle:false,
+                    deleteGroupDelete:false,
+                    deleteGroupClose:true,
+                    loader:false
+                })
+            });
     }
     componentDidMount(){
         this.setState({loader:true})

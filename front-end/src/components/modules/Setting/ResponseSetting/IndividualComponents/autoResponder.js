@@ -235,7 +235,7 @@ class responseSetting extends Component {
                                         loader:false,
                                         notifier:true,
                                         notifier_head:"Well Done !",
-                                        notifier_message:"Aww yeah, you successfully create an AutoResponder"
+                                        notifier_message:"Awesome, you successfully create an AutoResponder"
                         });
                         setInterval(() => {
                                     this.setState({
@@ -294,7 +294,7 @@ class responseSetting extends Component {
                                         loader:false,
                                         notifier:true,
                                         notifier_head:"Well Done !",
-                                        notifier_message:"Aww yeah, you successfully Edited an AutoResponder"
+                                        notifier_message:"Awesome, you successfully Edited an AutoResponder"
                         });
                         setInterval(() => {
                             this.setState({
@@ -434,7 +434,7 @@ class responseSetting extends Component {
                                         loader:false,
                                         notifier:true,
                                         notifier_head:"Well Done !",
-                                        notifier_message:"Aww yeah, you successfully Updated the Status of an AutoResponder"
+                                        notifier_message:"Awesome, you successfully Updated the Status of an AutoResponder"
                                         
                         })
                         setInterval(() => {
@@ -493,7 +493,7 @@ class responseSetting extends Component {
                                         loader:false,  
                                         notifier:true,
                                         notifier_head:"Well Done !",
-                                        notifier_message:"Aww yeah, you successfully Deleted an AutoResponder"
+                                        notifier_message:"Awesome, you successfully Deleted an AutoResponder"
                         });
                         setInterval(() => {
                             this.setState({
