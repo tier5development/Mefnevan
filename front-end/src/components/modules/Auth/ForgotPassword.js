@@ -157,7 +157,7 @@ class ForgotPassword extends Component {
                 <div className="login_container">
                     <div className="login_welcome_block">
                     Forgot Password?
-                        <h3>Submit your registered email to get the link to reset your account password.</h3>
+                       <h3 className="forgetpasswordtext">Submit your registered email to get the link to reset your account password.</h3>
                     </div>
                     <div className="login_block">
                             <form>

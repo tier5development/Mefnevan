@@ -216,7 +216,7 @@ class Login extends Component {
                                     <NavLink className="link" to="/forgetPassword">Forgot Password?</NavLink>
                                 </div>
                                 <button type="button" className="blue_btn" onClick={this.loginHandler} >LOGIN</button>
-                                
+                                <div className="login_signup">Don’t have an account? <a href="#">Sign up</a></div>
                                 {this.state.error && (   
                                     <div className="error"> {this.state.errorMessage} *</div>
                                 )}

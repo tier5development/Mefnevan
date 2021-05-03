@@ -5,6 +5,8 @@ import deleteLogo from  "../../../../../images/delete.svg";
 import EmptyFileLogo from "../../../../../images/empty_file.svg";
 import LoaderLogo from "../../../../../images/Loader.gif"
 import backArrowLogo from "../../../../../images/arrow2.svg";
+import GroupLogo    from    "../../../../../images/ic1.svg";
+import TextLogo from    "../../../../../images/ic2.svg";
 import AutoResponderService from  "../../../../../services/autoResponderServices";
 import GroupServices from "../../../../../services/groupServices";
 import { WithContext as ReactTags } from 'react-tag-input';
@@ -601,7 +603,16 @@ class responseSetting extends Component {
                                     
                                     <div className={data.status === 1  ?  "listing_card" :"listing_card inactive"}>
                                         <div className="head">
-                                            <div className="txt">{data.auto_responder_name}</div>
+                                            <div className="txt">
+                                            {data.type=="1"
+                                                ?
+                                                <img src={GroupLogo} alt=""/>
+                                                
+                                                :
+                                                <img src={TextLogo} alt=""/>
+                                                
+                                            }       
+                                                {data.auto_responder_name}</div>
                                             <div className="action">
                                                 <label className="switch_box box_2">
                                                 <input type="checkbox" onChange={() => this.editAutoResponderStatus(data._id,data.status)} className="switch_2" id="" name="" checked={data.status === 1  ?  "checked" :""}  />
@@ -614,9 +625,9 @@ class responseSetting extends Component {
                                         <div className="body">
                                                 {data.type=="1"
                                                 ?
-                                                <p className="qn">Group : {data.messageGroup[0].title}</p>
+                                                <p className="qn">{data.messageGroup[0].title}</p>
                                                 :
-                                                <p className="qn">Text : {data.message}</p>
+                                                <p className="qn">{data.message}</p>
                                                 }
                                                 
                                             <div className="listfooter">

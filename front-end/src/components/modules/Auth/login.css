@@ -32964,7 +32964,9 @@ new style added for modification
 .login_block {
   margin-bottom: 44px;
 }
-
+.loginscreen .text-right.gap1 {
+  font-size: 12px;
+}
 .createbtn:hover{
 color: #fff;
 }
