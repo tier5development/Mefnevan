@@ -5,6 +5,7 @@ import {kyubiExtensionId}  from "../../../config";
 import "./login.css";
 import AuthServices from "../../../services/authService";
 import loginHelper from "../../../helper/loginHelper";
+import  {OpenPoweredBy,OpenTier5Partnership,OpenFacebookLink,OpenMessengerLink,OpenSignupLink} from  '../../../helper/helper';
 import logo from "../../../images/logo1.svg";
 import biglogo from "../../../images/biglogo.svg";
 import LoaderLogo from "../../../images/Loader.gif"
@@ -63,6 +64,24 @@ class ForgotPassword extends Component {
           }
           
           return formIsValid;
+    }
+    LinkHandler(option,event){
+      event.preventDefault();
+      if(option == "optOne"){
+          OpenSignupLink();
+      }
+      if(option == "optTwo"){
+          OpenPoweredBy();
+      }
+      if(option == "optThree"){
+          OpenTier5Partnership();
+      }
+      if(option == "optFour"){
+          OpenFacebookLink();
+      }
+      if(option == "optFive"){
+          OpenMessengerLink();
+      }
     }
     /**
     * @forgetPasswordHandler 
@@ -184,8 +203,8 @@ class ForgotPassword extends Component {
                             </form>
                     </div>  
                     <div className="footer">
-                        <p>Powered by <a href="#">Tier5</a> and the <a href="#">Tier5 Partnership</a></p>
-                        <a href="#"><img src={path}/></a> <a href="#"><img src={messanger}/></a>
+                        <p>Powered by <a  onClick={(event) => this.LinkHandler("optTwo",event)} href="#">Tier5</a> and the <a  onClick={(event) => this.LinkHandler("optThree",event)}  href="#">Tier5 Partnership</a></p>
+                        <a  onClick={(event) => this.LinkHandler("optFour",event)}  href="#"><img src={path}/></a> <a  onClick={(event) => this.LinkHandler("optFive",event)} href="#"><img src={messanger}/></a>
                     </div>
                 </div>
             </div>

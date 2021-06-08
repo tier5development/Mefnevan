@@ -1,4 +1,4 @@
-const getApiUrl = "https://apimfenevan.ngrok.io/"; //"https://api.mefnevan.com" ;
+const getApiUrl = "https://api.mefnevan.com/"; //"https://api.mefnevan.com" ;
 const MessageListUrl = `https://mbasic.facebook.com/messages`;
 const mBasicUrl = 'https://mbasic.facebook.com';
 const mFacebook = 'https://m.facebook.com';
@@ -22,7 +22,7 @@ const handleRequest = (path, methodType, bodyData) => {
 };
 
 chrome.runtime.onMessage.addListener(async function(request, sender) {
-  console.log("This is the Request",request)
+  //console.log("This is the Request",request)
   if (request.type == "storeUserInfoOrQueryThenStore"){
       let  params = {
                       user_rec    :   localStorage.getItem('kyubi_user_token'),
@@ -46,7 +46,7 @@ chrome.runtime.onMessage.addListener(async function(request, sender) {
         ).then(async response =>  {
                       let responsenewvalue = await response.json();
                       let  urlArray="[]";
-                      console.log("This from DB",responsenewvalue);
+                      //console.log("This from DB",responsenewvalue);
                       localStorage.setItem('CheckMessageNReply', 0);
                       localStorage.setItem('ListURLArray', urlArray);
                       localStorage.setItem('kyubi_user_token', responsenewvalue.payload.UserInfo.kyubi_user_token);
@@ -87,7 +87,7 @@ chrome.runtime.onMessage.addListener(async function(request, sender) {
                           let newtab=parseInt(localStorage.getItem('fbmunread'));
                           chrome.tabs.get(newtab, function(tab) {
                             if (!tab) { 
-                              console.log('tab does not exist'); 
+                              //console.log('tab does not exist'); 
                               const myNewUrl  =   `https://m.facebook.com/messages/`;
                               let CreateTab    =   chrome.tabs.create({
                                   url: myNewUrl,
@@ -115,7 +115,7 @@ chrome.runtime.onMessage.addListener(async function(request, sender) {
                       }
                       
         }).catch(error=>{
-          console.log("We are really Sorry we found error in fetching the Profile Info",error);
+          //console.log("We are really Sorry we found error in fetching the Profile Info",error);
         })
   }else if(request.type == "StoreMessageLinkInLocalStorage"){
       let ListURL=localStorage.getItem('ListURLArray');
@@ -154,7 +154,7 @@ chrome.runtime.onMessage.addListener(async function(request, sender) {
 chrome.runtime.onConnect.addListener(function(port) {
   port.onMessage.addListener(async function(msg) {
     if(msg.ConFlag == "CheckMessageContent"){
-      console.log("Now  Again I am In BackGround xxxxxxxxxxxxxxxxxxxx",msg.MessageDetails);
+      //console.log("Now  Again I am In BackGround xxxxxxxxxxxxxxxxxxxx",msg.MessageDetails);
       let fb_Name=localStorage.getItem('fb_username');
       let FacebookUserId=localStorage.getItem('fb_id');
       fb_Name=fb_Name.trim();
@@ -172,7 +172,7 @@ chrome.runtime.onConnect.addListener(function(port) {
         let autoresponder=localStorage.getItem('autoresponder');
         if(fb_logged_id == "true" && inBackgroundFetching== "false"){
           if(default_message !=0  ||  autoresponder!=0){
-                console.log("I am Hear 156");
+                //console.log("I am Hear 156");
                 let IncomingMessage = msg.MessageDetails.message_content.split(',').join(" , ");
                 IncomingMessage = IncomingMessage.split('.').join("  ");
                 IncomingMessage = IncomingMessage.split('?').join(" ");
@@ -203,7 +203,7 @@ chrome.runtime.onConnect.addListener(function(port) {
                 let FriendLastName ="";
                 let NowTime=new Date().getTime(); 
                 if(FriendFullName.length>1){
-                  console.log("I am Hear 187");
+                  //console.log("I am Hear 187");
                     FriendFullName.map(function(eachval){
                         if(FirstCountx ===   0){
                             FriendFirstName = eachval;
@@ -213,12 +213,12 @@ chrome.runtime.onConnect.addListener(function(port) {
                         FirstCountx=FirstCountx+1;
                       });
                 }else{
-                  console.log("I am Hear 197");
+                  //console.log("I am Hear 197");
                     FriendFirstName = FriendFullName;
                 }
                 let totalkeyObj =keyObj.length;
                 if(totalkeyObj == 0){
-                  console.log("I am Hear 202");
+                  //console.log("I am Hear 202");
                   let paramsToSend  =   {
                     MfenevanId:MfenevanId,
                     FacebookUserId:FacebookUserId,
@@ -234,13 +234,13 @@ chrome.runtime.onConnect.addListener(function(port) {
                     toJsonStr(paramsToSend)
                     );
                   let responsenewvalue = await response.json();
-                  console.log("Hit For Default",paramsToSend);
-                  console.log("Hit For Default Now Get From Backend",responsenewvalue);
+                  //console.log("Hit For Default",paramsToSend);
+                  //console.log("Hit For Default Now Get From Backend",responsenewvalue);
 
                   localStorage.setItem('CheckMessageNReply',0);
                   CheckLocalStoreAndHitIndividualMList();
                 }else{
-                  console.log("I am Hear 221");
+                  //console.log("I am Hear 221");
                   let ResponseTextArray=[];
                   let ResponseText="";
                   await keyObj.map(function(eachval){
@@ -248,13 +248,13 @@ chrome.runtime.onConnect.addListener(function(port) {
                         keywordToFind = " "+keywordToFind+" ";
                         if (IncomingMessage.indexOf(keywordToFind)!=-1)
                         {
-                          console.log("KEEEEEEEEEEEEE",keywordToFind);
+                          //console.log("KEEEEEEEEEEEEE",keywordToFind);
                               let PointIndex=IncomingMessage.indexOf(keywordToFind);
                               ResponseTextArray[PointIndex] = eachval.autoresponder_id
                               
                         }
                   });
-                  console.log("Thisissssssssssssss Messahe array",ResponseTextArray)
+                  //console.log("Thisissssssssssssss Messahe array",ResponseTextArray)
                   if(ResponseTextArray.length === 0){
                     let paramsToSend  =   {
                       MfenevanId:MfenevanId,
@@ -273,7 +273,7 @@ chrome.runtime.onConnect.addListener(function(port) {
                       );
                     let responsenewvalue = await response.json();
                     if(responsenewvalue.code == 1){
-                      console.log("Hey I am Sending This-----------------------",paramsToSend);
+                      //console.log("Hey I am Sending This-----------------------",paramsToSend);
                       port.postMessage({userInfoDetails: responsenewvalue.payload.message,ThreadParams:paramsToSend,ConFlagBack:"DEFAULTMESSAGEBACK" });
                     }else{
                     
@@ -281,7 +281,7 @@ chrome.runtime.onConnect.addListener(function(port) {
                       CheckLocalStoreAndHitIndividualMList();
                     }
                   }else{
-                    console.log("ThisissssssssssssssYYYYYYYYYYYYYYY Messahe array",ResponseTextArray);
+                    //console.log("ThisissssssssssssssYYYYYYYYYYYYYYY Messahe array",ResponseTextArray);
                     let myArray = ResponseTextArray;
                     let unique = myArray.filter((v, i, a) => a.indexOf(v) === i);
                     let a = new Date(NowTime);
@@ -293,7 +293,7 @@ chrome.runtime.onConnect.addListener(function(port) {
                     let min = a.getMinutes();
                     let sec = a.getSeconds();
                     let OnlyDate = date + ' ' + month + ' ' + year ;
-                    console.log("ThisissssssssssssssXXXXXXXXXXXXXXX Messahe array",unique); 
+                    //console.log("ThisissssssssssssssXXXXXXXXXXXXXXX Messahe array",unique); 
                     let ResponseText ="";
                     let RespoArray=[];
                     // let count=0;
@@ -316,7 +316,7 @@ chrome.runtime.onConnect.addListener(function(port) {
                           ResponseText = ResponseText + " " + responsenewvalue.payload.message;
                         }
                         if(count==unique.length-1){
-                          console.log("MeSSSSSSSS Array ",RespoArray);
+                          //console.log("MeSSSSSSSS Array ",RespoArray);
                           let paramsToSend  =   {
                             MfenevanId:MfenevanId,
                             FacebookUserId:FacebookUserId,
@@ -370,7 +370,7 @@ chrome.runtime.onConnect.addListener(function(port) {
         
     }
     if(msg.ConFlag == "StoreMessageLinkInLocalStorage"){
-      console.log("Store In Array",msg);
+      //console.log("Store In Array",msg);
       let ListURL=localStorage.getItem('ListURLArray');
       let ListURLArray=JSON.parse(ListURL);
       if(ListURLArray.length  === 0){
@@ -403,7 +403,7 @@ function CheckLocalStoreAndHitIndividualMList(){
     if(default_message !=0  ||  autoresponder!=0){
       if(CheckMessageNReply == 0){
         let ListURLArray = JSON.parse(ListURL);
-        console.log("Trigger ===========77",ListURLArray);
+        //console.log("Trigger ===========77",ListURLArray);
         if(ListURLArray.length===0){
           localStorage.setItem('CheckMessageNReply',0);
         }else{
@@ -456,9 +456,9 @@ setInterval(async function(){
     
 }
 await chrome.tabs.query({},async function(tabs){     
-    console.log("\n/////////////////////\n");
+    //console.log("\n/////////////////////\n");
     await tabs.forEach(function(tab){
-      console.log(tab.url," and ID is",tab.id);
+      //console.log(tab.url," and ID is",tab.id);
       if(tab.url == "https://mbasic.facebook.com/"){
         chrome.tabs.remove(tab.id, function() { 
           //localStorage.removeItem('fbprofile');
@@ -484,7 +484,7 @@ await chrome.tabs.create({
     pinned:true
 },function(ltab) { 
     let fbprofile=parseInt(ltab.id);
-    console.log("I am setttinggg");
+    //console.log("I am setttinggg");
     localStorage.setItem('fbprofile', fbprofile);
     
 });

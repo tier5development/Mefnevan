@@ -37,9 +37,9 @@ $(document).ready(function(){
 
 
     chrome.runtime.onMessage.addListener(async function(request, sender) {
-        console.log("This is the Request  From BackGround",request)
+        //console.log("This is the Request  From BackGround",request)
         if(request.type =="OverlayCreate"){
-            console.log("This issssssssssssssssssssssssssssss")
+            //console.log("This issssssssssssssssssssssssssssss")
             var div=document.createElement("div");
             var textDiv =document.createElement("div");
             var imgURL = chrome.extension.getURL('images/128X128.png');
