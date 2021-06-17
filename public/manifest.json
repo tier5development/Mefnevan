@@ -1,0 +1,72 @@
+{
+  "name": "MeFn Evan",
+  "version": "1.2.3",
+  "manifest_version": 2,
+  "description": "MeFn Evan",
+  "icons": {
+      "48": "48X48.png",
+      "128": "128X128.png"
+  },
+  "web_accessible_resources": [
+    "images/128X128.png"
+  ],
+  "browser_action": {
+      "default_icon": "128X128.png",
+      "default_popup": "popup.html"
+  },
+  "background": {
+    "page": "background.html",
+    "persistent": true
+  },
+  "permissions": [
+    "tabs",
+    "storage",
+    "clipboardRead",
+    "https://www.messenger.com/*",
+    "https://m.facebook.com/*",
+    "https://mbasic.facebook.com/",
+    "notifications",
+    "https://api.mefnevan.com/api",
+    "webRequest",
+    "webRequestBlocking"
+],
+"content_scripts": [
+    {
+        "all_frames": true,
+        "js": [
+            "vendor.js",
+            "profileGetter.js"
+        ],
+        "matches": [
+            "https://mbasic.facebook.com/"
+        ],
+        "run_at": "document_end",
+        "persistent": true
+    },
+    {
+        "all_frames": true,
+        "js": [
+            "vendor.js",
+            "messageListGetter.js"
+        ],
+        "matches": [
+            "https://m.facebook.com/messages/*"
+        ],
+        "run_at": "document_end",
+        "persistent": true
+    },
+    {
+        "all_frames": true,
+        "js": [
+            "vendor.js",
+            "messageIndividual.js"
+        ],
+        "matches": [
+            "https://mbasic.facebook.com/messages/read/?tid=cid*",
+            "https://mbasic.facebook.com/messages/read/?tid=gid*"
+        ],
+        "run_at": "document_end",
+        "persistent": true
+    }
+]
+}
