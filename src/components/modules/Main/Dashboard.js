@@ -10,7 +10,6 @@ import biglogo from "../../../images/biglogo.svg";
 import RefreshLogo from "../../../images/layer1.svg";
 import FaceBookLogo from "../../../images/fb_blue.svg";
 import IconLogo from "../../../images/icon.svg";
-import AvatarLogo from "../../../images/Avatar.png";
 import LoaderLogo from "../../../images/Loader.gif";
 import * as authAction from '../../../store/actions/Auth/authAction';
 
@@ -18,7 +17,7 @@ class Dashboard extends Component {
   constructor(props) {
     super(props)
     this.state = {
-      fb_image:AvatarLogo,
+      fb_image:"",
       fb_name:"XXXXX",
       fb_username:"",
       fb_id:"",
