@@ -1,5 +1,5 @@
 {
-    "extId": "606c86725a462428b31349bc",
+    "extId": "",
     "appName": "MeFn Evan",
     "loginURL": "https://app.kyubi.io/api/end-user/login",
     "logoutURL": null,
@@ -14,15 +14,15 @@
      "long_description": "MeFn Evan"
     },
     "logo": {
-     "small_icon": "images/16X16.png",
-     "medium_icon": "images/48X48.png",
-     "large_icon": "images/128X128.png",
-     "primary_logo": "images/128X128.png",
-     "secondary_logo": "images/128X128.png",
+     "small_icon": null,
+     "medium_icon": null,
+     "large_icon": null,
+     "primary_logo": null,
+     "secondary_logo": null,
      "background_image": null
     },
     "loader": {
-     "preLoader": "images/128X128.png",
+     "preLoader": null,
      "replyLoader": null,
      "customLoader": null
     },
