@@ -18,8 +18,8 @@
      "medium_icon": null,
      "large_icon": null,
      "primary_logo": null,
-     "secondary_logo": null,
-     "background_image": null
+     "secondary_logo": "images/logo.png",
+     "background_image": "images/logo1.png"
     },
     "loader": {
      "preLoader": null,

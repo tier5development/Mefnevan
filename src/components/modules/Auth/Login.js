@@ -6,7 +6,7 @@ import "./login.css";
 import AuthServices from "../../../services/authService";
 import loginHelper from "../../../helper/loginHelper";
 import  {OpenPoweredBy,OpenTier5Partnership,OpenFacebookLink,OpenMessengerLink,OpenSignupLink} from  '../../../helper/helper';
-import logo from "../../../images/logo1.svg";
+import logo from "../../../images/logo1.png";
 import biglogo from "../../../images/biglogo.svg";
 import LoaderLogo from "../../../images/Loader.gif"
 import mail from "../../../images/mail.svg";

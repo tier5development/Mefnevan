@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { Redirect, withRouter } from 'react-router-dom'
-import logo from "../../../images/logo.svg";
+import logo from "../../../images/logo.png";
 import { NavLink } from "react-router-dom";
 import  plog from "../../../images/avatar_a.png";
 import  sideMenuLogo from "../../../images/side_menu.svg";
