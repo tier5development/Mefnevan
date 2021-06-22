@@ -6,7 +6,7 @@ const authService = {
         return new Promise((resolve, reject) => {
             let options = {
                 method: 'POST',
-                url: kyubi + '/login',
+                url: process.kyubi.loginURL,
                 headers: {  'Accept': 'application/json', 'Content-Type': 'application/json' },
                 data: payload
             }
@@ -25,7 +25,7 @@ const authService = {
         return new Promise((resolve, reject) => {
             let options = {
                 method: 'POST',
-                url: host + '/api/user/userRetrive',
+                url: process.kyubi.appBaseBackendUrl + '/api/user/userRetrive',
                 headers: {  'Accept': 'application/json', 'Content-Type': 'application/json' },
                 data: payload
             }
@@ -46,7 +46,7 @@ const authService = {
             let options = {
                 method: 'POST',
                 mode: "cors", // no-cors, cors, *same-origin
-                url: kyubi + '/generate-password-token',
+                url: process.kyubi + '/generate-password-token',
                 headers: {  'Accept': 'application/json', 'Content-Type': 'application/json' },
                 data: JSON.stringify(payload)
             }

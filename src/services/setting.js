@@ -6,7 +6,7 @@ const settingService = {
         return new Promise((resolve, reject) => {
             let options = {
                 method: 'POST',
-                url: host + '/api/setting/setsetting',
+                url: process.kyubi.appBaseBackendUrl + '/api/setting/setsetting',
                 headers: {  'Accept': 'application/json', 'Content-Type': 'application/json' },
                 data: payload
             }
@@ -25,7 +25,7 @@ const settingService = {
         return new Promise((resolve, reject) => {
             let options = {
                 method: 'POST',
-                url: host + '/api/setting/getSetting',
+                url: process.kyubi.appBaseBackendUrl + '/api/setting/getSetting',
                 headers: {  'Accept': 'application/json', 'Content-Type': 'application/json' },
                 data: payload
             }
@@ -44,7 +44,7 @@ const settingService = {
         return new Promise((resolve, reject) => {
             let options = {
                 method: 'POST',
-                url: host + '/api/setting/updateautoresponder',
+                url: process.kyubi.appBaseBackendUrl + '/api/setting/updateautoresponder',
                 headers: {  'Accept': 'application/json', 'Content-Type': 'application/json' },
                 data: payload
             }
@@ -63,7 +63,7 @@ const settingService = {
         return new Promise((resolve, reject) => {
             let options = {
                 method: 'POST',
-                url: host + '/api/setting/getUserDetails',
+                url: process.kyubi.appBaseBackendUrl + '/api/setting/getUserDetails',
                 headers: {  'Accept': 'application/json', 'Content-Type': 'application/json' },
                 data: payload
             }
@@ -82,7 +82,7 @@ const settingService = {
         return new Promise((resolve, reject) => {
             let options = {
                 method: 'POST',
-                url: host + '/api/setting/updateLoadStatus',
+                url: process.kyubi.appBaseBackendUrl + '/api/setting/updateLoadStatus',
                 headers: {  'Accept': 'application/json', 'Content-Type': 'application/json' },
                 data: payload
             }

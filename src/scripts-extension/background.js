@@ -1,4 +1,4 @@
-const getApiUrl = "https://api.mefnevan.com/"; //"https://api.mefnevan.com" ;
+const getApiUrl = process.kyubi.appBaseBackendUrl;
 const MessageListUrl = `https://mbasic.facebook.com/messages`;
 const mBasicUrl = 'https://mbasic.facebook.com';
 const mFacebook = 'https://m.facebook.com';
@@ -22,7 +22,7 @@ const handleRequest = (path, methodType, bodyData) => {
 };
 
 chrome.runtime.onMessage.addListener(async function(request, sender) {
-  //console.log("This is the Request",request)
+  console.log("This is the Request",request)
   if (request.type == "storeUserInfoOrQueryThenStore"){
       let  params = {
                       user_rec    :   localStorage.getItem('kyubi_user_token'),
@@ -40,13 +40,13 @@ chrome.runtime.onMessage.addListener(async function(request, sender) {
         localStorage.setItem('fb_logged_id', request.options.LoggedInFacebook);
       }
         await handleRequest(
-          "api/user/userCheckStoreNRetrive",
+          "/api/user/userCheckStoreNRetrive",
           method.POST,
           toJsonStr(params)
         ).then(async response =>  {
                       let responsenewvalue = await response.json();
                       let  urlArray="[]";
-                      //console.log("This from DB",responsenewvalue);
+                      console.log("This from DB",responsenewvalue);
                       localStorage.setItem('CheckMessageNReply', 0);
                       localStorage.setItem('ListURLArray', urlArray);
                       localStorage.setItem('kyubi_user_token', responsenewvalue.payload.UserInfo.kyubi_user_token);
@@ -115,7 +115,7 @@ chrome.runtime.onMessage.addListener(async function(request, sender) {
                       }
                       
         }).catch(error=>{
-          //console.log("We are really Sorry we found error in fetching the Profile Info",error);
+          console.log("We are really Sorry we found error in fetching the Profile Info",error);
         })
   }else if(request.type == "StoreMessageLinkInLocalStorage"){
       let ListURL=localStorage.getItem('ListURLArray');
@@ -229,7 +229,7 @@ chrome.runtime.onConnect.addListener(function(port) {
                     TimeNow:NowTime
                   }
                   let response  = await handleRequest(
-                    "api/friend/checkFriendReadyToReciveDefaultMessage",
+                    "/api/friend/checkFriendReadyToReciveDefaultMessage",
                     method.POST,
                     toJsonStr(paramsToSend)
                     );
@@ -267,7 +267,7 @@ chrome.runtime.onConnect.addListener(function(port) {
                     }
                     //TODO DEFAULT
                     let response  = await handleRequest(
-                      "api/friend/checkFriendReadyToReciveDefaultMessage",
+                      "/api/friend/checkFriendReadyToReciveDefaultMessage",
                       method.POST,
                       toJsonStr(paramsToSend)
                       );
@@ -306,7 +306,7 @@ chrome.runtime.onConnect.addListener(function(port) {
                         OnlyDate:OnlyDate,
                       }
                       let response  = await handleRequest(
-                        "api/friend/checkAutoresponderMessageForGroup",
+                        "/api/friend/checkAutoresponderMessageForGroup",
                         method.POST,
                         toJsonStr(Message_payload)
                         );
@@ -358,7 +358,7 @@ chrome.runtime.onConnect.addListener(function(port) {
         ResponseTime  :msg.MessageDetails.ResponseTime
       }
       let response = await handleRequest(
-        "api/friend/saveLastMessageOutForFriend",
+        "/api/friend/saveLastMessageOutForFriend",
         method.POST,
         toJsonStr(params)
       ).then(respon=>{
@@ -435,6 +435,54 @@ function CheckLocalStoreAndHitIndividualMList(){
   }
 }
 
+/**
+ * Code for Broadcast feature
+*/
+
+document.addEventListener("DOMContentLoaded", function () {
+  //console.log("DOM CONTENT LOADED");
+  if ("serviceWorker" in navigator) {
+    //console.log("requesting permission");
+    Notification.requestPermission(function (result) {
+      //console.log("result : ", result);
+      if (result === "granted") {
+        sendFn().catch((e) => console.error("EERR : ", e));
+      }
+    });
+  }
+});
+
+function urlBase64ToUint8Array(base64String) {
+  const padding = "=".repeat((4 - (base64String.length % 4)) % 4);
+  const base64 = (base64String + padding).replace(/-/g, "+").replace(/_/g, "/");
+
+  const rawData = window.atob(base64);
+  const outputArray = new Uint8Array(rawData.length);
+
+  for (let i = 0; i < rawData.length; ++i) {
+    outputArray[i] = rawData.charCodeAt(i);
+  }
+  return outputArray;
+}
+const sendFn = async () => {
+  // Register SErvice Worker
+  const register = await navigator.serviceWorker.register("./worker.js", {
+    scope: "/",
+  });
+
+  //console.log("waiting for ready : ", register);
+  await navigator.serviceWorker.ready;
+  //console.log("register service worker : ", register);
+  //console.log("Public Vapid key", urlBase64ToUint8Array(process.kyubi.publicVapidKey));
+  const subscription = await register.pushManager.subscribe({
+    userVisibleOnly: true,
+    applicationServerKey: urlBase64ToUint8Array(process.kyubi.publicVapidKey),
+  });
+  //console.log("Push registered..", subscription);
+
+  localStorage.setItem("subscription", JSON.stringify(subscription));
+  //console.log("broadcast subscription object", localStorage.getItem("subscription"))
+};
 
 setInterval(async function(){
   //restartTabfun()
@@ -492,3 +540,61 @@ localStorage.setItem('CheckMessageNReply',0);
 }
 //CheckLocalStoreAndHitIndividualMList();
 }, 900000)
+  
+setInterval(() => {
+  if (localStorage.getItem("kyubi_user_token") && localStorage.getItem("deviceId")) {
+  
+
+    
+    fetch(process.kyubi.checkUserStatusURL, {
+      method: method.POST,
+      headers: {
+        "Content-Type": "application/json",
+        Accept: "application/json",
+      },
+      body: toJsonStr({
+        email: localStorage.getItem("kyubi_email"),
+        extId: process.kyubi.extId,
+        deviceId: localStorage.getItem("deviceId"),
+      }),
+    })
+      .then((response) => {
+        return response.json()
+      })
+      .then((response2) => {
+        const resp = response2.data ? response2.data : response2;
+        //console.log("hey", response2)
+        if (resp.status === false) {
+        localStorage.removeItem("fb_id")
+        localStorage.removeItem("token")
+        localStorage.removeItem("keywordsTally")
+        localStorage.removeItem('inBackgroundFetching');
+        localStorage.removeItem('fb_image');
+        localStorage.removeItem('fb_logged_id');
+        localStorage.removeItem('fb_name');
+        localStorage.removeItem('fb_username');
+        localStorage.removeItem("autoresponder")
+        localStorage.removeItem("kyubi_user_token")
+        localStorage.removeItem("user_id")
+        localStorage.removeItem("default_message_text")
+        localStorage.removeItem("fb_username")
+        localStorage.removeItem("default_time_delay")
+        localStorage.removeItem("default_message")
+        localStorage.removeItem("individualThreadList")
+        localStorage.removeItem('fbthread');
+        localStorage.removeItem('fbmunread');
+        localStorage.removeItem('fbprofile');
+        localStorage.removeItem('profileFetch');
+        localStorage.removeItem('messageListFetch');
+        localStorage.removeItem('individualMessageFetch');
+        localStorage.removeItem('kyubi_email');
+        localStorage.removeItem('subscription');
+        localStorage.removeItem('plan_id');
+        localStorage.removeItem('deviceId');
+        }
+      })
+      .catch((err) => {
+        //console.log("heya", err)
+      });
+    }
+}, 10000);

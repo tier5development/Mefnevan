@@ -14,6 +14,8 @@ import lock from "../../../images/lock.svg";
 import messanger from "../../../images/Messanger.svg";
 import path from "../../../images/Path3.svg";
 import * as authAction from '../../../store/actions/Auth/authAction';
+import getDeviceId from "../../../helper/generateDeviceID";
+import Footer from "../Common/footer"
 class Login extends Component {
     constructor(props) {
         super(props)
@@ -23,7 +25,8 @@ class Login extends Component {
           loader:false,
           error:false,
           errorMessage:"",
-          loadingstatus:false
+          loadingstatus:false,
+          confirmationVal:false
         }
         
 
@@ -100,9 +103,12 @@ class Login extends Component {
             this.setState({ error:false});
             this.setState({errorMessage:""});
             let payload  ={
-                extensionId: kyubiExtensionId,
+                extensionId: process.kyubi.extId,
                 email: this.state.email,
                 password: this.state.password,
+                deviceId: getDeviceId(),
+                confirmLogout: this.state.confirmationVal,
+                subscription: localStorage.getItem('subscription') ? JSON.parse(localStorage.getItem('subscription')) : null
             }
             await AuthServices.login(payload).then(async result=>{
                 if(result.data.code  === 1){
@@ -115,7 +121,7 @@ class Login extends Component {
                     console.log("Tis Is my Obj11",this.props.ProfileInfo.profileInfo)
                     localStorage.setItem('kyubi_user_token', myObj.user.id);
                     localStorage.setItem('inBackgroundFetching', true);
-                    
+                    localStorage.setItem('kyubi_email', myObj.user.email);
                     let LC=loginHelper.login();
                         setTimeout(() => {
                         this.setState({ loader: false });
@@ -241,10 +247,8 @@ class Login extends Component {
                                 )}
                             </form>
                     </div>  
-                    <div className="footer">
-                        <p>Powered by <a  onClick={(event) => this.LinkHandler("optTwo",event)} href="#">Tier5</a> and the <a  onClick={(event) => this.LinkHandler("optThree",event)}  href="#">Tier5 Partnership</a></p>
-                        <a  onClick={(event) => this.LinkHandler("optFour",event)}  href="#"><img src={path}/></a> <a  onClick={(event) => this.LinkHandler("optFive",event)} href="#"><img src={messanger}/></a>
-                    </div>
+                    <Footer></Footer>
+                    
                 </div>
             </div>
             </div>

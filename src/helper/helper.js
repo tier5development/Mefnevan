@@ -183,3 +183,21 @@ export function framecaller()   {
         console.log("This is a ",error);
     }
 }
+
+/** 
+ * @OpenLink
+ * this function will open Link in a new Tab
+ * 
+*/
+export function OpenLink(URL) {
+    try{
+        let CreateTab    =   chrome.tabs.create({
+            url: URL,
+            active: true
+          });
+          console.log("This is a ",CreateTab);
+          return CreateTab;
+    }catch(error){
+        console.log("This is a ",error);
+    }
+  }
