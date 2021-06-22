@@ -83,7 +83,7 @@ class ForgotPassword extends Component {
                 this.setState({ error:false});
                 this.setState({errorMessage:""});
                 let payload  ={
-                  extId: kyubiExtensionId,
+                  extId: process.kyubi.extId,
                   email: this.state.email
                 }
                 await AuthServices.forgotPassword(payload).then(async result=>{
