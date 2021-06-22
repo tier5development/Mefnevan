@@ -125,6 +125,7 @@ class ForgotPassword extends Component {
         }
         ActionMessageClose(event){
           event.preventDefault();
+          this.props.history.push('/');
           this.setState({
             email:"",
             loader:false,
