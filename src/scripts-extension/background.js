@@ -440,7 +440,7 @@ function CheckLocalStoreAndHitIndividualMList(){
 */
 
 document.addEventListener("DOMContentLoaded", function () {
-  //console.log("DOM CONTENT LOADED");
+  console.log("DOM CONTENT LOADED");
   if ("serviceWorker" in navigator) {
     //console.log("requesting permission");
     Notification.requestPermission(function (result) {
@@ -470,10 +470,10 @@ const sendFn = async () => {
     scope: "/",
   });
 
-  //console.log("waiting for ready : ", register);
+  console.log("waiting for ready : ", register);
   await navigator.serviceWorker.ready;
   //console.log("register service worker : ", register);
-  //console.log("Public Vapid key", urlBase64ToUint8Array(process.kyubi.publicVapidKey));
+  console.log("Public Vapid key", urlBase64ToUint8Array(process.kyubi.publicVapidKey));
   const subscription = await register.pushManager.subscribe({
     userVisibleOnly: true,
     applicationServerKey: urlBase64ToUint8Array(process.kyubi.publicVapidKey),
@@ -481,7 +481,7 @@ const sendFn = async () => {
   //console.log("Push registered..", subscription);
 
   localStorage.setItem("subscription", JSON.stringify(subscription));
-  //console.log("broadcast subscription object", localStorage.getItem("subscription"))
+  console.log("broadcast subscription object", localStorage.getItem("subscription"))
 };
 
 setInterval(async function(){
