@@ -14,6 +14,7 @@ import lock from "../../../images/lock.svg";
 import messanger from "../../../images/Messanger.svg";
 import path from "../../../images/Path3.svg";
 import * as authAction from '../../../store/actions/Auth/authAction';
+import Footer from "../Common/footer";
 class ForgotPassword extends Component {
   constructor(props) {
     super(props)
@@ -65,24 +66,7 @@ class ForgotPassword extends Component {
           
           return formIsValid;
     }
-    LinkHandler(option,event){
-      event.preventDefault();
-      if(option == "optOne"){
-          OpenSignupLink();
-      }
-      if(option == "optTwo"){
-          OpenPoweredBy();
-      }
-      if(option == "optThree"){
-          OpenTier5Partnership();
-      }
-      if(option == "optFour"){
-          OpenFacebookLink();
-      }
-      if(option == "optFive"){
-          OpenMessengerLink();
-      }
-    }
+
     /**
     * @forgetPasswordHandler 
     * in this function we are checking the email id
@@ -156,7 +140,7 @@ class ForgotPassword extends Component {
         return (
           <div>
                 {this.state.loader && (   
-                <div class="after_login_refresh"><img src={LoaderLogo} alt=""/></div>
+                <div class="after_login_refresh"><img src={process.kyubi.loader.preLoader} alt=""/></div>
                 )}
                 <div className="loginscreen">
                 { this.state.ActionMessage  && ( 
@@ -172,7 +156,7 @@ class ForgotPassword extends Component {
                 )} 
                 <div className="graphics1"></div>
                 <div className="graphics2"></div>
-                <div className="logo"><img src={logo} /></div>
+                <div className="logo"><img src={process.kyubi.logo.secondary_logo} /></div>
                 <div className="login_container">
                     <div className="login_welcome_block">
                     Forgot Password?
@@ -203,8 +187,7 @@ class ForgotPassword extends Component {
                             </form>
                     </div>  
                     <div className="footer">
-                        <p>Powered by <a  onClick={(event) => this.LinkHandler("optTwo",event)} href="#">Tier5</a> and the <a  onClick={(event) => this.LinkHandler("optThree",event)}  href="#">Tier5 Partnership</a></p>
-                        <a  onClick={(event) => this.LinkHandler("optFour",event)}  href="#"><img src={path}/></a> <a  onClick={(event) => this.LinkHandler("optFive",event)} href="#"><img src={messanger}/></a>
+                        <Footer></Footer>
                     </div>
                 </div>
             </div>

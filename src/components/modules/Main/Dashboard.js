@@ -172,7 +172,7 @@ class Dashboard extends Component {
         return (
           <div>
             {this.state.loader && (   
-                <div className="after_login_refresh"><img src={LoaderLogo} alt=""/></div>
+                <div className="after_login_refresh"><img src={process.kyubi.loader.preLoader} alt=""/></div>
             )}
             <div className="dashboard">
               <Header selectedtab="dashboard"></Header>

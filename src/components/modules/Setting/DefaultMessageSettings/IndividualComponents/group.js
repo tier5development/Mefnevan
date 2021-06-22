@@ -665,7 +665,7 @@ class group extends Component {
             {this.state.groupList ?
             <div className="subtabcontent">
                 {this.state.loader && (   
-                                <div className="after_login_refresh"><img src={LoaderLogo} alt=""/></div>
+                                <div className="after_login_refresh"><img src={process.kyubi.loader.preLoader} alt=""/></div>
                 )}
                 {this.state.notifier  && (
                         <div className="group_delete_sreen">
@@ -727,7 +727,7 @@ class group extends Component {
             {this.state.groupCreate ?
             <div className="subtabcontent">
                 {this.state.loader && (   
-                                <div className="after_login_refresh"><img src={LoaderLogo} alt=""/></div>
+                                <div className="after_login_refresh"><img src={process.kyubi.loader.preLoader} alt=""/></div>
                 )}
                 <div class="headding gap1">
                     <span class="big">Create a Message Group</span> 
@@ -813,7 +813,7 @@ class group extends Component {
             {this.state.groupEdit ?
                 <div className="subtabcontent">
                     {this.state.loader && (   
-                                <div className="after_login_refresh"><img src={LoaderLogo} alt=""/></div>
+                                <div className="after_login_refresh"><img src={process.kyubi.loader.preLoader} alt=""/></div>
                     )}
                     <div class="headding gap1">
                         <span class="big">Edit a Message Group</span>

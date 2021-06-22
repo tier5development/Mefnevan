@@ -564,7 +564,7 @@ class segment extends Component {
 
                     <div className="subtabcontent">
                             {this.state.loader && (   
-                                <div className="after_login_refresh"><img src={biglogo} alt=""/></div>
+                                <div className="after_login_refresh"><img src={process.kyubi.loader.preLoader} alt=""/></div>
                             )}
                             {this.state.notifier  && (
                                 <div className="group_delete_sreen">
@@ -629,7 +629,7 @@ class segment extends Component {
                 {this.state.segmentCreate ?
                     <div className="subtabcontent">
                         {this.state.loader && (   
-                                <div className="after_login_refresh"><img src={biglogo} alt=""/></div>
+                                <div className="after_login_refresh"><img src={process.kyubi.loader.preLoader} alt=""/></div>
                         )}
                         <div className="headding gap1">
                             <span className="big">Create a Message Segments</span> 
@@ -682,7 +682,7 @@ class segment extends Component {
                 {this.state.segmentEdit ?
                     <div className="subtabcontent">
                         {this.state.loader && (   
-                                <div className="after_login_refresh"><img src={biglogo} alt=""/></div>
+                                <div className="after_login_refresh"><img src={process.kyubi.loader.preLoader} alt=""/></div>
                         )}
                         <div className="headding gap1">
                             <span className="big">Edit a Message Segments</span> 

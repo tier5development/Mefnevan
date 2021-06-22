@@ -154,24 +154,7 @@ class Login extends Component {
     callFrameHandler    =   async   (event) =>{
         loginHelper.framecaller();
     }
-    LinkHandler(option,event){
-        event.preventDefault();
-        if(option == "optOne"){
-            OpenSignupLink();
-        }
-        if(option == "optTwo"){
-            OpenPoweredBy();
-        }
-        if(option == "optThree"){
-            OpenTier5Partnership();
-        }
-        if(option == "optFour"){
-            OpenFacebookLink();
-        }
-        if(option == "optFive"){
-            OpenMessengerLink();
-        }
-    }
+    
     componentDidMount(){
         this.setState({ loader: true });
         let kyubi_user_token=localStorage.getItem('kyubi_user_token');
@@ -204,12 +187,12 @@ class Login extends Component {
         return (
             <div>
                 {this.state.loader && (   
-                <div class="after_login_refresh"><img src={LoaderLogo} alt=""/></div>
+                <div class="after_login_refresh"><img src={process.kyubi.loader.preLoader} alt=""/></div>
                 )}
                 <div className="loginscreen">
                 <div className="graphics1"></div>
                 <div className="graphics2"></div>
-                <div className="logo"><img src={logo} /></div>
+                <div className="logo"><img src={process.kyubi.logo.secondary_logo} /></div>
                 <div className="login_container">
                     <div className="login_welcome_block">
                         Welcome,

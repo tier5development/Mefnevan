@@ -204,9 +204,9 @@ class header extends Component {
         return (
             <div className="gen_header">
               {this.state.loader && (   
-                                <div className="after_login_refresh"><img src={LoadingLogo} alt=""/></div>
+                                <div className="after_login_refresh"><img src={process.kyubi.loader.preLoader} alt=""/></div>
               )}
-              <div className="logo"><img src={logo} alt="" /></div>
+              <div className="logo"><img src={process.kyubi.logo.primary_logo} alt="" /></div>
               <div className="hBtnWrapper">
                 <div className="toogler">
                   <label className="switch_box box_1">

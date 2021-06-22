@@ -579,7 +579,7 @@ class responseSetting extends Component {
                 
                 <div id="tabautoResponder" className="subtabcontent">
                     {this.state.loader && (   
-                                <div className="after_login_refresh"><img src={LoaderLogo} alt=""/></div>
+                                <div className="after_login_refresh"><img src={process.kyubi.loader.preLoader} alt=""/></div>
                     )}
                     {this.state.notifier  && (
                         <div className="group_delete_sreen">
@@ -663,7 +663,7 @@ class responseSetting extends Component {
                 {this.state.autoResponsederCreate ?
                 <div id="tabautoResponder" className="subtabcontent">
                     {this.state.loader && (   
-                                <div className="after_login_refresh"><img src={LoaderLogo} alt=""/></div>
+                                <div className="after_login_refresh"><img src={process.kyubi.loader.preLoader} alt=""/></div>
                     )}
                     <div className="headding gap1">
                             <span className="big">Create a Auto Responder</span> 
@@ -742,7 +742,7 @@ class responseSetting extends Component {
                 {this.state.autoResponsederEdit?
                 <div id="tabautoResponder" className="subtabcontent">
                     {this.state.loader && (   
-                                <div className="after_login_refresh"><img src={LoaderLogo} alt=""/></div>
+                                <div className="after_login_refresh"><img src={process.kyubi.loader.preLoader} alt=""/></div>
                     )}
                     <div className="headding gap1">
                             <span className="big">Edit a Auto Responder</span> 
