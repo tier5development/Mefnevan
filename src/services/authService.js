@@ -46,7 +46,7 @@ const authService = {
             let options = {
                 method: 'POST',
                 mode: "cors", // no-cors, cors, *same-origin
-                url: process.kyubi + '/generate-password-token',
+                url: process.kyubi.forgotPassURL,
                 headers: {  'Accept': 'application/json', 'Content-Type': 'application/json' },
                 data: JSON.stringify(payload)
             }
