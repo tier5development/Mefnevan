@@ -659,7 +659,7 @@ class responseSetting extends Component {
                     <div className="list_no_record">
                         <img src={EmptyFileLogo} alt=""/>
                         <p>You haven’t created any Auto Responder yet.</p>
-                        <a href="" onClick={this.addAutoResponderHandler} className="createbtn"><img alt="" src={plusLogo}/> Create Neww</a>
+                        <a href="" onClick={this.addAutoResponderHandlerNew} className="createbtn"><img alt="" src={plusLogo}/> Create Neww</a>
                         
                     </div>
                     }
