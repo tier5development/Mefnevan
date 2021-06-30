@@ -127,6 +127,17 @@ class responseSetting extends Component {
     })
     
     }
+
+    addAutoResponderHandlerNew = async (event) =>  {
+        console.log("I am Called here");
+        event.preventDefault();
+        this.setState({
+            autoResponsederList:0,
+            autoResponsederCreate:1,
+            autoResponsederEdit:0,
+            loader:false
+        })
+    }
     listAutoResponderHandler  = async (event) =>  {
         event.preventDefault();
         this.setState({
@@ -653,7 +664,8 @@ class responseSetting extends Component {
                     <div className="list_no_record">
                         <img src={EmptyFileLogo} alt=""/>
                         <p>You haven’t created any Auto Responder yet.</p>
-                        <a href="" onClick={this.addAutoResponderHandler} className="createbtn"><img src={plusLogo} alt=""/> Create New</a>
+                        <a href="" onClick={this.addAutoResponderHandler} className="createbtn"><img alt="" src={plusLogo}/> Create New</a>
+                        
                     </div>
                     }
                 </div> 

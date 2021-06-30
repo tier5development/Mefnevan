@@ -11,7 +11,6 @@
     "images/*"
   ],
   "browser_action": {
-      "default_icon": "./images/128X128.png",
       "default_popup": "popup.html"
   },
   "background": {
