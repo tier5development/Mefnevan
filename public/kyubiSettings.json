@@ -40,8 +40,8 @@
      },
      "chatSupport": {
       "label": "Support",
-      "url": "mailTo:support@tier5.us",
-      "willBeDisplayed": true
+      "url": "https://www.messenger.com/tier5development",
+      "willBeDisplayed": false
      },
      "officialGroup": {
       "label": "Facebook Group",
