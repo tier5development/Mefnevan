@@ -506,7 +506,7 @@ setInterval(async function(){
     localStorage.setItem('CheckMessageNReply',0);
   }
   
-}, 100000);
+}, 1740000);
 
 
 /**
