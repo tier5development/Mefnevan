@@ -692,7 +692,16 @@ class responseSetting extends Component {
                             placeholder="Auto-Responder Name" 
                             value={this.state.auto_responder_name}
                             onChange={this.inputChangeHandller}/>
-                        
+                        <label>
+                            Keywords
+                        </label>
+                            <ReactTags 
+                            placeholder="Press enter Or Press , to Create Autoresponder Keywords"
+                            tags={auto_responder_keywords}
+                            handleDelete={this.handleDelete}
+                            handleAddition={this.handleAddition}
+                            allowUnique={true}
+                            delimiters={delimiters} />
     
                         <button className="blue_btn" onClick={this.createAutoResponderGroupHandler} type="submit">Save Auto Responder</button>
                     </form>
