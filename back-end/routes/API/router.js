@@ -29,4 +29,9 @@ const router = require('express').Router()
   require('./Group/router')
   )
 
+  
+  router.use('/delaysetting',
+  require('./DelaySetting/router')
+  )
+
 module.exports = router

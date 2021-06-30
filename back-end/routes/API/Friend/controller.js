@@ -3,8 +3,11 @@ const   FriendsRepo =   require('../../../models/repositories/friends.repository
 const   UserSettingRepository   =   require('../../../models/repositories/settings.repository');
 const   MessageGroup    =   require('../../../models/repositories/messagegroup.repository');
 const   MessageSegment  =   require('../../../models/repositories/messagesegment.repository');
-const   AutoResponderRepo   =   require('../../../models/repositories/autoresponder.repository')
+const   AutoResponderRepo   =   require('../../../models/repositories/autoresponder.repository');
+const   FriendMessageTrackRepository    =   require('../../../models/repositories/friendmessagetrack.repository');
+const   DelayRepo   =   require('../../../models/repositories/delaysettings.repository');
 var typecast = require('typecast');
+
 module.exports.FriendsCreateOrUpdate    =   async   (req,   res)    =>  {
     try{
         console.log("This is my sent",req.body);
@@ -337,6 +340,34 @@ module.exports.SaveLastMessageOutForFriend  =   async   (req,   res)    =>  {
                 last_default_message: Checklast_default_message,
                 connection_status: Checkconnection_status
             };
+            // 'user_id': mongoose.Types.ObjectId(UserId),
+            //     'autoresponder_id': mongoose.Types.ObjectId(AutoresponderId),
+            //     'facebook_id':FriendId
+            let getDelayInfo = await DelayRepo.GetUserSettingById(Checkuser_id);
+            if(getDelayInfo){
+                if(getDelayInfo.delay_setting == 1){
+                    for (let count = 0; count < req.body.autoresponder_id.length; count++) {
+                        let FriendMessageTrackInfo=await FriendMessageTrackRepository.GetFriendMessageTrack(Checkuser_id,Checkfacebook_user_id,req.body.autoresponder_id[count]);
+                        if(FriendMessageTrackInfo){
+            
+                        }else{
+                            let MessageTrack={
+                            user_id:Checkuser_id,
+                            autoresponder_id:req.body.autoresponder_id[count],
+                            facebook_user_id:Checkfacebook_user_id,
+                            facebook_id:Checkfacebook_id,
+                            facebook_username:Checkfacebook_username,
+                            facebook_first_name:Checkfacebook_first_name ,
+                            facebook_last_name:Checkfacebook_last_name,
+                            send_time:req.body.ResponseTime
+                            }
+                            await FriendMessageTrackRepository.saveFriendMessageTrack(MessageTrack)
+                        }
+                    }
+                }
+            }
+
+            
         }
         if(FriendsInfo){
             let updateFriendsInfo=await FriendsRepo.updateFriendsInfoById(FriendsInfoPayloadUpdate,FriendsInfo._id);
@@ -355,6 +386,8 @@ module.exports.SaveLastMessageOutForFriend  =   async   (req,   res)    =>  {
             };
             let saveFriendsInfo=await FriendsRepo.CreateFriendsInfo(FriendsInfoPayload);
         }
+
+        
         res.send({
             code: 1,
             message: "Successfull",
@@ -509,58 +542,67 @@ module.exports.checkAutoresponderMessageForGroup    =   async   (req,   res)    
     try{
         console.log("This is my sent",req.body);
         let AutoResponderDetails= await AutoResponderRepo.GetAutoResponderResponderWithId(req.body.autoresponder_id);
-        console.log("This is my Autoresponder",AutoResponderDetails[0]);
-        let KeywordParams={
-            ChangeDate:req.body.OnlyDate,
-            ChangeFirstName:req.body.FriendFirstName,
-            ChangeLastName:req.body.FriendLastName
-        }
-        if(AutoResponderDetails[0].type == "1"){
-            await MessageGroup.GetMessageGroup(AutoResponderDetails[0].message_group).then(async resultGroup=>{
-                let TotalNumberofBlocks=resultGroup.associate_blocks.length;
-                let CointNum=Math.floor(Math.random() * TotalNumberofBlocks);
-                let randomBlock = resultGroup.associate_blocks[CointNum];
-                if(randomBlock.length>0){
-                    let i = 0
-                    let finalMessage = []
-                    sendResponse = (data) =>{
-                    res.status(200).send({
-                        code: 1,
-                        message: "Succefully fetched random message from the selected group",
-                        payload: {
-                        message: data
+        //console.log("This is my Autoresponder",AutoResponderDetails[0]);
+        let AllowedtosendMessage= await MessageCreatorTrack(req.body);
+        if(AllowedtosendMessage == 1){
+                let KeywordParams={
+                    ChangeDate:req.body.OnlyDate,
+                    ChangeFirstName:req.body.FriendFirstName,
+                    ChangeLastName:req.body.FriendLastName
+                }
+                if(AutoResponderDetails[0].type == "1"){
+                    await MessageGroup.GetMessageGroup(AutoResponderDetails[0].message_group).then(async resultGroup=>{
+                        let TotalNumberofBlocks=resultGroup.associate_blocks.length;
+                        let CointNum=Math.floor(Math.random() * TotalNumberofBlocks);
+                        let randomBlock = resultGroup.associate_blocks[CointNum];
+                        if(randomBlock.length>0){
+                            let i = 0
+                            let finalMessage = []
+                            sendResponse = (data) =>{
+                            res.status(200).send({
+                                code: 1,
+                                message: "Succefully fetched random message from the selected group",
+                                payload: {
+                                message: data
+                                }
+                            })
+                            }
+                            constructMessage(i,randomBlock,finalMessage,sendResponse,KeywordParams);
+                            
+                        }else{
+                            res.status(200).send({
+                                code: 2,
+                                message: "UnSuccefully fetched random message from the selected group",
+                                payload: { }
+                            }) 
                         }
-                    })
-                    }
-                    constructMessage(i,randomBlock,finalMessage,sendResponse,KeywordParams);
-                    
+                    });
+                    // res.send({
+                    //     code: 1,
+                    //     message: "Succefully fetched random message from the selected group1",
+                    //     payload: {
+                    //     message: AutoResponderDetails[0].message_group
+                    //     }
+                    // })  
                 }else{
-                    res.status(200).send({
-                        code: 2,
-                        message: "UnSuccefully fetched random message from the selected group",
-                        payload: { }
-                    }) 
+                    let newText=AutoResponderDetails[0].message.replace('{first_name}'," "+KeywordParams.ChangeFirstName);
+                        newText=newText.replace('{last_name}'," "+KeywordParams.ChangeLastName);
+                        newText=newText.replace('{date}'," "+KeywordParams.ChangeDate);
+                        newText=newText.replace('{Date}'," "+KeywordParams.ChangeDate);
+                    res.send({
+                        code: 1,
+                        message: "Succefully fetched random message from text",
+                        payload: {
+                        message: newText
+                        }
+                    })  
                 }
-            });
-            // res.send({
-            //     code: 1,
-            //     message: "Succefully fetched random message from the selected group1",
-            //     payload: {
-            //     message: AutoResponderDetails[0].message_group
-            //     }
-            // })  
         }else{
-            let newText=AutoResponderDetails[0].message.replace('{first_name}'," "+KeywordParams.ChangeFirstName);
-                newText=newText.replace('{last_name}'," "+KeywordParams.ChangeLastName);
-                newText=newText.replace('{date}'," "+KeywordParams.ChangeDate);
-                newText=newText.replace('{Date}'," "+KeywordParams.ChangeDate);
-            res.send({
-                code: 1,
-                message: "Succefully fetched random message from text",
-                payload: {
-                message: newText
-                }
-            })  
+            res.status(200).send({
+                code: 2,
+                message: "UnSuccefully fetched random message from the selected group",
+                payload: { }
+            })     
         }
         
     }catch(error){
@@ -601,4 +643,37 @@ async function constructMessage(i,messageBlock,finalMessage,__callback,KeywordPa
           return __callback(finalMessage.join(' '))
       }
     //return __callback(messageBlock);
+}
+async function MessageCreatorTrack(Restro){
+    let getDelayInfo = await DelayRepo.GetUserSettingById(Restro.MfenevanId);
+    let AllowedtosendMessage = 0;
+    if(getDelayInfo){
+        if(getDelayInfo.delay_setting == 1){
+            let DelayTime=getDelayInfo.delay_time;
+            console.log("Delay Minutes",DelayTime);
+            let GetLastMessageTrack=await FriendMessageTrackRepository.GetFriendMessageTrack(Restro.MfenevanId,Restro.FriendFacebookId,Restro.autoresponder_id);
+            if(GetLastMessageTrack){
+                console.log("Last Message Time",GetLastMessageTrack.send_time);
+                console.log("Now Time",Restro.TimeNow);
+                let actualnumber=typecast.number(Restro.TimeNow)-typecast.number(GetLastMessageTrack.send_time);
+                let minutes = Math.floor(actualnumber/1000/60);
+                console.log("Difference",minutes);
+                if(minutes>=DelayTime){  
+                    console.log("Delete This Row =====",GetLastMessageTrack);
+                    console.log("Delete This Row =====",GetLastMessageTrack._id);
+                    await FriendMessageTrackRepository.DeleteFriendMessageTrack(Restro.MfenevanId,Restro.FriendFacebookId,Restro.autoresponder_id)
+                    return 1;
+                }else{
+                    return 0;
+                }
+            }else{
+                return 1; 
+            }
+            
+        }else{
+            return 1;
+        }
+    }else{
+        return 1;
+    }
 }
