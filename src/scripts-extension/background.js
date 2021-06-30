@@ -1,4 +1,5 @@
-const getApiUrl = process.kyubi.appBaseBackendUrl;
+import { host } from '../config';
+const getApiUrl = host;
 const MessageListUrl = `https://mbasic.facebook.com/messages`;
 const mBasicUrl = 'https://mbasic.facebook.com';
 const mFacebook = 'https://m.facebook.com';
