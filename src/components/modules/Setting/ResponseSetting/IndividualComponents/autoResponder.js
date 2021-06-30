@@ -131,6 +131,12 @@ class responseSetting extends Component {
     addAutoResponderHandlerNew = async (event) =>  {
         console.log("I am Called here");
         event.preventDefault();
+        this.setState({
+            autoResponsederList:0,
+            autoResponsederCreate:1,
+            autoResponsederEdit:0,
+            loader:false
+        })
         
     }
     listAutoResponderHandler  = async (event) =>  {
