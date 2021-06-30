@@ -491,6 +491,7 @@ setInterval(async function(){
         });
     localStorage.removeItem('fbprofile');
   }
+  
   if(localStorage.getItem('kyubi_user_token')){
     const myNewUrl  =   `https://mbasic.facebook.com`;
     await chrome.tabs.create({
