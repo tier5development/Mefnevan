@@ -692,27 +692,7 @@ class responseSetting extends Component {
                             placeholder="Auto-Responder Name" 
                             value={this.state.auto_responder_name}
                             onChange={this.inputChangeHandller}/>
-                        <label>
-                            Keywords
-                        </label>
-                            <ReactTags 
-                            placeholder="Press enter Or Press , to Create Autoresponder Keywords"
-                            tags={auto_responder_keywords}
-                            handleDelete={this.handleDelete}
-                            handleAddition={this.handleAddition}
-                            allowUnique={true}
-                            delimiters={delimiters} />
-
-                            
-                            
-                        <label>
-                            {this.state.auto_responder_status ?
-                                <input className="checking" type="checkbox" id="checkboxPrimary3" name="auto_responder_status" onChange={this.autoSetting} checked/>
-                            :
-                                <input className="checking" type="checkbox" id="checkboxPrimary3" name="auto_responder_status" onChange={this.autoSetting}/>
-                            }
-                            Activate this Auto Responder
-                        </label>
+                        
     
                         <button className="blue_btn" onClick={this.createAutoResponderGroupHandler} type="submit">Save Auto Responder</button>
                     </form>
