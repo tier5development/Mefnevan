@@ -40,7 +40,7 @@ class responseSetting extends Component {
                 autoResponsederEdit:0,
                 autoresponderListValue:[],
                 auto_responder_name:"",
-                auto_responder_keywords: [],
+                auto_responder_keywords: [{"id":"","text":""}],
                 auto_responder_message:"",
                 auto_responder_status:1,
                 loader:false,
@@ -132,6 +132,7 @@ class responseSetting extends Component {
         console.log("I am Called here");
         event.preventDefault();
         this.setState({
+            auto_responder_keywords: [],
             autoResponsederList:0,
             autoResponsederCreate:1,
             autoResponsederEdit:0,
