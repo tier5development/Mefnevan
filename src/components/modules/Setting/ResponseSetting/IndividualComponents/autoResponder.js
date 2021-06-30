@@ -40,7 +40,7 @@ class responseSetting extends Component {
                 autoResponsederEdit:0,
                 autoresponderListValue:[],
                 auto_responder_name:"",
-                auto_responder_keywords: [{"id":"","text":""}],
+                auto_responder_keywords: [],
                 auto_responder_message:"",
                 auto_responder_status:1,
                 loader:false,
@@ -681,7 +681,7 @@ class responseSetting extends Component {
                     <div className="headding gap1">
                             <span className="big">Create a Auto Responder</span> 
                             <a  onClick={this.listAutoResponderHandler} href="#" className="roundarrow"><img src={backArrowLogo}/></a>
-                    </div>
+                        </div>
                     <form>
                         <label>
                             Auto Responder Name
@@ -702,6 +702,49 @@ class responseSetting extends Component {
                             handleAddition={this.handleAddition}
                             allowUnique={true}
                             delimiters={delimiters} />
+
+                            <div className="selectbox">
+                                <Select
+                                
+                                value={selectedOption}
+                                onChange={this.handleChange}
+                                options={options}
+                                />
+                            </div>
+                            {this.state.autoreponder_message_type ? 
+                                <div className="selectbox">
+                                    <Select
+                                    
+                                    value={selectedGPL}
+                                    onChange={this.handleChangeGPL}
+                                    options={GPL}
+                                    />
+                                </div>
+                            : 
+                                <div>
+                                    <label>Auto Response Message</label>
+                                    <textarea className="withtag" 
+                                    name="auto_responder_message"
+                                    id="auto_responder_message"
+                                    rows="3"  
+                                    placeholder="Please enter the response message...."
+                                    value={this.state.auto_responder_message}
+                                    onChange={this.inputChangeHandller}
+                                    ></textarea>
+                                    <button type="button" onClick={() => this.insertTagAtMessageSegments('auto_responder_message', '{first_name}')} className="formtag">[ First Name ]</button> 
+                                    <button type="button" onClick={() => this.insertTagAtMessageSegments('auto_responder_message', '{last_name}')} class="formtag">[ Last Name ]</button>
+                                    <button type="button" onClick={() => this.insertTagAtMessageSegments('auto_responder_message', '{date}')} class="formtag">[ Todays Date ]</button>
+                                </div>
+                            }
+                            
+                        <label>
+                            {this.state.auto_responder_status ?
+                                <input className="checking" type="checkbox" id="checkboxPrimary3" name="auto_responder_status" onChange={this.autoSetting} checked/>
+                            :
+                                <input className="checking" type="checkbox" id="checkboxPrimary3" name="auto_responder_status" onChange={this.autoSetting}/>
+                            }
+                            Activate this Auto Responder
+                        </label>
     
                         <button className="blue_btn" onClick={this.createAutoResponderGroupHandler} type="submit">Save Auto Responder</button>
                     </form>
