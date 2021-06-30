@@ -6,7 +6,7 @@ const segmentServices = {
         return new Promise((resolve, reject) => {
             let options = {
                 method: 'POST',
-                url: process.kyubi.appBaseBackendUrl + '/api/segment/create',
+                url: host + '/api/segment/create',
                 headers: {  'Accept': 'application/json', 'Content-Type': 'application/json' },
                 data: payload
             }
@@ -25,7 +25,7 @@ const segmentServices = {
         return new Promise((resolve, reject) => {
             let options = {
                 method: 'POST',
-                url: process.kyubi.appBaseBackendUrl + '/api/segment/list',
+                url: host + '/api/segment/list',
                 headers: {  'Accept': 'application/json', 'Content-Type': 'application/json' },
                 data: payload
             }
@@ -44,7 +44,7 @@ const segmentServices = {
         return new Promise((resolve, reject) => {
             let options = {
                 method: 'POST',
-                url: process.kyubi.appBaseBackendUrl + '/api/segment/edit',
+                url: host + '/api/segment/edit',
                 headers: {  'Accept': 'application/json', 'Content-Type': 'application/json' },
                 data: payload
             }
@@ -63,7 +63,7 @@ const segmentServices = {
         return new Promise((resolve, reject) => {
             let options = {
                 method: 'POST',
-                url: process.kyubi.appBaseBackendUrl + '/api/segment/update',
+                url: host + '/api/segment/update',
                 headers: {  'Accept': 'application/json', 'Content-Type': 'application/json' },
                 data: payload
             }
@@ -82,7 +82,7 @@ const segmentServices = {
         return new Promise((resolve, reject) => {
             let options = {
                 method: 'POST',
-                url: process.kyubi.appBaseBackendUrl + '/api/segment/delete',
+                url: host + '/api/segment/delete',
                 headers: {  'Accept': 'application/json', 'Content-Type': 'application/json' },
                 data: payload
             }

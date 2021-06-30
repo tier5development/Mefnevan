@@ -1,12 +1,12 @@
 import axios from 'axios';
 import { host,kyubi } from '../config';
 
-const settingService = {
+const delaysettingService = {
     setSetting: function (payload) {
         return new Promise((resolve, reject) => {
             let options = {
                 method: 'POST',
-                url: host + '/api/setting/setsetting',
+                url: host + '/api/delaysetting/setsetting',
                 headers: {  'Accept': 'application/json', 'Content-Type': 'application/json' },
                 data: payload
             }
@@ -25,7 +25,7 @@ const settingService = {
         return new Promise((resolve, reject) => {
             let options = {
                 method: 'POST',
-                url: host + '/api/setting/getSetting',
+                url: host + '/api/delaysetting/getSetting',
                 headers: {  'Accept': 'application/json', 'Content-Type': 'application/json' },
                 data: payload
             }
@@ -44,45 +44,7 @@ const settingService = {
         return new Promise((resolve, reject) => {
             let options = {
                 method: 'POST',
-                url: host + '/api/setting/updateautoresponder',
-                headers: {  'Accept': 'application/json', 'Content-Type': 'application/json' },
-                data: payload
-            }
-            axios(options)
-                .then(res => {
-                    console.log("In Success");
-                    resolve(res)
-                })
-                .catch(err => {
-                    console.log("In Error");
-                    reject(err)
-                })
-        })
-    },
-    getUserDetails: function    (payload)   {
-        return new Promise((resolve, reject) => {
-            let options = {
-                method: 'POST',
-                url: host + '/api/setting/getUserDetails',
-                headers: {  'Accept': 'application/json', 'Content-Type': 'application/json' },
-                data: payload
-            }
-            axios(options)
-                .then(res => {
-                    console.log("In Success");
-                    resolve(res)
-                })
-                .catch(err => {
-                    console.log("In Error");
-                    reject(err)
-                })
-        })
-    },
-    updateLoadStatus: function   (payload)   {
-        return new Promise((resolve, reject) => {
-            let options = {
-                method: 'POST',
-                url: host + '/api/setting/updateLoadStatus',
+                url: host + '/api/delaysetting/updateSetting',
                 headers: {  'Accept': 'application/json', 'Content-Type': 'application/json' },
                 data: payload
             }
@@ -100,4 +62,4 @@ const settingService = {
     
 }
 
-export default settingService;
+export default delaysettingService;

@@ -237,7 +237,7 @@ class header extends Component {
                       <ul className="menunav">
                         <li><NavLink  to="/dashboard"><img src="images/menuicon4.svg" /> Dashboard</NavLink></li>
                         <li><NavLink  to="/setting"><img src="images/menuicon3.svg"/> Settings</NavLink></li>
-
+                        <li><NavLink  to="/delay_setting"><img src="images/menuicon3.svg"/> Delay Setting</NavLink></li>
                         <li><NavLink  to="/logout"><img src="images/menuicon1.svg"/> Logout</NavLink></li>
                       </ul>
                   </div>

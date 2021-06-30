@@ -72,6 +72,14 @@ class sidebar extends Component {
                                       Setting
                                     </p>
                                   </NavLink>
+                              </li> 
+                              <li className="nav-item">
+                                  <NavLink  to="/delay_setting" className="nav-link">
+                                    <i className="nav-icon fas fa-cogs"></i>
+                                    <p>
+                                      Delay Setting
+                                    </p>
+                                  </NavLink>
                               </li>  
                               <li className="nav-item">
                                   <NavLink  to="/autoresponder" className="nav-link">

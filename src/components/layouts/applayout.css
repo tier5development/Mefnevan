@@ -1309,3 +1309,37 @@ new style added for modification
 .listing_card .head .txt img {
     margin-right: 4px;
 }
+.toggleSettings p {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+}
+.toggleSettings .toggler label {
+	margin: 0;
+}
+.settingsMore input {
+	height: 40px;
+	line-height: 40px;
+	color: #000;
+	width: 100%;
+	margin-bottom: 0;
+	padding: 0 14px;
+	text-align: center;
+	background-color: transparent;
+	border: none;
+}
+.toggleSettings {
+	max-width: calc(100% - 40px);
+	margin: 0 auto;
+}
+.settingsMore {
+	margin-bottom: 15px;
+	display: none;
+	align-items: center;
+	background: #ffffff;
+	border: 1px solid #d9e3ec;
+	border-radius: 22px;
+}
+.settingsMore.active {
+	display: flex;
+}

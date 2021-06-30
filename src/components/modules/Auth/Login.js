@@ -159,7 +159,7 @@ class Login extends Component {
         this.setState({ loader: true });
         let kyubi_user_token=localStorage.getItem('kyubi_user_token');
         let inBackgroundFetching=localStorage.getItem('inBackgroundFetching');
-            
+        
         if(kyubi_user_token){
             if(inBackgroundFetching !== "true"){
                 let createStatePayload = [];

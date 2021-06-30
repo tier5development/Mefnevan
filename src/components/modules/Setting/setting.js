@@ -1,8 +1,6 @@
 import React, { Component } from "react";
-import { NavLink } from "react-router-dom";
 import Header from "../Common/header";
 import Footer from "../Common/footer";
-import biglogo from "../../../images/biglogo.svg";
 import ResponseSetting from "../Setting/ResponseSetting/responseSetting";
 import MessageSetting  from "../Setting/DefaultMessageSettings/defaultMessageSettings"
 class setting extends Component {
@@ -34,7 +32,7 @@ class setting extends Component {
         return (
             <div>
                 {this.state.loader && (   
-                    <div className="after_login_refresh"><img src={biglogo} alt=""/></div>
+                    <div className="after_login_refresh"><img src={process.kyubi.loader.preLoader} alt=""/></div>
                 )}
                 <div className="dashboard">
                 <Header selectedtab="setting"></Header>

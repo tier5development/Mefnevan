@@ -11,6 +11,7 @@ const ForgotPassword = lazy(() => import("../components/modules/Auth/ForgotPassw
 const NotFound = lazy(() => import("../components/modules/Auth/NotFound"));
 const Dashboard = lazy(() => import("../components/modules/Main/Dashboard"));
 const Setting = lazy(() => import("../components/modules/Setting/setting"));
+const DelaySetting = lazy(() => import("../components/modules/DelaySetting/setting"));
 const AutoResponder = lazy(() => import("../components/modules/AutoResponder/autoResponder"));
 const AutoResponderCreate = lazy(() =>  import("../components/modules/AutoResponder/autoResponderCreate"))
 const AutoResponderEdit = lazy(() =>  import("../components/modules/AutoResponder/autoResponderEdit"));
@@ -30,6 +31,7 @@ const AppRoute = ({ sidebarIsOpen, toggleSidebar }) => {
         <Route exact path="/" test="abc" component={Login} />
         <Route  exact  path="/dashboard" component={Dashboard} />
         <Route  exact  path="/setting" component={Setting} />
+        <Route  exact  path="/delay_setting" component={DelaySetting} />
         <Route  exact  path="/autoresponder" component={AutoResponder} />
         <Route  exact  path="/autorespondercreate" component={AutoResponderCreate} />
         <Route  exact  path="/autoresponderedit/:idfy"  component={AutoResponderEdit} />

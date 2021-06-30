@@ -6,7 +6,7 @@ const autoResponderServices = {
         return new Promise((resolve, reject) => {
             let options = {
                 method: 'POST',
-                url: host + '/api/autoresponder/create',
+                url: process.kyubi.appBaseBackendUrl + '/api/autoresponder/create',
                 headers: {  'Accept': 'application/json', 'Content-Type': 'application/json' },
                 data: payload
             }
@@ -25,7 +25,7 @@ const autoResponderServices = {
         return new Promise((resolve, reject) => {
             let options = {
                 method: 'POST',
-                url: host + '/api/autoresponder/list',
+                url: process.kyubi.appBaseBackendUrl + '/api/autoresponder/list',
                 headers: {  'Accept': 'application/json', 'Content-Type': 'application/json' },
                 data: payload
             }
@@ -44,7 +44,7 @@ const autoResponderServices = {
         return new Promise((resolve, reject) => {
             let options = {
                 method: 'POST',
-                url: host + '/api/autoresponder/edit',
+                url: process.kyubi.appBaseBackendUrl + '/api/autoresponder/edit',
                 headers: {  'Accept': 'application/json', 'Content-Type': 'application/json' },
                 data: payload
             }
@@ -63,7 +63,7 @@ const autoResponderServices = {
         return new Promise((resolve, reject) => {
             let options = {
                 method: 'POST',
-                url: host + '/api/autoresponder/update',
+                url: process.kyubi.appBaseBackendUrl + '/api/autoresponder/update',
                 headers: {  'Accept': 'application/json', 'Content-Type': 'application/json' },
                 data: payload
             }
@@ -82,7 +82,7 @@ const autoResponderServices = {
         return new Promise((resolve, reject) => {
             let options = {
                 method: 'POST',
-                url: host + '/api/autoresponder/updateStatus',
+                url: process.kyubi.appBaseBackendUrl + '/api/autoresponder/updateStatus',
                 headers: {  'Accept': 'application/json', 'Content-Type': 'application/json' },
                 data: payload
             }

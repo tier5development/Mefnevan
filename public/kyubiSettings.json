@@ -1,28 +1,28 @@
 {
-    "extId": "",
+    "extId": "60d4b4b09ea0af157fa74197",
     "appName": "MeFn Evan",
-    "loginURL": "https://app.kyubi.io/api/end-user/login",
+    "loginURL": "https://dev.kyubi.io/api/end-user/login",
     "logoutURL": null,
-    "forgotPassURL": "https://app.kyubi.io/api/end-user/generate-password-token",
-    "changePassURL": "https://app.kyubi.io/api/end-user/update-password",
-    "checkUserStatusURL": "https://app.kyubi.io/api/end-user/get-status",
+    "forgotPassURL": "https://dev.kyubi.io/api/end-user/generate-password-token",
+    "changePassURL": "https://dev.kyubi.io/api/end-user/update-password",
+    "checkUserStatusURL": "https://dev.kyubi.io/api/end-user/get-status",
     "youtubeLink": "",
     "youtubeLink2": null,
-    "signupURL": "https://app.kyubi.io/",
+    "signupURL": "https://dev.kyubi.io/",
     "description": {
      "short_description": null,
      "long_description": "MeFn Evan"
     },
     "logo": {
-     "small_icon": null,
-     "medium_icon": null,
-     "large_icon": null,
-     "primary_logo": null,
-     "secondary_logo": null,
+     "small_icon": "./images/16X16.png",
+     "medium_icon": "./images/48X48.png",
+     "large_icon": "./images/128X128.png",
+     "primary_logo": "images/logo.png",
+     "secondary_logo": "images/logo1.png",
      "background_image": null
     },
     "loader": {
-     "preLoader": null,
+     "preLoader": "images/Loader.gif",
      "replyLoader": null,
      "customLoader": null
     },
@@ -46,14 +46,14 @@
      "officialGroup": {
       "label": "Facebook Group",
       "url": "https://www.facebook.com/groups/geniusschedulercommunity",
-      "willBeDisplayed": false
+      "willBeDisplayed": true
      }
     },
     "isLive": false,
     "advertisementTextHtml": null,
     "mailTo": "support@tier5.us",
     "publicVapidKey": "BHcFkqcSHe3BS6EPkUWzYCXM2v4nSd541MqGyEao2EaSQeaQ_xfZrb8IcSasVN1G5pAwmDpXLNIjR7kTnEePOCA",
-    "clearSubscriptionObjectURL": "https://app.kyubi.io/api/clear-subscription-object",
-    "registerNotificationView": "https://app.kyubi.io/api/notification-view",
-    "appBaseBackendUrl": "http://localhost:8080"
+    "clearSubscriptionObjectURL": "https://dev.kyubi.io/api/clear-subscription-object",
+    "registerNotificationView": "https://dev.kyubi.io/api/notification-view",
+    "appBaseBackendUrl": ""
    }

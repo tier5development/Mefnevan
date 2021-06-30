@@ -4,14 +4,14 @@
   "manifest_version": 2,
   "description": "MeFn Evan",
   "icons": {
-      "48": "48X48.png",
-      "128": "128X128.png"
+      "48": "./images/48X48.png",
+      "128": "./images/128X128.png"
   },
   "web_accessible_resources": [
-    "images/128X128.png"
+    "images/*"
   ],
   "browser_action": {
-      "default_icon": "128X128.png",
+      "default_icon": "./images/128X128.png",
       "default_popup": "popup.html"
   },
   "background": {

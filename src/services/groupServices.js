@@ -6,7 +6,7 @@ const groupServices = {
         return new Promise((resolve, reject) => {
             let options = {
                 method: 'POST',
-                url: process.kyubi.appBaseBackendUrl + '/api/group/create',
+                url: host+ '/api/group/create',
                 headers: {  'Accept': 'application/json', 'Content-Type': 'application/json' },
                 data: payload
             }
@@ -25,7 +25,7 @@ const groupServices = {
         return new Promise((resolve, reject) => {
             let options = {
                 method: 'POST',
-                url: process.kyubi.appBaseBackendUrl + '/api/group/list',
+                url: host + '/api/group/list',
                 headers: {  'Accept': 'application/json', 'Content-Type': 'application/json' },
                 data: payload
             }
@@ -44,7 +44,7 @@ const groupServices = {
         return new Promise((resolve, reject) => {
             let options = {
                 method: 'POST',
-                url: process.kyubi.appBaseBackendUrl + '/api/group/edit',
+                url: host + '/api/group/edit',
                 headers: {  'Accept': 'application/json', 'Content-Type': 'application/json' },
                 data: payload
             }
@@ -63,7 +63,7 @@ const groupServices = {
         return new Promise((resolve, reject) => {
             let options = {
                 method: 'POST',
-                url: process.kyubi.appBaseBackendUrl + '/api/group/update',
+                url: host + '/api/group/update',
                 headers: {  'Accept': 'application/json', 'Content-Type': 'application/json' },
                 data: payload
             }
@@ -82,7 +82,7 @@ const groupServices = {
         return new Promise((resolve, reject) => {
             let options = {
                 method: 'POST',
-                url: process.kyubi.appBaseBackendUrl + '/api/group/delete',
+                url: host + '/api/group/delete',
                 headers: {  'Accept': 'application/json', 'Content-Type': 'application/json' },
                 data: payload
             }

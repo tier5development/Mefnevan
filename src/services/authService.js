@@ -25,7 +25,7 @@ const authService = {
         return new Promise((resolve, reject) => {
             let options = {
                 method: 'POST',
-                url: process.kyubi.appBaseBackendUrl + '/api/user/userRetrive',
+                url: host + '/api/user/userRetrive',
                 headers: {  'Accept': 'application/json', 'Content-Type': 'application/json' },
                 data: payload
             }
