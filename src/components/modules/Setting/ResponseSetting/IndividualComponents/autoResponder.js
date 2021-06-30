@@ -681,8 +681,42 @@ class responseSetting extends Component {
                     <div className="headding gap1">
                             <span className="big">Create a Auto Responder</span> 
                             <a  onClick={this.listAutoResponderHandler} href="#" className="roundarrow"><img src={backArrowLogo}/></a>
-                        </div>
                     </div>
+                    <form>
+                        <label>
+                            Auto Responder Name
+                        </label>
+                            <input type="text" 
+                            name="auto_responder_name" 
+                            id="auto_responder_name" 
+                            placeholder="Auto-Responder Name" 
+                            value={this.state.auto_responder_name}
+                            onChange={this.inputChangeHandller}/>
+                        <label>
+                            Keywords
+                        </label>
+                            <ReactTags 
+                            placeholder="Press enter Or Press , to Create Autoresponder Keywords"
+                            tags={auto_responder_keywords}
+                            handleDelete={this.handleDelete}
+                            handleAddition={this.handleAddition}
+                            allowUnique={true}
+                            delimiters={delimiters} />
+
+                            
+                            
+                        <label>
+                            {this.state.auto_responder_status ?
+                                <input className="checking" type="checkbox" id="checkboxPrimary3" name="auto_responder_status" onChange={this.autoSetting} checked/>
+                            :
+                                <input className="checking" type="checkbox" id="checkboxPrimary3" name="auto_responder_status" onChange={this.autoSetting}/>
+                            }
+                            Activate this Auto Responder
+                        </label>
+    
+                        <button className="blue_btn" onClick={this.createAutoResponderGroupHandler} type="submit">Save Auto Responder</button>
+                    </form>
+                </div>
                 :
                 ""
                 }
