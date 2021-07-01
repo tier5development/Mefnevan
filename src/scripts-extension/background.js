@@ -173,6 +173,7 @@ chrome.runtime.onConnect.addListener(function(port) {
       fb_Name=fb_Name.trim();
       let m_username=msg.MessageDetails.profile_name.trim();
       let ProfileLink=msg.MessageDetails.ProfileLink.trim();
+      let FacebooKFriendId ="";
       if(msg.MessageDetails.facebook_Id[0].trim() == FacebookUserId.trim()){
         FacebooKFriendId=msg.MessageDetails.facebook_Id[1].trim()
       }else{
