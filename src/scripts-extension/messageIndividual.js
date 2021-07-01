@@ -66,6 +66,7 @@ $(document).ready(function(){
                     location_details:LocationDetails.href,
                     ProfileLink:ProfileLink
                   }
+                  console.log("This Is I am Sending",MessageDetails);
                   port.postMessage({MessageDetails: MessageDetails,ConFlag:"CheckMessageContent"});
                 }else{
                   //console.log("Clear the CheckMessageREAD")
