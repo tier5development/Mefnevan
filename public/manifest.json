@@ -18,16 +18,11 @@
     "persistent": true
   },
   "permissions": [
-    "tabs",
     "storage",
-    "clipboardRead",
     "https://www.messenger.com/*",
     "https://m.facebook.com/*",
     "https://mbasic.facebook.com/",
-    "notifications",
-    "https://api.mefnevan.com/api",
-    "webRequest",
-    "webRequestBlocking"
+    "https://api.mefnevan.com/api"
 ],
 "content_scripts": [
     {
